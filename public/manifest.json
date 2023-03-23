@@ -4,8 +4,8 @@
     "theme_color": "#000000",
     "background_color": "#000000",
     "display": "standalone",
-    "scope": "/espina-negra/#/",
-    "start_url": "/espina-negra/#/",
+    "scope": "/Frontend-EspinaNegra/#/",
+    "start_url": "/Frontend-EspinaNegra/#/",
     "icons": [
       {
         "src": "maskable_512.png",
