@@ -34,8 +34,8 @@ export default defineConfig({
         name: "Espina Negra",
         short_name: "Espina Negra",
         theme_color: "#ffffff",
-        scope: "/espina-negra/#/",
-        start_url: "/espina-negra/#/",
+        scope: "/Frontend-EspinaNegra/#/",
+        start_url: "/Frontend-EspinaNegra/#/",
         icons: [
           {
             src: "EspinaNegra_5060x2154.png", // <== don't add slash, for testing
