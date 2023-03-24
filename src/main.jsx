@@ -6,8 +6,6 @@ import "./styles.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <HashRouter>
-      <EspinaNegraApp />
-    </HashRouter>
+    <EspinaNegraApp />
   </React.StrictMode>
 );
