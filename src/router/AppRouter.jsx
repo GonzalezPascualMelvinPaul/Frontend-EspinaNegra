@@ -9,8 +9,9 @@ import { AuthRouter, AuthRoutes } from "../auth/router";
 import { JournalRouter, JournalRoutes } from "../journal/routes";
 import { PrivateRouter } from "./PrivateRouter";
 import { PublicRouter } from "./PublicRouter";
+import { useCheckAuth } from "../hooks";
 
-const routes = createHashRoutergit([
+const routes = createBrowserRouter([
   {
     path: "/",
     element: (
@@ -34,8 +35,7 @@ const routes = createHashRoutergit([
 export const AppRouter = () => {
   return (
     <>
-        <RouterProvider router={routes} />
-    
+      <RouterProvider router={routes} />
     </>
   );
 };
