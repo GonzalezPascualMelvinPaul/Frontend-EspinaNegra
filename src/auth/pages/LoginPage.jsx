@@ -22,6 +22,14 @@ import { store } from "../../store/store";
 import Iconify from "../../components/iconify";
 import { useDispatch, useSelector } from "react-redux";
 import { startLoginWithEmailPassword } from "../../store/auth/authThunks";
+import { Formik } from "formik";
+import { object, string } from "yup";
+const validationSchema = object({
+  email: string("Ingese su correo electronico")
+    .email()
+    .required("Este campo es obligatorio"),
+  password: string("Ingrese su contraseña").required("Este campo es requerido"),
+});
 
 const formData = {
   email: "",
@@ -43,88 +51,113 @@ export const LoginPage = () => {
     navigate("/auth/register", { replace: true });
   };
 
-  const onSubmit = (event) => {
-    event.preventDefault();
-    console.log({ email, password });
-    dispatch(startLoginWithEmailPassword({ email, password }));
+  const onSubmit = (values) => {
+    console.log(values);
+
+    dispatch(
+      startLoginWithEmailPassword(values, () => {
+        navigate("/");
+      })
+    );
   };
 
   return (
     <>
       <AuthLayout title="Iniciar Sesion">
-        <form onSubmit={onSubmit}>
-          <Stack spacing={3}>
-            <TextField
-              name="email"
-              label="Email address"
-              type="email"
-              placeholder="Correo@gmail.com"
-              value={email}
-              onChange={onInputChange}
-            />
+        <Formik
+          initialValues={{ email: "", password: "" }}
+          validationSchema={validationSchema}
+          onSubmit={(values) => {
+            console.log("Formulario", values);
+            onSubmit(values);
+          }}
+        >
+          {({ handleChange, values, errors, touched, handleSubmit }) => (
+            <form onSubmit={handleSubmit}>
+              <Stack spacing={3}>
+                <TextField
+                  name="email"
+                  label="Email address"
+                  id="email"
+                  type="email"
+                  placeholder="Correo@gmail.com"
+                  onChange={handleChange}
+                  value={values.email}
+                  error={touched.email && Boolean(errors.email)}
+                  helperText={touched.email && errors.email}
+                />
 
-            <TextField
-              name="password"
-              label="Password"
-              type={showPassword ? "text" : "password"}
-              placeholder="Password"
-              value={password}
-              onChange={onInputChange}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={() => setShowPassword(!showPassword)}
-                      edge="end"
-                    >
-                      <Iconify
-                        icon={
-                          showPassword ? "eva:eye-fill" : "eva:eye-off-fill"
-                        }
-                      />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Stack>
+                <TextField
+                  name="password"
+                  label="Password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  id="password"
+                  onChange={handleChange}
+                  value={values.password}
+                  error={touched.password && Boolean(errors.password)}
+                  helperText={touched.password && errors.password}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setShowPassword(!showPassword)}
+                          edge="end"
+                        >
+                          <Iconify
+                            icon={
+                              showPassword ? "eva:eye-fill" : "eva:eye-off-fill"
+                            }
+                          />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Stack>
 
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent="space-between"
-            sx={{ my: 2 }}
-          >
-            <Checkbox name="remember" label="Remember me" />
-            <Link variant="subtitle2" underline="hover">
-              Forgot password?
-            </Link>
-          </Stack>
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="space-between"
+                sx={{ my: 2 }}
+              >
+                <Checkbox name="remember" label="Remember me" />
+                <Link variant="subtitle2" underline="hover">
+                  Forgot password?
+                </Link>
+              </Stack>
 
-          <LoadingButton
-            fullWidth
-            size="large"
-            type="submit"
-            variant="contained"
-            //disabled={isAutehnticating}
-          >
-            Login
-          </LoadingButton>
-          <div>
-            {store.getState().auth.status === "error" ? (
-              <Alert sx={{ mt: 3, mb: 3 }} severity="error">
-                {store.getState().auth.errorMessage}
-              </Alert>
-            ) : (
-              ""
-            )}
-          </div>
-          <Grid container direction={"row"} justifyContent="end">
-            <Link component={RouterLink} color="inherit" to="/auth/register">
-              Crear una cuenta
-            </Link>
-          </Grid>
-        </form>
+              <LoadingButton
+                fullWidth
+                size="large"
+                type="submit"
+                variant="contained"
+                //disabled={isAutehnticating}
+              >
+                Login
+              </LoadingButton>
+              <div>
+                {store.getState().auth.status === "error" ? (
+                  <Alert sx={{ mt: 3, mb: 3 }} severity="error">
+                    {store.getState().auth.errorMessage}
+                  </Alert>
+                ) : (
+                  ""
+                )}
+              </div>
+              <Grid container direction={"row"} justifyContent="end">
+                <Link
+                  component={RouterLink}
+                  color="inherit"
+                  to="/auth/register"
+                >
+                  Crear una cuenta
+                </Link>
+              </Grid>
+            </form>
+          )}
+        </Formik>
       </AuthLayout>
     </>
   );

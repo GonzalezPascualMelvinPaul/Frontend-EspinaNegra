@@ -8,6 +8,9 @@ export const PublicRouter = ({ children }) => {
   const { status } = useSelector((state) => state.auth);
   //console.log(statuus);
   console.log(status);
+  if (status === "checking") {
+    return <CheckingAuth />;
+  }
   let ruta = sessionStorage.getItem("Location");
-  return status !== "authenticated" ? children : <Navigate to={"/"} />;
+  return status !== "authenticated" ? children : <Navigate to={ruta} />;
 };

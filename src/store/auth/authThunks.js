@@ -11,26 +11,19 @@ export const checkingAuthentication = () => {
   };
 };
 
-export const startLoginWithEmailPassword = ({ email, password }) => {
+export const startLoginWithEmailPassword = (values, navigate = () => {}) => {
   return async (dispatch) => {
     dispatch(checkingCredentials());
 
-    const result = await loginWithEmailAndPassword({ email, password });
-    console.log("Este es el resultado", result);
+    const { ok, user, error, token } = await loginWithEmailAndPassword(values);
 
-    if (result.ok) {
-      dispatch(login(result));
-      setToken(result.token);
-      console.log("Data del user", result.user);
+    if (ok) {
+      dispatch(login({ token, user, error }));
+      setToken(token);
+      console.log("Data del user", user);
+      navigate();
     } else {
-      dispatch(onError(result.error));
+      dispatch(onError(error));
     }
-  };
-};
-
-export const startLogout = () => {
-  return async (dispatch) => {
-    await logoutAccount();
-    dispatch(logout());
   };
 };

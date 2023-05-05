@@ -8,8 +8,10 @@ import { store } from "./store";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <Provider store={store}>
-      <EspinaNegraApp />
-    </Provider>
+    <HashRouter>
+      <Provider store={store}>
+        <EspinaNegraApp />
+      </Provider>
+    </HashRouter>
   </React.StrictMode>
 );

@@ -25,7 +25,7 @@ const Main = styled("div")(({ theme }) => ({
   },
 }));
 
-export const JournalRouter = () => {
+export const EmployeeRouter = () => {
   const [open, setOpen] = useState(false);
   return (
     <>

@@ -8,19 +8,19 @@ export const PrivateRouter = ({ children }) => {
   //const statuus = useCheckAuth();
   const { status } = useSelector((state) => state.auth);
   //console.log(statuus);
-  /* if (status === "checking") {
+  if (status === "checking") {
     return <CheckingAuth />;
-  } */
+  }
 
   const { pathname, search } = useLocation();
   const lastPath = pathname + search;
 
-  useEffect(() => {
+  /* useEffect(() => {
     localStorage.setItem("lastPath", lastPath);
-  }, [lastPath]);
-
+  }, [lastPath]); */
+  localStorage.setItem("lastPath", lastPath);
   const location = useLocation();
-  console.log(location);
+
   sessionStorage.setItem("Location", location.pathname);
 
   return status !== "not-authenticated" ? (

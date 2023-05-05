@@ -3,15 +3,18 @@ import {
   createBrowserRouter,
   createHashRouter,
   HashRouter,
+  Navigate,
+  Route,
   RouterProvider,
+  Routes,
 } from "react-router-dom";
 import { AuthRouter, AuthRoutes } from "../auth/router";
-import { JournalRouter, JournalRoutes } from "../journal/routes";
+import { EmployeeRouter, EmployeeRoutes } from "../employee/routes";
 import { PrivateRouter } from "./PrivateRouter";
 import { PublicRouter } from "./PublicRouter";
 import { useCheckAuth } from "../hooks";
 
-const routes = createBrowserRouter([
+/* const routes = createBrowserRouter([
   {
     path: "/",
     element: (
@@ -30,12 +33,25 @@ const routes = createBrowserRouter([
     ),
     children: AuthRoutes,
   },
-]);
+]); */
 
 export const AppRouter = () => {
+  const { status } = useCheckAuth();
   return (
     <>
-      <RouterProvider router={routes} />
+      <Routes>
+        <Route path="/auth/*" element={<AuthRoutes />} />
+        <Route
+          path="/empleado/*"
+          element={
+            <PrivateRouter>
+              <EmployeeRoutes />
+            </PrivateRouter>
+          }
+        />
+        <Route path="/*" element={<Navigate to="/empleado/inicio" />} />
+      </Routes>
+      {/* <RouterProvider router={routes} /> */}
     </>
   );
 };

@@ -1,30 +1,43 @@
-import { useState } from 'react';
+import { useState } from "react";
 // @mui
-import { alpha } from '@mui/material/styles';
-import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, Popover } from '@mui/material';
+import { alpha } from "@mui/material/styles";
+import {
+  Box,
+  Divider,
+  Typography,
+  Stack,
+  MenuItem,
+  Avatar,
+  IconButton,
+  Popover,
+} from "@mui/material";
 // mocks_
-import account from '../../../_mock/account';
-
+import account from "../../../_mock/account";
+import { deleteToken } from "../../../providers/auth/configAuth";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../../store/auth/authSlice";
 // ----------------------------------------------------------------------
 
 const MENU_OPTIONS = [
   {
-    label: 'Home',
-    icon: 'eva:home-fill',
+    label: "Home",
+    icon: "eva:home-fill",
   },
   {
-    label: 'Profile',
-    icon: 'eva:person-fill',
+    label: "Profile",
+    icon: "eva:person-fill",
   },
   {
-    label: 'Settings',
-    icon: 'eva:settings-2-fill',
+    label: "Settings",
+    icon: "eva:settings-2-fill",
   },
 ];
 
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
   const [open, setOpen] = useState(null);
 
   const handleOpen = (event) => {
@@ -35,6 +48,11 @@ export default function AccountPopover() {
     setOpen(null);
   };
 
+  const onLogout = () => {
+    deleteToken();
+    dispatch(logout());
+  };
+
   return (
     <>
       <IconButton
@@ -42,13 +60,13 @@ export default function AccountPopover() {
         sx={{
           p: 0,
           ...(open && {
-            '&:before': {
+            "&:before": {
               zIndex: 1,
               content: "''",
-              width: '100%',
-              height: '100%',
-              borderRadius: '50%',
-              position: 'absolute',
+              width: "100%",
+              height: "100%",
+              borderRadius: "50%",
+              position: "absolute",
               bgcolor: (theme) => alpha(theme.palette.grey[900], 0.8),
             },
           }),
@@ -61,16 +79,16 @@ export default function AccountPopover() {
         open={Boolean(open)}
         anchorEl={open}
         onClose={handleClose}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        transformOrigin={{ vertical: "top", horizontal: "right" }}
         PaperProps={{
           sx: {
             p: 0,
             mt: 1.5,
             ml: 0.75,
             width: 180,
-            '& .MuiMenuItem-root': {
-              typography: 'body2',
+            "& .MuiMenuItem-root": {
+              typography: "body2",
               borderRadius: 0.75,
             },
           },
@@ -78,14 +96,14 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {account.displayName}
+            {user?.name}
           </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {account.email}
+          <Typography variant="body2" sx={{ color: "text.secondary" }} noWrap>
+            {user?.email}
           </Typography>
         </Box>
 
-        <Divider sx={{ borderStyle: 'dashed' }} />
+        <Divider sx={{ borderStyle: "dashed" }} />
 
         <Stack sx={{ p: 1 }}>
           {MENU_OPTIONS.map((option) => (
@@ -95,9 +113,9 @@ export default function AccountPopover() {
           ))}
         </Stack>
 
-        <Divider sx={{ borderStyle: 'dashed' }} />
+        <Divider sx={{ borderStyle: "dashed" }} />
 
-        <MenuItem onClick={handleClose} sx={{ m: 1 }}>
+        <MenuItem onClick={onLogout} sx={{ m: 1 }}>
           Logout
         </MenuItem>
       </Popover>

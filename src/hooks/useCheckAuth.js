@@ -6,31 +6,34 @@ import { login, logout } from "../store/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 
 export const useCheckAuth = () => {
-  const { status } = useSelector((state) => state.auth);
+  const { status, email, user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   useEffect(() => {
     async function loadUser() {
-      if (!getToken) {
+      if (!getToken()) {
         dispatch(logout());
 
         return;
       }
+
       try {
-        login({
-          token: getToken(),
-          username: "DEFAULT",
-          email: "DEFAULT",
-        });
+        dispatch(
+          login({
+            token: getToken(),
+            user: user,
+            email: email,
+          })
+        );
+
         navigate(sessionStorage.getItem("Location"));
       } catch (error) {
         dispatch(logout());
-        console.log(error);
       }
     }
     loadUser();
   }, []);
   return {
-    status: "authenticated",
+    status: status,
   };
 };
