@@ -41,6 +41,8 @@ import UserListHead from "../../sections/@dashboard/user/UserListHead";
 import USERLIST from "../../_mock/user";
 import { useState } from "react";
 import { sentenceCase } from "change-case";
+import { useDispatch } from "react-redux";
+import { startGetDataWithToken } from "../../store/auth/authThunks";
 
 const TABLE_HEAD = [
   { id: "name", label: "Name", alignRight: false },
@@ -84,6 +86,7 @@ function applySortFilter(array, comparator, query) {
 }
 
 export const EmployeePage = () => {
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(null);
 
   const [page, setPage] = useState(0);
@@ -162,6 +165,11 @@ export const EmployeePage = () => {
     filterName
   );
 
+  const getDataToken = () => {
+    console.log("Entrando al getDataToken");
+    dispatch(startGetDataWithToken());
+  };
+
   const isNotFound = !filteredUsers.length && !!filterName;
 
   return (
@@ -180,6 +188,7 @@ export const EmployeePage = () => {
             Empleado
           </Typography>
           <Button
+            onClick={() => getDataToken()}
             variant="contained"
             startIcon={<Iconify icon="eva:plus-fill" />}
           >

@@ -3,6 +3,9 @@ import axios from "axios";
 export const TOKEN_KEY = "TOKEN";
 export const authApi = axios.create({
   baseURL: "http://127.0.0.1:8000/api/",
+  headers: {
+    Authorization: `Bearer ${sessionStorage.getItem(TOKEN_KEY)}`,
+  },
 });
 
 export const setToken = (token) => {

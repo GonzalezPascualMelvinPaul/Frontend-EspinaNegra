@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getToken } from "../providers/auth/configAuth";
 import { login, logout } from "../store/auth/authSlice";
 import { useNavigate } from "react-router-dom";
+import { getDataWithToken } from "../providers/auth/providerAuth";
 
 export const useCheckAuth = () => {
   const { status, email, user } = useSelector((state) => state.auth);
@@ -18,11 +19,11 @@ export const useCheckAuth = () => {
       }
 
       try {
+        const { ok, user, error, token } = await getDataWithToken();
         dispatch(
           login({
             token: getToken(),
             user: user,
-            email: email,
           })
         );
 

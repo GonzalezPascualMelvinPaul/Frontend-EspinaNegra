@@ -18,6 +18,21 @@ export const loginWithEmailAndPassword = async ({ email, password }) => {
   }
 };
 
+export const getDataWithToken = async () => {
+  try {
+    const { data } = await authApi.get("user-profile");
+    console.log("infor del token", data);
+    return {
+      ok: true,
+      token: data.token,
+      user: data.user,
+      errors: "",
+    };
+  } catch (error) {
+    return { ok: false, error: error.response.data.message };
+  }
+};
+
 export const logoutAccount = async () => {
   try {
     const { data } = await authApi.post("logout");

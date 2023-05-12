@@ -1,5 +1,6 @@
 import { setToken } from "../../providers/auth/configAuth";
 import {
+  getDataWithToken,
   loginWithEmailAndPassword,
   logoutAccount,
 } from "../../providers/auth/providerAuth";
@@ -22,6 +23,19 @@ export const startLoginWithEmailPassword = (values, navigate = () => {}) => {
       setToken(token);
       console.log("Data del user", user);
       navigate();
+    } else {
+      dispatch(onError(error));
+    }
+  };
+};
+
+export const startGetDataWithToken = () => {
+  return async (dispatch) => {
+    const { ok, user, error, token } = await getDataWithToken();
+    if (ok) {
+      dispatch(login({ token, user, error }));
+      setToken(token);
+      console.log("Data del user", user);
     } else {
       dispatch(onError(error));
     }
