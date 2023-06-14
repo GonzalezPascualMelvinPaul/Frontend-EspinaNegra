@@ -1,24 +1,25 @@
 import React, { useState } from "react";
-import { deleteUserProvider } from "../../providers/usuario/providerUsuario";
+
 import { AlertMessage, ModalDelete } from "../../ui";
 import { Alert, Box, Button, Typography } from "@mui/material";
+import { deleteVentaProvider } from "../../providers/venta/providerVenta";
 
 export const EliminarVenta = ({
   open = false,
   onClose = () => {},
-  updateUsers = () => {},
-  user = {},
+  updateventas = () => {},
+  venta = {},
 }) => {
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
   const [openAlert, setOpenAlert] = useState(false);
 
-  const deleteUserHandle = async () => {
+  const deleteVentaHandle = async () => {
     setMessage("");
 
-    const { ok, data, message } = await deleteUserProvider(user.id);
+    const { ok, data, message } = await deleteVentaProvider(venta.id);
     if (ok) {
-      updateUsers();
+      updateventas();
       setMessage(message);
       setOpenAlert(true);
       onClose();
@@ -40,8 +41,7 @@ export const EliminarVenta = ({
           variant="h7"
           textAlign={"center"}
         >
-          ¿DESEA ELIMINAR EL USUARIO {user?.username} CON EL CORREO{" "}
-          {user?.email}?
+          ¿DESEA ELIMINAR LA VENTA con ID: {venta?.id} ?
         </Typography>
         {error ? (
           <Alert sx={{ mt: 0, mb: 0 }} severity="error">
@@ -59,7 +59,7 @@ export const EliminarVenta = ({
           <Button variant="contained" onClick={onClose} color="error">
             Cancelar
           </Button>
-          <Button onClick={deleteUserHandle} type="submit" variant="contained">
+          <Button onClick={deleteVentaHandle} type="submit" variant="contained">
             Sí, deseo eliminarlo
           </Button>
         </Box>

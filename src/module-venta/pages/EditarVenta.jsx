@@ -20,56 +20,47 @@ import {
   TextField,
 } from "@mui/material";
 import { CameraAltOutlined } from "@mui/icons-material";
+import {
+  getVentaProvider,
+  updateVentaProvider,
+} from "../../providers/venta/providerVenta";
 const validationSchema = Yup.object({
-  email: Yup.string().required("El email es requerido"),
-  username: Yup.string().required("El username es requerido"),
-  rol_id: Yup.number().required("El rol es requerido"),
+  observaciones: Yup.string().required("El email es requerido"),
+  recibo: Yup.string(),
 });
 
-export const EditarUser = () => {
+export const EditarVenta = () => {
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingData, setIsLoadingData] = useState(false);
-  const [empleados, setEmpleados] = useState([]);
   const [open, setOpen] = useState(false);
-  const [rol, setRol] = useState([]);
-  const [user, setUser] = useState([]);
+  const [venta, setVenta] = useState([]);
   const { id } = useParams();
   const navigate = useNavigate();
-  const getEmpleados = async () => {
-    const { data } = await getEmpleadosProvider();
-    console.log(data?.empleados);
-    setEmpleados(data?.empleados);
-  };
-  const getRoles = async () => {
-    const { data } = await getRolesProvider();
 
-    setRol(data?.roles);
-  };
-  const getUser = async () => {
-    const { ok, data } = await getUserProvider(id);
+  const getVenta = async () => {
+    const { ok, data } = await getVentaProvider(id);
     if (ok) {
+      console.log("Venta a editar", data);
       setIsLoadingData(true);
     } else {
       setIsLoadingData(false);
     }
-    setUser(data);
+    setVenta(data.venta);
   };
   const handleClose = () => {
     setOpen(false);
   };
   useEffect(() => {
-    getRoles();
-    getEmpleados();
-    getUser();
+    getVenta();
   }, []);
 
   const onSubmit = async (values, e) => {
     setIsLoading(true);
     setError(false);
     setOpen(false);
-    const { ok, data, message } = await updateUserProvider(values, id);
+    const { ok, data, message } = await updateVentaProvider(values, id);
     if (ok) {
       setOpen(true);
       setError(false);
@@ -80,14 +71,12 @@ export const EditarUser = () => {
     setMessage(message);
     setIsLoading(false);
     setTimeout(() => {
-      navigate("/usuario/inicio");
+      navigate("/venta/inicio");
     }, 5000);
   };
   const initialValues = {
-    email: user?.email,
-    username: user?.username,
-    rol_id: user?.rol_id,
-    empleado_id: user?.empleado_id,
+    observaciones: venta?.observaciones,
+    recibo: venta?.recibo,
   };
   return (
     <>
@@ -97,15 +86,15 @@ export const EditarUser = () => {
         open={open}
         severity="info"
       />
-      <IndexLayout title={"Usuario"}>
+      <IndexLayout title={"Venta"}>
         <BreadCrumbsCustom
           routes={[
             {
-              name: "Usuarios",
-              url: "/usuario/inicio",
+              name: "Ventas",
+              url: "/venta/inicio",
             },
             {
-              name: "Editar usuario",
+              name: "Editar venta",
               url: "",
             },
           ]}
@@ -125,84 +114,34 @@ export const EditarUser = () => {
                 <Form>
                   <Field
                     as={TextField}
-                    label="Email"
-                    name="email"
+                    label="Observaciones"
+                    name="observaciones"
                     variant="outlined"
                     fullWidth
                     margin="normal"
                     error={
-                      formik.touched.email && formik.errors.email ? true : false
+                      formik.touched.observaciones &&
+                      formik.errors.observaciones
+                        ? true
+                        : false
                     }
-                    helperText={<ErrorMessage name="email" />}
+                    helperText={<ErrorMessage name="observaciones" />}
                   />
+
                   <Field
                     as={TextField}
-                    label="Username"
-                    name="username"
+                    label="Recibo"
+                    name="recibo"
                     variant="outlined"
                     fullWidth
                     margin="normal"
                     error={
-                      formik.touched.username && formik.errors.username
+                      formik.touched.recibo && formik.errors.recibo
                         ? true
                         : false
                     }
-                    helperText={<ErrorMessage name="username" />}
+                    helperText={<ErrorMessage name="recibo" />}
                   />
-                  <Field
-                    as={TextField}
-                    label="Rol"
-                    name="rol_id"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    select
-                    error={
-                      formik.touched.rol_id && formik.errors.rol_id
-                        ? true
-                        : false
-                    }
-                    helperText={<ErrorMessage name="rol_id" />}
-                  >
-                    {rol.map((option) => (
-                      <MenuItem key={option.id} value={option.id}>
-                        {option.nombre}
-                      </MenuItem>
-                    ))}
-                  </Field>
-                  <Field
-                    name="empleado_id"
-                    label="Empleado"
-                    as={TextField}
-                    variant="outlined"
-                    fullWidth
-                    disabled={true}
-                    select
-                    margin="normal"
-                    error={
-                      formik.touched.empleado_id && formik.errors.empleado_id
-                        ? true
-                        : false
-                    }
-                    helperText={<ErrorMessage name="empleado_id" />}
-                    SelectProps={{
-                      MenuProps: {
-                        PaperProps: {
-                          style: {
-                            maxHeight: 48 * 8 + 8, // donde '48' es la altura de cada elemento del menú y '5' es el número de elementos visibles
-                            width: 250,
-                          },
-                        },
-                      },
-                    }}
-                  >
-                    {empleados.map((option) => (
-                      <MenuItem key={option.id} value={option.id}>
-                        {option.nombre} {option.apellido_paterno}{" "}
-                        {option.apellido_materno}
-                      </MenuItem>
-                    ))}
-                  </Field>
 
                   {error ? (
                     <Alert sx={{ mt: 0, mb: 0 }} severity="error">

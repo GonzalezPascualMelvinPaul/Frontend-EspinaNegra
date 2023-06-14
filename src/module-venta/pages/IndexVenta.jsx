@@ -14,7 +14,7 @@ import { IndexLayout } from "../../layouts";
 import { AddCircleOutline } from "@mui/icons-material";
 import { EliminarVenta } from "../componentes/EliminarVenta";
 import { useNavigate } from "react-router-dom/dist";
-import { Buscador } from "../../ui";
+import { Buscador, CustomTable } from "../../ui";
 import { getVentasProvider } from "../../providers/venta/providerVenta";
 
 export const IndexVenta = () => {
@@ -28,19 +28,21 @@ export const IndexVenta = () => {
   const navigate = useNavigate();
 
   const getVentas = async () => {
-    console.log("haciendo peticion");
     const { ok, data } = await getVentasProvider();
     setIsLoading(false);
     if (!ok) {
       setError("Hubo un error");
+    } else {
+      console.log(data);
     }
 
-    setVentas(data.users);
-    setVentasBuscador(data.users);
+    setVentas(data.ventas);
+    setVentasBuscador(data.ventas);
     setIsLoading(false);
   };
 
   const handleDelete = (row) => {
+    console.log(row);
     setVenta(row);
     setModalDelete(!modalDelete);
   };
@@ -56,33 +58,45 @@ export const IndexVenta = () => {
 
   const columns = [
     {
-      field: "name",
-      headerName: "Nombre",
+      field: "id",
+      headerName: "ID",
+      flex: 1,
+      sortable: true,
+    },
+    {
+      field: "fecha_venta",
+      headerName: "Fecha",
       flex: 2,
       sortable: true,
-      renderCell: ({ row }) => {
-        return (
-          <Stack spacing={2} direction="row">
-            {row.nombre} {row.apellido_paterno} {row.apellido_materno}
-          </Stack>
-        );
+    },
+    {
+      field: "cliente",
+      headerName: "Cliente",
+      flex: 2,
+      sortable: true,
+      renderCell: ({ value }) => {
+        return value.nombre;
       },
     },
     {
-      field: "username",
-      headerName: "Username",
-      flex: 1,
-    },
-    {
-      field: "email",
-      headerName: "Email",
+      field: "empleado",
+      headerName: "Empleado",
       flex: 2,
+      sortable: true,
+      renderCell: ({ value }) => {
+        return value.nombre;
+      },
     },
     {
-      field: "nombre_rol",
-      headerName: "Rol",
-      flex: 1,
+      field: "total",
+      headerName: "Total",
+      flex: 2,
+      sortable: true,
+      renderCell: ({ value }) => {
+        return "$ " + value;
+      },
     },
+
     {
       field: "acciones",
       headerName: "Acciones",
@@ -97,7 +111,7 @@ export const IndexVenta = () => {
             </Button>
             <Button
               onClick={() => {
-                navigate(`/usuario/editar/${row.id}`);
+                navigate(`/venta/editar/${row.id}`);
               }}
               variant="contained"
               color="secondary"
@@ -107,7 +121,7 @@ export const IndexVenta = () => {
             <Button
               variant="contained"
               color="error"
-              /* onClick={() => handleDelete(row)} */
+              onClick={() => handleDelete(row)}
             >
               Eliminar
             </Button>
@@ -149,8 +163,8 @@ export const IndexVenta = () => {
         <EliminarVenta
           open={modalDelete}
           onClose={handleDelete}
-          user={venta}
-          updateUsers={getVentas}
+          venta={venta}
+          updateventas={getVentas}
         />
       </Box>
     </>
