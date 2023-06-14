@@ -16,6 +16,7 @@ import account from "../../../_mock/account";
 import { deleteToken } from "../../../providers/auth/configAuth";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../../store/auth/authSlice";
+import { getEnvVariables } from "../../../helpers/getEnvVariables";
 // ----------------------------------------------------------------------
 
 const MENU_OPTIONS = [
@@ -39,6 +40,7 @@ export default function AccountPopover() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const [open, setOpen] = useState(null);
+  const { VITE_API_URL_IMAGE } = getEnvVariables();
 
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
@@ -52,7 +54,6 @@ export default function AccountPopover() {
     deleteToken();
     dispatch(logout());
   };
-
   return (
     <>
       <IconButton
@@ -72,7 +73,16 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <Avatar src={account.photoURL} alt="photoURL" />
+        <Avatar
+          //src={`http://localhost:8000/storage/imagenes/${user?.imagen}`}
+
+          src={
+            user?.imagen == undefined
+              ? "../../../../public/assets/images/avatars/avatar_1.jpg"
+              : `${VITE_API_URL_IMAGE}${user?.imagen}`
+          }
+          alt="photoURL"
+        />
       </IconButton>
 
       <Popover

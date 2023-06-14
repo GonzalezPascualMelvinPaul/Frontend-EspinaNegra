@@ -7,10 +7,15 @@ export const PublicRouter = ({ children }) => {
   // const statuus = useCheckAuth();
   const { status } = useSelector((state) => state.auth);
   //console.log(statuus);
-  console.log(status);
-  if (status === "checking") {
+
+  /* if (status !== "checking") {
     return <CheckingAuth />;
-  }
+  } */
+
   let ruta = sessionStorage.getItem("Location");
-  return status !== "authenticated" ? children : <Navigate to={ruta} />;
+  return status !== "authenticated" ? (
+    children
+  ) : (
+    <Navigate to={ruta == null ? "/dashboard/inicio" : ruta} />
+  );
 };

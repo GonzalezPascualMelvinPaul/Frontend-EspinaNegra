@@ -21,7 +21,7 @@ export const startLoginWithEmailPassword = (values, navigate = () => {}) => {
     if (ok) {
       dispatch(login({ token, user, error }));
       setToken(token);
-      console.log("Data del user", user);
+
       navigate();
     } else {
       dispatch(onError(error));
@@ -31,11 +31,12 @@ export const startLoginWithEmailPassword = (values, navigate = () => {}) => {
 
 export const startGetDataWithToken = () => {
   return async (dispatch) => {
+    dispatch(checkingCredentials());
     const { ok, user, error, token } = await getDataWithToken();
+
     if (ok) {
       dispatch(login({ token, user, error }));
       setToken(token);
-      console.log("Data del user", user);
     } else {
       dispatch(onError(error));
     }

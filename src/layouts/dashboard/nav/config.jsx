@@ -1,45 +1,83 @@
 // component
 import SvgColor from "../../../components/svg-color";
-import { GroupOutlined } from "@mui/icons-material";
+import {
+  AccountBoxOutlined,
+  CropRotateOutlined,
+  DashboardOutlined,
+  GroupOutlined,
+  Inventory2Outlined,
+  LocalMallOutlined,
+  LocalShippingOutlined,
+  MapsHomeWorkOutlined,
+  PermContactCalendarOutlined,
+  ScienceOutlined,
+  ShoppingCartOutlined,
+  ShowChartOutlined,
+  WarehouseOutlined,
+} from "@mui/icons-material";
 // ----------------------------------------------------------------------
-
-const icon = (name) => (
-  <SvgColor
-    src={`/assets/icons/navbar/${name}.svg`}
-    sx={{ width: 1, height: 1 }}
-  />
-);
 
 const navConfig = [
   {
-    title: "dashboard",
-    path: "/dashboard/app",
-    icon: icon("ic_analytics"),
+    title: "Dashboard",
+    path: "/dashboard",
+    icon: <DashboardOutlined />,
+  },
+  {
+    title: "Usuarios",
+    path: "/usuario",
+    icon: <AccountBoxOutlined />,
   },
   {
     title: "Empleados",
-    path: "/empleado/inicio",
+    path: "/empleado",
     icon: <GroupOutlined />,
   },
   {
-    title: "product",
-    path: "/dashboard/products",
-    icon: icon("ic_cart"),
+    title: "Proveedor",
+    path: "/proveedor",
+    icon: <MapsHomeWorkOutlined />,
   },
   {
-    title: "blog",
-    path: "/dashboard/blog",
-    icon: icon("ic_blog"),
+    title: "Clientes",
+    path: "/cliente",
+    icon: <PermContactCalendarOutlined />,
   },
   {
-    title: "login",
-    path: "/login",
-    icon: icon("ic_lock"),
+    title: "Productos",
+    path: "/producto",
+    icon: <WarehouseOutlined />,
   },
   {
-    title: "Not found",
-    path: "/404",
-    icon: icon("ic_disabled"),
+    title: "Bodegas",
+    path: "/bodega",
+    icon: <Inventory2Outlined />,
+  },
+
+  {
+    title: "Venta",
+    path: "/venta",
+    icon: <LocalShippingOutlined />,
+  },
+  {
+    title: "Compra",
+    path: "/compra",
+    icon: <LocalMallOutlined />,
+  },
+  {
+    title: "Gastos",
+    path: "/gasto",
+    icon: <ShowChartOutlined />,
+  },
+  {
+    title: "Produccion",
+    path: "/produccion",
+    icon: <CropRotateOutlined />,
+  },
+  {
+    title: "Envasado",
+    path: "/envasado",
+    icon: <ScienceOutlined />,
   },
 ];
 

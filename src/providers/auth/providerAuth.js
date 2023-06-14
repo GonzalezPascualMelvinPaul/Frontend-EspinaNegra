@@ -1,12 +1,11 @@
-import { authApi } from "./configAuth";
+import { espinaNegraApi } from "../../api";
 
 export const loginWithEmailAndPassword = async ({ email, password }) => {
   try {
-    const { data } = await authApi.post("login", {
+    const { data } = await espinaNegraApi.post("login", {
       email: email,
       password: password,
     });
-    console.log("Info del login", data);
     return {
       ok: true,
       token: data.token,
@@ -20,8 +19,7 @@ export const loginWithEmailAndPassword = async ({ email, password }) => {
 
 export const getDataWithToken = async () => {
   try {
-    const { data } = await authApi.get("user-profile");
-    console.log("infor del token", data);
+    const { data } = await espinaNegraApi.get("user/profile");
     return {
       ok: true,
       token: data.token,
@@ -35,8 +33,7 @@ export const getDataWithToken = async () => {
 
 export const logoutAccount = async () => {
   try {
-    const { data } = await authApi.post("logout");
-    console.log("Cerrando Sesion", data);
+    const { data } = await espinaNegraApi.post("logout");
     return { ok: true };
   } catch (error) {
     return { ok: false };

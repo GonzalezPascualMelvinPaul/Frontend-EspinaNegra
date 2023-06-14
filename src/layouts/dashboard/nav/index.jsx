@@ -23,6 +23,7 @@ import NavSection from "../../../components/nav-section";
 //
 import navConfig from "./config";
 import { useSelector } from "react-redux";
+import { getEnvVariables } from "../../../helpers/getEnvVariables";
 
 // ----------------------------------------------------------------------
 
@@ -46,6 +47,7 @@ Nav.propTypes = {
 export default function Nav({ openNav, onCloseNav }) {
   const { pathname } = useLocation();
   const { user } = useSelector((state) => state.auth);
+  const { VITE_API_URL_IMAGE } = getEnvVariables();
   const isDesktop = useResponsive("up", "lg");
 
   useEffect(() => {
@@ -56,74 +58,50 @@ export default function Nav({ openNav, onCloseNav }) {
   }, [pathname]);
 
   const renderContent = (
-    <Scrollbar
-      sx={{
-        height: 1,
-        "& .simplebar-content": {
+    <>
+      <Scrollbar
+        sx={{
           height: 1,
-          display: "flex",
-          flexDirection: "column",
-        },
-      }}
-    >
-      <Box sx={{ px: 2.5, py: 3, display: "inline-flex" }}>
-        <Logo />
-      </Box>
+          "& .simplebar-content": {
+            height: 1,
+            display: "flex",
+            flexDirection: "column",
+          },
+        }}
+      >
+        <Box sx={{ px: 2.5, py: 3, display: "inline-flex" }}>
+          <Logo />
+        </Box>
 
-      <Box sx={{ mb: 5, mx: 2.5 }}>
-        <Link underline="none">
-          <StyledAccount>
-            <Avatar src={account.photoURL} alt="photoURL" />
+        <Box sx={{ mb: 5, mx: 2.5 }}>
+          <Link underline="none">
+            <StyledAccount>
+              <Avatar
+                src={
+                  user?.imagen == undefined
+                    ? "../../../../public/assets/images/avatars/avatar_1.jpg"
+                    : `${VITE_API_URL_IMAGE}${user?.imagen}`
+                }
+                alt="photoURL"
+              />
 
-            <Box sx={{ ml: 2 }}>
-              <Typography variant="subtitle2" sx={{ color: "text.primary" }}>
-                {user?.name}
-              </Typography>
+              <Box sx={{ ml: 2 }}>
+                <Typography variant="subtitle2" sx={{ color: "text.primary" }}>
+                  {user?.nombre}
+                </Typography>
 
-              <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                Teacher
-              </Typography>
-            </Box>
-          </StyledAccount>
-        </Link>
-      </Box>
+                <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                  {user?.nombre_rol}
+                </Typography>
+              </Box>
+            </StyledAccount>
+          </Link>
+        </Box>
+        <NavSection data={navConfig} />
 
-      <NavSection data={navConfig} />
-
-      <Box sx={{ flexGrow: 1 }} />
-
-      <Box sx={{ px: 2.5, pb: 3, mt: 10 }}>
-        <Stack
-          alignItems="center"
-          spacing={3}
-          sx={{ pt: 5, borderRadius: 2, position: "relative" }}
-        >
-          <Box
-            component="img"
-            src="/assets/illustrations/illustration_avatar.png"
-            sx={{ width: 100, position: "absolute", top: -50 }}
-          />
-
-          <Box sx={{ textAlign: "center" }}>
-            <Typography gutterBottom variant="h6">
-              Get more?
-            </Typography>
-
-            <Typography variant="body2" sx={{ color: "text.secondary" }}>
-              From only $69
-            </Typography>
-          </Box>
-
-          <Button
-            href="https://material-ui.com/store/items/minimal-dashboard/"
-            target="_blank"
-            variant="contained"
-          >
-            Upgrade to Pro
-          </Button>
-        </Stack>
-      </Box>
-    </Scrollbar>
+        <Box sx={{ flexGrow: 1 }} />
+      </Scrollbar>
+    </>
   );
 
   return (
