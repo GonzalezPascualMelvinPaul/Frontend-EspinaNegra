@@ -2,7 +2,7 @@ import { espinaNegraApi } from "../../api";
 
 export const getUsersProvider = async () => {
   return espinaNegraApi
-    .get(`user/`)
+    .get(`user`)
     .then((response) => {
       return { ok: true, data: response.data, message: response.data?.message };
     })
@@ -25,7 +25,7 @@ export const updateUserProvider = async (user, id) => {
 
 export const addUserProvider = async (newUser) => {
   return espinaNegraApi
-    .post(`user/`, newUser, {
+    .post(`user`, newUser, {
       headers: { "content-type": "multipart/form-data" },
     })
     .then((response) => {

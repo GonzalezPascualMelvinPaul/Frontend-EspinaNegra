@@ -2,7 +2,7 @@ import { espinaNegraApi } from "../../api";
 
 export const getProveedoresProvider = async () => {
   return espinaNegraApi
-    .get(`proveedor/`)
+    .get(`proveedor`)
     .then((response) => {
       return { ok: true, data: response.data, message: response.data?.message };
     })
@@ -32,7 +32,7 @@ export const updateProveedorProvider = async (proveedor, id) => {
 
 export const addProveedorProvider = async (newProveedor) => {
   return espinaNegraApi
-    .post(`proveedor/`, newProveedor)
+    .post(`proveedor`, newProveedor)
     .then((response) => {
       return { ok: true, data: response.data, message: response.data?.message };
     })

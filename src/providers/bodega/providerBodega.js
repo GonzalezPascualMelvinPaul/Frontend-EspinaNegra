@@ -2,7 +2,7 @@ import { espinaNegraApi } from "../../api";
 
 export const getBodegasProvider = async () => {
   return espinaNegraApi
-    .get(`bodega/`)
+    .get(`bodega`)
     .then((response) => {
       return { ok: true, data: response.data, message: response.data?.message };
     })
@@ -32,7 +32,7 @@ export const updateBodegaProvider = async (bodega, id) => {
 
 export const addBodegaProvider = async (newBodega) => {
   return espinaNegraApi
-    .post(`bodega/`, newBodega)
+    .post(`bodega`, newBodega)
     .then((response) => {
       return { ok: true, data: response.data, message: response.data?.message };
     })

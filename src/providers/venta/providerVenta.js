@@ -2,7 +2,7 @@ import { espinaNegraApi } from "../../api";
 
 export const getVentasProvider = async () => {
   return espinaNegraApi
-    .get(`venta/`)
+    .get(`venta`)
     .then((response) => {
       return { ok: true, data: response.data, message: response.data?.message };
     })
@@ -25,7 +25,7 @@ export const updateVentaProvider = async (venta, id) => {
 
 export const addVentaProvider = async (newventa) => {
   return espinaNegraApi
-    .post(`venta/`, newventa, {
+    .post(`venta`, newventa, {
       headers: { "content-type": "multipart/form-data" },
     })
     .then((response) => {
