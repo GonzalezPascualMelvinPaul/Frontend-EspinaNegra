@@ -34,8 +34,11 @@ export const authSlice = createSlice({
       state.errorMessage = payload;
       state.status = "error";
     },
+    updateImage: (state, action) => {
+      state.user.imagen = action.payload;
+    },
   },
 });
 
-export const { login, logout, checkingCredentials, onError } =
+export const { login, logout, checkingCredentials, onError, updateImage } =
   authSlice.actions;

@@ -72,7 +72,7 @@ export const EditarVenta = () => {
     setIsLoading(false);
     setTimeout(() => {
       navigate("/venta/inicio");
-    }, 5000);
+    }, 2200);
   };
   const initialValues = {
     observaciones: venta?.observaciones,

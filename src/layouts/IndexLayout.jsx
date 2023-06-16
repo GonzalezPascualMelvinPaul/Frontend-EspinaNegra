@@ -15,7 +15,7 @@ export const IndexLayout = ({ title, children }) => {
             flexWrap={"wrap"}
             justifyContent="center"
             display={"flex"}
-            sx={{ height: "50px", pr: 5 }}
+            sx={{ height: "50px" }}
           >
             <Typography
               textAlign={"center"}

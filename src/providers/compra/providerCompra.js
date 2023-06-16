@@ -25,9 +25,7 @@ export const updateCompraProvider = async (compra, id) => {
 
 export const addCompraProvider = async (newcompra) => {
   return espinaNegraApi
-    .post(`compra`, newcompra, {
-      headers: { "content-type": "multipart/form-data" },
-    })
+    .post(`compra`, newcompra)
     .then((response) => {
       return { ok: true, data: response.data, message: response.data?.message };
     })

@@ -1,4 +1,4 @@
-import { Google } from "@mui/icons-material";
+import { Google, Visibility, VisibilityOff } from "@mui/icons-material";
 //import { Grid, TextField, Typography, Button, Link } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { AuthLayout } from "../layout/AuthLayout";
@@ -106,39 +106,13 @@ export const LoginPage = () => {
                           onClick={() => setShowPassword(!showPassword)}
                           edge="end"
                         >
-                          <Iconify
-                            icon={
-                              showPassword ? "eva:eye-fill" : "eva:eye-off-fill"
-                            }
-                          />
+                          {showPassword ? <Visibility /> : <VisibilityOff />}
                         </IconButton>
                       </InputAdornment>
                     ),
                   }}
                 />
               </Stack>
-
-              <Stack
-                direction="row"
-                alignItems="center"
-                justifyContent="space-between"
-                sx={{ my: 2 }}
-              >
-                <Checkbox name="remember" label="Remember me" />
-                <Link variant="subtitle2" underline="hover">
-                  Forgot password?
-                </Link>
-              </Stack>
-
-              <LoadingButton
-                fullWidth
-                size="large"
-                type="submit"
-                variant="contained"
-                //disabled={isAutehnticating}
-              >
-                Login
-              </LoadingButton>
               <div>
                 {store.getState().auth.status === "error" ? (
                   <Alert sx={{ mt: 3, mb: 3 }} severity="error">
@@ -148,15 +122,15 @@ export const LoginPage = () => {
                   ""
                 )}
               </div>
-              <Grid container direction={"row"} justifyContent="end">
-                <Link
-                  component={RouterLink}
-                  color="inherit"
-                  to="/auth/register"
-                >
-                  Crear una cuenta
-                </Link>
-              </Grid>
+              <LoadingButton
+                fullWidth
+                size="large"
+                type="submit"
+                variant="contained"
+                //disabled={isAutehnticating}
+              >
+                Login
+              </LoadingButton>
             </form>
           )}
         </Formik>

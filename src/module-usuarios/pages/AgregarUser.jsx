@@ -40,6 +40,7 @@ export const AgregarUser = () => {
   const [open, setOpen] = useState(false);
   const [rol, setRol] = useState([]);
   const [empleados, setEmpleados] = useState([]);
+
   const getRoles = async () => {
     const { data } = await getRolesProvider();
     console.log(data?.roles);
@@ -50,6 +51,7 @@ export const AgregarUser = () => {
     const { data } = await getEmpleadosProvider();
     setEmpleados(data?.empleados);
   };
+
   const onSubmit = async (values, e) => {
     const formData = new FormData();
     formData.append("imagen", picture);
@@ -70,6 +72,7 @@ export const AgregarUser = () => {
     setMessage(message);
     setIsLoading(false);
   };
+
   const handleImageChange = (event) => {
     const file = event.currentTarget.files[0];
     setPicture(file);

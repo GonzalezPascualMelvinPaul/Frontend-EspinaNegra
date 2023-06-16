@@ -17,20 +17,30 @@ import { deleteToken } from "../../../providers/auth/configAuth";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../../store/auth/authSlice";
 import { getEnvVariables } from "../../../helpers/getEnvVariables";
+import {
+  DashboardOutlined,
+  Logout,
+  Person2,
+  Settings,
+} from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 // ----------------------------------------------------------------------
 
 const MENU_OPTIONS = [
   {
-    label: "Home",
-    icon: "eva:home-fill",
+    label: "Dashboard",
+    icon: <DashboardOutlined />,
+    path: "/dashboard/inicio",
   },
   {
-    label: "Profile",
-    icon: "eva:person-fill",
+    label: "Perfil",
+    icon: <Person2 />,
+    path: "/usuario/perfil",
   },
   {
-    label: "Settings",
-    icon: "eva:settings-2-fill",
+    label: "Configuracion",
+    icon: <Settings />,
+    path: "/usuario/configuracion",
   },
 ];
 
@@ -41,13 +51,18 @@ export default function AccountPopover() {
   const { user } = useSelector((state) => state.auth);
   const [open, setOpen] = useState(null);
   const { VITE_API_URL_IMAGE } = getEnvVariables();
-
+  const navigate = useNavigate();
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
   };
 
   const handleClose = () => {
     setOpen(null);
+  };
+
+  const handleNavigate = (path) => {
+    setOpen(null);
+    navigate(path);
   };
 
   const onLogout = () => {
@@ -78,7 +93,7 @@ export default function AccountPopover() {
 
           src={
             user?.imagen == undefined
-              ? "../../../../public/assets/images/avatars/avatar_1.jpg"
+              ? "/public/avatar_1.jpg"
               : `${VITE_API_URL_IMAGE}${user?.imagen}`
           }
           alt="photoURL"
@@ -117,8 +132,11 @@ export default function AccountPopover() {
 
         <Stack sx={{ p: 1 }}>
           {MENU_OPTIONS.map((option) => (
-            <MenuItem key={option.label} onClick={handleClose}>
-              {option.label}
+            <MenuItem
+              key={option.label}
+              onClick={() => handleNavigate(option.path)}
+            >
+              {option.icon} {option.label}
             </MenuItem>
           ))}
         </Stack>
@@ -126,7 +144,7 @@ export default function AccountPopover() {
         <Divider sx={{ borderStyle: "dashed" }} />
 
         <MenuItem onClick={onLogout} sx={{ m: 1 }}>
-          Logout
+          <Logout /> Logout
         </MenuItem>
       </Popover>
     </>

@@ -79,7 +79,7 @@ export default function Nav({ openNav, onCloseNav }) {
               <Avatar
                 src={
                   user?.imagen == undefined
-                    ? "../../../../public/assets/images/avatars/avatar_1.jpg"
+                    ? "/public/avatar_1.jpg"
                     : `${VITE_API_URL_IMAGE}${user?.imagen}`
                 }
                 alt="photoURL"

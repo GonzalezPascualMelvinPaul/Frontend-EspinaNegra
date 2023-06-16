@@ -44,9 +44,11 @@ export const EditarCompra = () => {
     }
     setCompra(data.compra);
   };
+
   const handleClose = () => {
     setOpen(false);
   };
+
   useEffect(() => {
     getCompra();
   }, []);
@@ -67,11 +69,11 @@ export const EditarCompra = () => {
     setIsLoading(false);
     setTimeout(() => {
       navigate("/compra/inicio");
-    }, 5000);
+    }, 2200);
   };
   const initialValues = {
     observaciones: compra?.observaciones,
-    recibo: compra?.recibo,
+    recibo: compra?.recibo || "",
   };
   return (
     <>
