@@ -27,14 +27,14 @@ import { object, string } from "yup";
 import { getEnvVariables } from "../../helpers/getEnvVariables";
 const { VITE_ESPINA_NEGRA_API_URL } = getEnvVariables();
 const validationSchema = object({
-  email: string("Ingese su correo electronico")
+  email_usuario: string("Ingese su correo electronico")
     .email()
     .required("Este campo es obligatorio"),
   password: string("Ingrese su contraseña").required("Este campo es requerido"),
 });
 
 const formData = {
-  email: "",
+  email_usuario: "",
   password: "",
 };
 
@@ -67,7 +67,10 @@ export const LoginPage = () => {
     <>
       <AuthLayout title="Iniciar Sesion">
         <Formik
-          initialValues={{ email: "", password: "" }}
+          initialValues={{
+            email_usuario: "18161127@itoaxaca.edu.mx",
+            password: "",
+          }}
           validationSchema={validationSchema}
           onSubmit={(values) => {
             console.log("Formulario", values);
@@ -78,15 +81,15 @@ export const LoginPage = () => {
             <form onSubmit={handleSubmit}>
               <Stack spacing={3}>
                 <TextField
-                  name="email"
+                  name="email_usuario"
                   label="Email address"
-                  id="email"
+                  id="email_usuario"
                   type="email"
                   placeholder="Correo@gmail.com"
                   onChange={handleChange}
-                  value={values.email}
-                  error={touched.email && Boolean(errors.email)}
-                  helperText={touched.email && errors.email}
+                  value={values.email_usuario}
+                  error={touched.email_usuario && Boolean(errors.email_usuario)}
+                  helperText={touched.email_usuario && errors.email_usuario}
                 />
 
                 <TextField
@@ -113,15 +116,17 @@ export const LoginPage = () => {
                   }}
                 />
               </Stack>
-              <div>
-                {store.getState().auth.status === "error" ? (
-                  <Alert sx={{ mt: 3, mb: 3 }} severity="error">
-                    {store.getState().auth.errorMessage}
-                  </Alert>
-                ) : (
-                  ""
-                )}
-              </div>
+              <Grid container spacing={2} sx={{ mb: 2, mt: 1 }}>
+                <div>
+                  {store.getState().auth.status === "error" ? (
+                    <Alert sx={{ mt: 3, mb: 3 }} severity="error">
+                      {store.getState().auth.errorMessage}
+                    </Alert>
+                  ) : (
+                    ""
+                  )}
+                </div>
+              </Grid>
               <LoadingButton
                 fullWidth
                 size="large"

@@ -46,23 +46,23 @@ export const IndexProveedor = () => {
 
   const columns = [
     {
-      field: "nombre",
+      field: "nombre_persona_fisica",
       headerName: "Nombre",
       flex: 1,
       sortable: true,
     },
     {
-      field: "email",
+      field: "email_proveedor",
       headerName: "Email",
       flex: 2,
     },
     {
-      field: "numero",
+      field: "celular_proveedor",
       headerName: "Número",
       flex: 1,
     },
     {
-      field: "rfc",
+      field: "rfc_persona_fisica",
       headerName: "RFC",
       flex: 1,
     },
@@ -80,7 +80,7 @@ export const IndexProveedor = () => {
             </Button>
             <Button
               onClick={() => {
-                navigate(`/proveedor/editar/${row.id}`);
+                navigate(`/proveedor/editar/${row.id_proveedor}`);
               }}
               variant="contained"
               color="secondary"
@@ -132,7 +132,7 @@ export const IndexProveedor = () => {
                 isLoading={isLoading}
                 data={proveedorBuscador}
                 columns={columns}
-                idData={"id"}
+                idData={"id_proveedor"}
               />
             </>
           )}

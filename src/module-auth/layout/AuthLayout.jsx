@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { styled } from "@mui/material/styles";
-import { Container, Divider, Typography } from "@mui/material";
+import { Box, Container, Divider, Typography } from "@mui/material";
 import useResponsive from "../../hooks/useResponsive";
 import Logo from "../../components/logo";
 const StyledRoot = styled("div")(({ theme }) => ({
@@ -48,10 +48,20 @@ export const AuthLayout = ({ children, title = "" }) => {
 
         {mdUp && (
           <StyledSection>
-            <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
+            <Typography variant="h3" sx={{ px: 5, mt: 20, mb: 5 }}>
               Hola, Bienvenido de Nuevo!
             </Typography>
-            <img src="/espinaNegra.jpg" alt="login" />
+            <Box
+              display={"flex"}
+              justifyContent={"center"}
+              alignContent={"center"}
+            >
+              <img
+                style={{ width: "80%", height: "70%" }}
+                src={"./espinaNegra.jpg"}
+                alt="login"
+              />
+            </Box>
           </StyledSection>
         )}
 

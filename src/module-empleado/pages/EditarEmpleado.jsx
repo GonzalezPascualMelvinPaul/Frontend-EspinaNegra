@@ -17,13 +17,17 @@ import { AlertMessage, BreadCrumbsCustom } from "../../ui";
 import dayjs from "dayjs";
 dayjs.locale("es");
 const validationSchema = Yup.object({
-  nombre: Yup.string().required("El nombre es requerido"),
-  apellido_paterno: Yup.string().required("El apellido paterno es requerido"),
-  apellido_materno: Yup.string().required("El apellido materno es requerido"),
+  nombre_persona_fisica: Yup.string().required("El nombre es requerido"),
+  apellido_paterno_persona_fisica: Yup.string().required(
+    "El apellido paterno es requerido"
+  ),
+  apellido_materno_persona_fisica: Yup.string().required(
+    "El apellido materno es requerido"
+  ),
   edad: Yup.number()
     .typeError("La edad debe ser un numero")
     .required("La edad es requerida"),
-  salario: Yup.number()
+  salario_empleado: Yup.number()
     .typeError("El salario debe ser un numero")
     .required("El salario es requerido"),
   porcentaje_comision: Yup.number()
@@ -31,8 +35,12 @@ const validationSchema = Yup.object({
     .required("El porcentaje de comision es requerido")
     .max(100, "El porcentaje de comision no puede ser mayor a 100")
     .min(0, "El porcentaje de comision no puede ser menor a 0"),
-  fecha_ingreso: Yup.date().required("La fecha de ingreso es requerida"),
-  fecha_nacimiento: Yup.date().required("La fecha de nacimiento es requerida"),
+  fecha_ingreso_empleado: Yup.date().required(
+    "La fecha de ingreso es requerida"
+  ),
+  fecha_nacimiento_empleado: Yup.date().required(
+    "La fecha de nacimiento es requerida"
+  ),
 });
 export const EditarEmpleado = ({
   type = "view",
@@ -84,14 +92,14 @@ export const EditarEmpleado = ({
   };
 
   const initialValues = {
-    nombre: empleado?.nombre,
-    apellido_paterno: empleado?.apellido_paterno,
-    apellido_materno: empleado?.apellido_materno,
+    nombre_persona_fisica: empleado?.nombre_persona_fisica,
+    apellido_paterno_persona_fisica: empleado?.apellido_paterno_persona_fisica,
+    apellido_materno_persona_fisica: empleado?.apellido_materno_persona_fisica,
     edad: empleado?.edad,
-    salario: empleado?.salario,
-    porcentaje_comision: empleado?.porcentaje_comision,
-    fecha_ingreso: new Date(empleado?.fecha_ingreso),
-    fecha_nacimiento: new Date(empleado?.fecha_nacimiento),
+    salario_empleado: empleado?.salario_empleado,
+    comision_empleado: empleado?.comision_empleado,
+    fecha_ingreso_empleado: new Date(empleado?.fecha_ingreso_empleado),
+    fecha_nacimiento_empleado: new Date(empleado?.fecha_nacimiento_empleado),
   };
 
   return (
@@ -131,49 +139,54 @@ export const EditarEmpleado = ({
                   <Field
                     as={TextField}
                     label="Nombre"
-                    name="nombre"
+                    name="nombre_persona_fisica"
                     disabled={true}
                     variant="outlined"
                     fullWidth
                     margin="normal"
                     error={
-                      formik.touched.nombre && formik.errors.nombre
+                      formik.touched.nombre_persona_fisica &&
+                      formik.errors.nombre_persona_fisica
                         ? true
                         : false
                     }
-                    helperText={<ErrorMessage name="nombre" />}
+                    helperText={<ErrorMessage name="nombre_persona_fisica" />}
                   />
                   <Field
                     as={TextField}
                     label="Apellido Paterno"
-                    name="apellido_paterno"
+                    name="apellido_paterno_persona_fisica"
                     disabled={true}
                     variant="outlined"
                     fullWidth
                     margin="normal"
                     error={
-                      formik.touched.apellido_paterno &&
-                      formik.errors.apellido_paterno
+                      formik.touched.apellido_paterno_persona_fisica &&
+                      formik.errors.apellido_paterno_persona_fisica
                         ? true
                         : false
                     }
-                    helperText={<ErrorMessage name="apellido_paterno" />}
+                    helperText={
+                      <ErrorMessage name="apellido_paterno_persona_fisica" />
+                    }
                   />
                   <Field
                     as={TextField}
                     label="Apellido Materno"
-                    name="apellido_materno"
+                    name="apellido_materno_persona_fisica"
                     disabled={true}
                     variant="outlined"
                     fullWidth
                     margin="normal"
                     error={
-                      formik.touched.apellido_materno &&
-                      formik.errors.apellido_materno
+                      formik.touched.apellido_materno_persona_fisica &&
+                      formik.errors.apellido_materno_persona_fisica
                         ? true
                         : false
                     }
-                    helperText={<ErrorMessage name="apellido_materno" />}
+                    helperText={
+                      <ErrorMessage name="apellido_materno_persona_fisica" />
+                    }
                   />
                   <Field
                     as={TextField}
@@ -190,33 +203,34 @@ export const EditarEmpleado = ({
                   <Field
                     as={TextField}
                     label="Salario"
-                    name="salario"
+                    name="salario_empleado"
                     variant="outlined"
                     fullWidth
                     margin="normal"
                     error={
-                      formik.touched.salario && formik.errors.salario
+                      formik.touched.salario_empleado &&
+                      formik.errors.salario_empleado
                         ? true
                         : false
                     }
-                    helperText={<ErrorMessage name="salario" />}
+                    helperText={<ErrorMessage name="salario_empleado" />}
                   />
                   <Field
                     as={TextField}
                     label="Porcentaje de comision"
-                    name="porcentaje_comision"
+                    name="comision_empleado"
                     variant="outlined"
                     fullWidth
                     margin="normal"
                     error={
-                      formik.touched.porcentaje_comision &&
-                      formik.errors.porcentaje_comision
+                      formik.touched.comision_empleado &&
+                      formik.errors.comision_empleado
                         ? true
                         : false
                     }
-                    helperText={<ErrorMessage name="porcentaje_comision" />}
+                    helperText={<ErrorMessage name="comision_empleado" />}
                   />
-                  <Field name="fecha_ingreso">
+                  <Field name="fecha_ingreso_empleado">
                     {({ field, form }) => (
                       <LocalizationProvider
                         dateAdapter={AdapterDateFns}
@@ -224,18 +238,20 @@ export const EditarEmpleado = ({
                       >
                         <DatePicker
                           label="Fecha de ingreso"
-                          name="fecha_ingreso"
+                          name="fecha_ingreso_empleado"
                           value={field.value}
                           onChange={(date) =>
-                            form.setFieldValue("fecha_ingreso", date)
+                            form.setFieldValue("fecha_ingreso_empleado", date)
                           }
                           error={
-                            formik.touched.fecha_ingreso &&
-                            formik.errors.fecha_ingreso
+                            formik.touched.fecha_ingreso_empleado &&
+                            formik.errors.fecha_ingreso_empleado
                               ? true
                               : false
                           }
-                          helperText={<ErrorMessage name="fecha_ingreso" />}
+                          helperText={
+                            <ErrorMessage name="fecha_ingreso_empleado" />
+                          }
                           renderInput={(params) => (
                             <TextField
                               {...params}
@@ -248,7 +264,7 @@ export const EditarEmpleado = ({
                       </LocalizationProvider>
                     )}
                   </Field>
-                  <Field name="fecha_nacimiento">
+                  <Field name="fecha_nacimiento_empleado">
                     {({ field, form }) => (
                       <LocalizationProvider
                         dateAdapter={AdapterDateFns}
@@ -257,18 +273,23 @@ export const EditarEmpleado = ({
                         <DatePicker
                           label="Fecha de nacimiento"
                           disabled={true}
-                          name="fecha_nacimiento"
+                          name="fecha_nacimiento_empleado"
                           value={field.value}
                           onChange={(date) =>
-                            form.setFieldValue("fecha_nacimiento", date)
+                            form.setFieldValue(
+                              "fecha_nacimiento_empleado",
+                              date
+                            )
                           }
                           error={
-                            formik.touched.fecha_nacimiento &&
-                            formik.errors.fecha_nacimiento
+                            formik.touched.fecha_nacimiento_empleado &&
+                            formik.errors.fecha_nacimiento_empleado
                               ? true
                               : false
                           }
-                          helperText={<ErrorMessage name="fecha_nacimiento" />}
+                          helperText={
+                            <ErrorMessage name="fecha_nacimiento_empleado" />
+                          }
                           renderInput={(params) => (
                             <TextField
                               {...params}
@@ -278,7 +299,7 @@ export const EditarEmpleado = ({
                             />
                           )}
                         />
-                        <ErrorMessage name="fecha_nacimiento" />
+                        <ErrorMessage name="fecha_nacimiento_empleado" />
                       </LocalizationProvider>
                     )}
                   </Field>

@@ -92,9 +92,9 @@ export default function AccountPopover() {
           //src={`http://localhost:8000/storage/imagenes/${user?.imagen}`}
 
           src={
-            user?.imagen == undefined
-              ? "/public/avatar_1.jpg"
-              : `${VITE_API_URL_IMAGE}${user?.imagen}`
+            user?.imagen_usuario == undefined
+              ? "./avatar_1.jpg"
+              : `${VITE_API_URL_IMAGE}${user?.imagen_usuario}`
           }
           alt="photoURL"
         />
@@ -121,10 +121,10 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {user?.name}
+            {user?.nombre_empleado}
           </Typography>
           <Typography variant="body2" sx={{ color: "text.secondary" }} noWrap>
-            {user?.email}
+            {user?.email_usuario}
           </Typography>
         </Box>
 

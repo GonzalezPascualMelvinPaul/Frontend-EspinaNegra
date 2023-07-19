@@ -8,12 +8,19 @@ const GREY = {
   100: "#F9FAFB",
   200: "#F4F6F8",
   300: "#DFE3E8",
-  400: "#C4CDD5",
+  400: "#FFF",
   500: "#919EAB",
   600: "#637381",
   700: "#454F5B",
   800: "#212B36",
   900: "#161C24",
+};
+
+const GREEN = {
+  0: "#0F4016",
+  100: "#035918",
+  200: "#084617",
+  300: "#04320f",
 };
 
 const PRIMARY = {
@@ -89,6 +96,7 @@ const palette = {
     paper: "#fff",
     default: GREY[100],
     neutral: GREY[200],
+    green: GREEN[0],
   },
   action: {
     active: GREY[600],

@@ -46,23 +46,23 @@ export const IndexCliente = () => {
 
   const columns = [
     {
-      field: "nombre",
+      field: "nombre_persona_fisica",
       headerName: "Nombre",
       flex: 1,
       sortable: true,
     },
     {
-      field: "email",
+      field: "email_cliente",
       headerName: "Email",
       flex: 1,
     },
     {
-      field: "telefono",
-      headerName: "Teléfono",
+      field: "celular_cliente",
+      headerName: "Celular",
       flex: 1,
     },
     {
-      field: "rfc",
+      field: "rfc_persona_fisica",
       headerName: "RFC",
       flex: 1,
     },
@@ -71,7 +71,7 @@ export const IndexCliente = () => {
       headerName: "Dirección",
       flex: 3,
       renderCell: ({ row }) => {
-        return `${row.direccion.calle}, ${row.direccion.ciudad}, ${row.direccion.estado}`;
+        return `${row.calle_direccion}, ${row.ciudad_direccion}, Oaxaca`;
       },
     },
     {
@@ -88,7 +88,7 @@ export const IndexCliente = () => {
             </Button>
             <Button
               onClick={() => {
-                navigate(`/cliente/editar/${row.id}`);
+                navigate(`/cliente/editar/${row.id_cliente}`);
               }}
               variant="contained"
               color="secondary"
@@ -140,7 +140,7 @@ export const IndexCliente = () => {
                 isLoading={isLoading}
                 data={clienteBuscador}
                 columns={columns}
-                idData={"id"}
+                idData={"id_cliente"}
               />
             </>
           )}

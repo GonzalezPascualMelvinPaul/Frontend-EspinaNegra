@@ -78,7 +78,7 @@ export const Configuracion = () => {
     if (ok) {
       setOpen(true);
       setError(false);
-      dispatch(updateImage(data.user.imagen));
+      dispatch(updateImage(data.user.imagen_usuario));
     } else {
       setError(true);
       setOpen(false);
@@ -127,7 +127,7 @@ export const Configuracion = () => {
                   src={
                     picture
                       ? URL.createObjectURL(picture)
-                      : `${VITE_API_URL_IMAGE}${user?.imagen}`
+                      : `${VITE_API_URL_IMAGE}${user?.imagen_usuario}`
                   }
                   alt="User"
                   sx={{ width: 80, height: 80, marginBottom: 5 }}

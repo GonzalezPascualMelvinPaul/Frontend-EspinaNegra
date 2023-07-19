@@ -35,7 +35,7 @@ export const authSlice = createSlice({
       state.status = "error";
     },
     updateImage: (state, action) => {
-      state.user.imagen = action.payload;
+      state.user.imagen_usuario = action.payload;
     },
   },
 });

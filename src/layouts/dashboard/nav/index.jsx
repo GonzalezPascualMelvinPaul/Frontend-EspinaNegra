@@ -58,50 +58,46 @@ export default function Nav({ openNav, onCloseNav }) {
   }, [pathname]);
 
   const renderContent = (
-    <>
-      <Scrollbar
-        sx={{
+    <Scrollbar
+      sx={{
+        height: 1,
+        "& .simplebar-content": {
           height: 1,
-          "& .simplebar-content": {
-            height: 1,
-            display: "flex",
-            flexDirection: "column",
-          },
-        }}
-      >
-        <Box sx={{ px: 2.5, py: 3, display: "inline-flex" }}>
-          <Logo />
-        </Box>
+          display: "flex",
+          flexDirection: "column",
+        },
+        backgroundColor: "#0f4016",
+      }}
+    >
+      <Box sx={{ px: 2.5, py: 3, display: "inline-flex" }}></Box>
 
-        <Box sx={{ mb: 5, mx: 2.5 }}>
-          <Link underline="none">
-            <StyledAccount>
-              <Avatar
-                src={
-                  user?.imagen == undefined
-                    ? "/public/avatar_1.jpg"
-                    : `${VITE_API_URL_IMAGE}${user?.imagen}`
-                }
-                alt="photoURL"
-              />
+      <Box sx={{ mb: 5, mx: 2.5 }}>
+        <Link underline="none">
+          <StyledAccount>
+            <Avatar
+              src={
+                user?.imagen_usuario == undefined
+                  ? "./avatar_1.jpg"
+                  : `${VITE_API_URL_IMAGE}${user?.imagen_usuario}`
+              }
+              alt="photoURL"
+            />
 
-              <Box sx={{ ml: 2 }}>
-                <Typography variant="subtitle2" sx={{ color: "text.primary" }}>
-                  {user?.nombre}
-                </Typography>
+            <Box sx={{ ml: 2 }}>
+              <Typography variant="subtitle2" sx={{ color: "#FFF" }}>
+                {user?.nombre_empleado}
+              </Typography>
 
-                <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  {user?.nombre_rol}
-                </Typography>
-              </Box>
-            </StyledAccount>
-          </Link>
-        </Box>
-        <NavSection data={navConfig} />
-
-        <Box sx={{ flexGrow: 1 }} />
-      </Scrollbar>
-    </>
+              <Typography variant="body2" sx={{ color: "#FFF" }}>
+                {user?.nombre_rol}
+              </Typography>
+            </Box>
+          </StyledAccount>
+        </Link>
+      </Box>
+      <NavSection data={navConfig} />
+      <Box sx={{ flexGrow: 1 }} />
+    </Scrollbar>
   );
 
   return (
@@ -120,7 +116,7 @@ export default function Nav({ openNav, onCloseNav }) {
             sx: {
               width: NAV_WIDTH,
               bgcolor: "background.default",
-              borderRightStyle: "dashed",
+              /*  borderRightStyle: "dashed", */
             },
           }}
         >

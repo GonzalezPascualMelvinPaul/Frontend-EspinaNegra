@@ -47,19 +47,19 @@ export const IndexProducto = () => {
 
   const columns = [
     {
-      field: "nombre",
+      field: "nombre_producto",
       headerName: "Nombre",
       flex: 1,
       sortable: true,
     },
     {
-      field: "precio_compra",
+      field: "precio_compra_producto",
       headerName: "Precio Compra",
       flex: 1,
       sortable: true,
     },
     {
-      field: "precio_venta",
+      field: "precio_venta_producto",
       headerName: "Precio Venta",
       flex: 1,
       sortable: true,
@@ -71,7 +71,7 @@ export const IndexProducto = () => {
       sortable: true,
     },
     {
-      field: "cantidad",
+      field: "cantidad_stock",
       headerName: "Cantidad",
       flex: 1,
       sortable: true,
@@ -121,6 +121,7 @@ export const IndexProducto = () => {
     setProductos(data.productos);
     setProductosBuscador(data.productos);
     setIsLoading(false);
+    console.log(data);
   };
   useEffect(() => {
     getProductos();
@@ -147,7 +148,7 @@ export const IndexProducto = () => {
                 isLoading={isLoading}
                 data={productosBuscador}
                 columns={columns}
-                idData={"id"}
+                idData={"id_producto"}
               />
             </>
           )}

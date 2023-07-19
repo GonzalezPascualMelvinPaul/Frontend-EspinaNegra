@@ -1,9 +1,12 @@
 import { espinaNegraApi } from "../../api";
 
-export const loginWithEmailAndPassword = async ({ email, password }) => {
+export const loginWithEmailAndPassword = async ({
+  email_usuario,
+  password,
+}) => {
   try {
     const { data } = await espinaNegraApi.post("login", {
-      email: email,
+      email_usuario: email_usuario,
       password: password,
     });
     return {

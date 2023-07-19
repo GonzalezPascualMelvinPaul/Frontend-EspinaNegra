@@ -39,12 +39,10 @@ export const EditarUser = () => {
   const navigate = useNavigate();
   const getEmpleados = async () => {
     const { data } = await getEmpleadosProvider();
-    console.log(data?.empleados);
     setEmpleados(data?.empleados);
   };
   const getRoles = async () => {
     const { data } = await getRolesProvider();
-
     setRol(data?.roles);
   };
   const getUser = async () => {
@@ -86,8 +84,8 @@ export const EditarUser = () => {
   const initialValues = {
     email: user?.email,
     username: user?.username,
-    rol_id: user?.rol_id,
-    empleado_id: user?.empleado_id,
+    id_rol: user?.id_rol,
+    id_empleado: user?.id_empleado,
   };
   return (
     <>
@@ -152,26 +150,26 @@ export const EditarUser = () => {
                   <Field
                     as={TextField}
                     label="Rol"
-                    name="rol_id"
+                    name="id_rol"
                     variant="outlined"
                     fullWidth
                     margin="normal"
                     select
                     error={
-                      formik.touched.rol_id && formik.errors.rol_id
+                      formik.touched.id_rol && formik.errors.id_rol
                         ? true
                         : false
                     }
-                    helperText={<ErrorMessage name="rol_id" />}
+                    helperText={<ErrorMessage name="id_rol" />}
                   >
                     {rol.map((option) => (
-                      <MenuItem key={option.id} value={option.id}>
-                        {option.nombre}
+                      <MenuItem key={option.id_rol} value={option.id_rol}>
+                        {option.nombre_rol}
                       </MenuItem>
                     ))}
                   </Field>
                   <Field
-                    name="empleado_id"
+                    name="id_empleado"
                     label="Empleado"
                     as={TextField}
                     variant="outlined"
@@ -180,11 +178,11 @@ export const EditarUser = () => {
                     select
                     margin="normal"
                     error={
-                      formik.touched.empleado_id && formik.errors.empleado_id
+                      formik.touched.id_empleado && formik.errors.id_empleado
                         ? true
                         : false
                     }
-                    helperText={<ErrorMessage name="empleado_id" />}
+                    helperText={<ErrorMessage name="id_empleado" />}
                     SelectProps={{
                       MenuProps: {
                         PaperProps: {
@@ -197,9 +195,13 @@ export const EditarUser = () => {
                     }}
                   >
                     {empleados.map((option) => (
-                      <MenuItem key={option.id} value={option.id}>
-                        {option.nombre} {option.apellido_paterno}{" "}
-                        {option.apellido_materno}
+                      <MenuItem
+                        key={option.id_empleado}
+                        value={option.id_empleado}
+                      >
+                        {option.nombre_persona_fisica}{" "}
+                        {option.apellido_paterno_persona_fisica}{" "}
+                        {option.apellido_materno_persona_fisica}
                       </MenuItem>
                     ))}
                   </Field>

@@ -58,7 +58,7 @@ export const IndexCompra = () => {
 
   const columns = [
     {
-      field: "id",
+      field: "id_compra",
       headerName: "ID",
       flex: 1,
       sortable: true,
@@ -75,11 +75,11 @@ export const IndexCompra = () => {
       flex: 2,
       sortable: true,
       renderCell: ({ value }) => {
-        return value.nombre;
+        return value.nombre_persona_fisica;
       },
     },
     {
-      field: "total",
+      field: "total_compra",
       headerName: "Total",
       flex: 2,
       sortable: true,
@@ -146,7 +146,7 @@ export const IndexCompra = () => {
                 isLoading={isLoading}
                 data={comprasBuscador}
                 columns={columns}
-                idData={"id"}
+                idData={"id_compra"}
               />
             </>
           )}

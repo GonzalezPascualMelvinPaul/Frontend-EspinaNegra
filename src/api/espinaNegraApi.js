@@ -6,7 +6,7 @@ console.log(VITE_API_URL);
 const espinaNegraApi = axios.create({
   baseURL: VITE_API_URL,
   headers: {
-    Authorization: `Bearer ${sessionStorage.getItem("TOKEN")}`,
+    Authorization: `Bearer ${localStorage.getItem("TOKEN")}`,
     "Content-Type": "application/json",
   },
 });

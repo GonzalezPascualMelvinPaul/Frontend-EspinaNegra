@@ -152,7 +152,7 @@ export const AgregarVenta = () => {
         open={open}
         severity="success"
       />
-      <IndexLayout title={"Compra"}>
+      <IndexLayout title={"Venta"}>
         <BreadCrumbsCustom
           routes={[
             {
@@ -220,7 +220,7 @@ export const AgregarVenta = () => {
                     />
                     <Field
                       as={TextField}
-                      label="Recibo"
+                      label="N. Factura / Nota"
                       name="recibo"
                       variant="outlined"
                       fullWidth

@@ -4,18 +4,18 @@ export const TOKEN_KEY = "TOKEN";
 export const authApi = axios.create({
   baseURL: "http://127.0.0.1:8000/api/",
   headers: {
-    Authorization: `Bearer ${sessionStorage.getItem(TOKEN_KEY)}`,
+    Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
   },
 });
 
 export const setToken = (token) => {
-  sessionStorage.setItem(TOKEN_KEY, token);
+  localStorage.setItem(TOKEN_KEY, token);
 };
 
 export const getToken = () => {
-  return sessionStorage.getItem(TOKEN_KEY);
+  return localStorage.getItem(TOKEN_KEY);
 };
 
 export const deleteToken = () => {
-  sessionStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(TOKEN_KEY);
 };

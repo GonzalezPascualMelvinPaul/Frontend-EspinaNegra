@@ -42,25 +42,25 @@ export const EmployeePage = () => {
 
   const columns = [
     {
-      field: "nombre",
+      field: "nombre_persona_fisica",
       headerName: "Nombre",
       flex: 2,
       sortable: true,
     },
     {
-      field: "apellido_paterno",
+      field: "apellido_paterno_persona_fisica",
       headerName: "Apellido Paterno",
       flex: 2,
       sortable: true,
     },
     {
-      field: "apellido_materno",
+      field: "apellido_materno_persona_fisica",
       headerName: "Apellido Materno",
       flex: 2,
       sortable: true,
     },
     {
-      field: "fecha_ingreso",
+      field: "fecha_ingreso_empleado",
       headerName: "Fecha de Ingreso",
       flex: 2,
       sortable: true,
@@ -79,7 +79,7 @@ export const EmployeePage = () => {
             </Button>
             <Button
               onClick={() => {
-                navigate(`/empleado/editar/${row.id}`);
+                navigate(`/empleado/editar/${row.id_empleado}`);
               }}
               variant="contained"
               color="secondary"
@@ -132,7 +132,7 @@ export const EmployeePage = () => {
                 isLoading={isLoading}
                 data={empleadosBuscador}
                 columns={columns}
-                idData={"id"}
+                idData={"id_empleado"}
               />
             </>
           )}

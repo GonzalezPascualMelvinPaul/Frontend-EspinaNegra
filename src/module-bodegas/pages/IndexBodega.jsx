@@ -37,13 +37,13 @@ export const IndexBodega = () => {
 
   const columns = [
     {
-      field: "nombre",
+      field: "nombre_bodega",
       headerName: "Nombre",
       flex: 1,
       sortable: true,
     },
     {
-      field: "descripcion",
+      field: "descripcion_bodega",
       headerName: "Descripción",
       flex: 1,
     },
@@ -52,7 +52,7 @@ export const IndexBodega = () => {
       headerName: "Dirección",
       flex: 3,
       renderCell: ({ row }) => {
-        return `${row.direccion.calle}, ${row.direccion.ciudad}, ${row.direccion.estado}`;
+        return `${row.direccion.calle_direccion}, ${row.direccion.ciudad_direccion}, Oaxaca`;
       },
     },
     {
@@ -121,7 +121,7 @@ export const IndexBodega = () => {
                 isLoading={isLoading}
                 data={bodegaBuscador}
                 columns={columns}
-                idData={"id"}
+                idData={"id_bodega"}
               />
             </>
           )}
