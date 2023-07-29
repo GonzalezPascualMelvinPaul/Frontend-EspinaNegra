@@ -24,9 +24,6 @@ const validationSchema = Yup.object({
   apellido_materno_persona_fisica: Yup.string().required(
     "El apellido materno es requerido"
   ),
-  edad: Yup.number()
-    .typeError("La edad debe ser un numero")
-    .required("La edad es requerida"),
   salario_empleado: Yup.number()
     .typeError("El salario debe ser un numero")
     .required("El salario es requerido"),
@@ -92,9 +89,9 @@ export const EditarEmpleado = ({
   };
 
   const initialValues = {
-    nombre_persona_fisica: empleado?.nombre_persona_fisica,
-    apellido_paterno_persona_fisica: empleado?.apellido_paterno_persona_fisica,
-    apellido_materno_persona_fisica: empleado?.apellido_materno_persona_fisica,
+    nombre_persona_fisica: empleado?.nombre_empleado,
+    apellido_paterno_persona_fisica: empleado?.apellido_paterno_empleado,
+    apellido_materno_persona_fisica: empleado?.apellido_materno_empleado,
     edad: empleado?.edad,
     salario_empleado: empleado?.salario_empleado,
     comision_empleado: empleado?.comision_empleado,
@@ -187,18 +184,6 @@ export const EditarEmpleado = ({
                     helperText={
                       <ErrorMessage name="apellido_materno_persona_fisica" />
                     }
-                  />
-                  <Field
-                    as={TextField}
-                    label="Edad"
-                    name="edad"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    error={
-                      formik.touched.edad && formik.errors.edad ? true : false
-                    }
-                    helperText={<ErrorMessage name="edad" />}
                   />
                   <Field
                     as={TextField}

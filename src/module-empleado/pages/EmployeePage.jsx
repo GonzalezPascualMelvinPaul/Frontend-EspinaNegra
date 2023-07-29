@@ -1,5 +1,5 @@
 import { AddCircleOutline } from "@mui/icons-material";
-import { Box, Button, Skeleton, Stack } from "@mui/material";
+import { Box, Button, Container, Skeleton, Stack } from "@mui/material";
 
 import { useEffect, useState } from "react";
 
@@ -42,19 +42,19 @@ export const EmployeePage = () => {
 
   const columns = [
     {
-      field: "nombre_persona_fisica",
+      field: "nombre_empleado",
       headerName: "Nombre",
       flex: 2,
       sortable: true,
     },
     {
-      field: "apellido_paterno_persona_fisica",
+      field: "apellido_paterno_empleado",
       headerName: "Apellido Paterno",
       flex: 2,
       sortable: true,
     },
     {
-      field: "apellido_materno_persona_fisica",
+      field: "apellido_materno_empleado",
       headerName: "Apellido Materno",
       flex: 2,
       sortable: true,

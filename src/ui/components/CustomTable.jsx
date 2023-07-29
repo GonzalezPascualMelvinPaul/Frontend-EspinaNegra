@@ -2,6 +2,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import React from "react";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { Box } from "@mui/material";
 
 export const CustomTable = ({
   data = [],
@@ -14,16 +15,26 @@ export const CustomTable = ({
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
-    <div
-      style={{
-        height: "100%",
-        width: "100%",
-      }}
-    >
+    <Box sx={{ height: 400, width: "100%" }}>
       <DataGrid
+        rows={data}
+        columns={columns}
+        getRowId={(row) => row[idData]}
+        initialState={{
+          pagination: {
+            paginationModel: {
+              pageSize: 5,
+            },
+          },
+        }}
+        pageSizeOptions={[5]}
+        checkboxSelection
+        disableRowSelectionOnClick
+      />
+      {/* <DataGrid
         loading={loading}
         scroll={{ x: isSmallScreen ? "scroll" : "auto", y: "auto" }}
-        getRowId={(row) => row[idData]}
+       
         disableSelectionOnClick
         rows={data}
         columns={columns}
@@ -47,7 +58,7 @@ export const CustomTable = ({
             outline: "none !important",
           },
         }}
-      />
-    </div>
+      /> */}
+    </Box>
   );
 };

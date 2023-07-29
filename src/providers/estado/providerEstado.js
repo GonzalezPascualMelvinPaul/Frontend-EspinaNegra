@@ -1,8 +1,8 @@
 import { espinaNegraApi } from "../../api";
 
-export const getEmpleadosProvider = async () => {
+export const getEstadosProvider = async () => {
   return espinaNegraApi
-    .get(`empleado`)
+    .get(`estado`)
     .then((response) => {
       return { ok: true, data: response.data, message: response.data?.message };
     })
