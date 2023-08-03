@@ -76,11 +76,17 @@ export const IndexDashboard = () => {
           container
           spacing={3}
         >
-          <Grid justifyContent={"center"} item xs={12}>
+          <Grid
+            display={"flex"}
+            justifyContent={"center"}
+            alignItems={"center"}
+            item
+            xs={12}
+          >
             <Typography variant="h6">Atajos Rapidos</Typography>
           </Grid>
           {cards.map((option) => (
-            <Grid item key={option.title} xs={4}>
+            <Grid item key={option.title} xs={6} md={4}>
               <Card sx={{ maxWidth: 345 }}>
                 <CardActionArea onClick={() => navigate(option.url)}>
                   <CardMedia
@@ -105,7 +111,7 @@ export const IndexDashboard = () => {
             <Typography variant="h6">Graficas</Typography>
           </Grid>
           <Grid mb={5} item xs={12} md={6} lg={4}>
-            <Card sx={{ maxWidth: 500 }}>
+            <Card sx={{ maxWidth: 600 }}>
               <CardActionArea onClick={() => navigate("/grafico/inicio")}>
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
@@ -118,11 +124,20 @@ export const IndexDashboard = () => {
                           { id: 0, value: 100, label: "Corchos" },
                           { id: 1, value: 20, label: "Botellas" },
                           { id: 2, value: 20, label: "Etiquetas" },
+                          { id: 3, value: 100, label: "Marbetes" },
                         ],
+                        innerRadius: 30,
+                        outerRadius: 100,
+                        paddingAngle: 5,
+                        cornerRadius: 5,
+                        startAngle: -90,
+                        endAngle: 180,
+                        cx: 100,
+                        cy: 100,
                       },
                     ]}
-                    width={400}
-                    height={200}
+                    width={350}
+                    height={250}
                   />
                 </CardContent>
               </CardActionArea>
