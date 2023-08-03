@@ -8,13 +8,13 @@ export const VerPerfil = () => {
   const { user } = useSelector((state) => state.auth);
   const { VITE_API_URL_IMAGE } = getEnvVariables();
   const initialValues = {
-    username: user?.username || "",
-    nombre: user?.nombre || "",
-    apellido_paterno: user?.apellido_paterno || "",
-    apellido_materno: user?.apellido_materno || "",
-    email: user?.email || "",
+    username: user?.username_usuario || "",
+    nombre: user?.nombre_empleado || "",
+    apellido_paterno: user?.apellido_paterno_empleado || "",
+    apellido_materno: user?.apellido_materno_empleado || "",
+    email: user?.email_usuario || "",
     nombre_role: user?.nombre_rol || "",
-    imagen: user?.imagen || "",
+    imagen: user?.imagen_usuario || "",
   };
   return (
     <>

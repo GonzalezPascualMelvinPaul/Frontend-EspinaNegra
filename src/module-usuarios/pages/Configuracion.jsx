@@ -12,6 +12,7 @@ import {
   Avatar,
   Box,
   Button,
+  Grid,
   IconButton,
   InputAdornment,
   TextField,
@@ -21,6 +22,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, updateImage } from "../../store/auth/authSlice";
 import { getEnvVariables } from "../../helpers/getEnvVariables";
+import { useNavigate } from "react-router-dom";
 const validationSchema = Yup.object({
   current_password: Yup.string().required("La contraseña actual es requerida"),
   new_password: Yup.string().required("La nueva contraseña es requerida"),
@@ -47,7 +49,10 @@ export const Configuracion = () => {
   const [showNewPasswordConfirmation, setShowNewPasswordConfirmation] =
     useState(false);
   const { user } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+
   const { VITE_API_URL_IMAGE } = getEnvVariables();
+
   const onSubmit = async (values, e) => {
     setIsLoading(true);
     setError(false);
@@ -70,7 +75,7 @@ export const Configuracion = () => {
   const onSubmitImage = async (values, e) => {
     const formData = new FormData();
 
-    formData.append("imagen", picture);
+    formData.append("imagen_usuario", picture);
     setIsLoading(true);
     setError(false);
     setOpen(false);
@@ -79,6 +84,9 @@ export const Configuracion = () => {
       setOpen(true);
       setError(false);
       dispatch(updateImage(data.user.imagen_usuario));
+      setTimeout(() => {
+        navigate("/dashboard/inicio");
+      }, 3000);
     } else {
       setError(true);
       setOpen(false);
@@ -159,114 +167,139 @@ export const Configuracion = () => {
         >
           {(formik) => (
             <Form>
-              <Field
-                as={TextField}
-                name="current_password"
-                label="Contraseña actual"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                type={showPassword ? "text" : "password"}
-                error={
-                  formik.touched.current_password &&
-                  formik.errors.current_password
-                    ? true
-                    : false
-                }
-                helperText={<ErrorMessage name="current_password" />}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={() => setShowPassword(!showPassword)}
-                        edge="end"
-                      >
-                        {showPassword ? <Visibility /> : <VisibilityOff />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-              <Field
-                as={TextField}
-                name="new_password_confirmation"
-                label="Nueva contraseña"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                type={showNewPassword ? "text" : "password"}
-                error={
-                  formik.touched.new_password_confirmation &&
-                  formik.errors.new_password_confirmation
-                    ? true
-                    : false
-                }
-                helperText={<ErrorMessage name="new_password_confirmation" />}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={() => setShowNewPassword(!showNewPassword)}
-                        edge="end"
-                      >
-                        {showNewPassword ? <Visibility /> : <VisibilityOff />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-              <Field
-                as={TextField}
-                name="new_password"
-                label="Nueva contraseña"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                type={showNewPasswordConfirmation ? "text" : "password"}
-                error={
-                  formik.touched.new_password && formik.errors.new_password
-                    ? true
-                    : false
-                }
-                helperText={<ErrorMessage name="new_password" />}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={() =>
-                          setShowNewPasswordConfirmation(
-                            !showNewPasswordConfirmation
-                          )
-                        }
-                        edge="end"
-                      >
-                        {showNewPasswordConfirmation ? (
-                          <Visibility />
-                        ) : (
-                          <VisibilityOff />
-                        )}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-              {error ? (
-                <Alert sx={{ mt: 0, mb: 0 }} severity="error">
-                  {message}
-                </Alert>
-              ) : (
-                ""
-              )}
-              {isLoading && !error ? (
-                <Alert sx={{ mt: 0, mb: 0 }} severity="success">
-                  Enviando datos...
-                </Alert>
-              ) : (
-                ""
-              )}
-              <Button type="submit" variant="contained">
-                Cambiar contraseña
-              </Button>
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={6}>
+                  <Field
+                    as={TextField}
+                    name="current_password"
+                    label="Contraseña actual"
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                    type={showPassword ? "text" : "password"}
+                    error={
+                      formik.touched.current_password &&
+                      formik.errors.current_password
+                        ? true
+                        : false
+                    }
+                    helperText={<ErrorMessage name="current_password" />}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => setShowPassword(!showPassword)}
+                            edge="end"
+                          >
+                            {showPassword ? <Visibility /> : <VisibilityOff />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Field
+                    as={TextField}
+                    name="new_password_confirmation"
+                    label="Nueva contraseña"
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                    type={showNewPassword ? "text" : "password"}
+                    error={
+                      formik.touched.new_password_confirmation &&
+                      formik.errors.new_password_confirmation
+                        ? true
+                        : false
+                    }
+                    helperText={
+                      <ErrorMessage name="new_password_confirmation" />
+                    }
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => setShowNewPassword(!showNewPassword)}
+                            edge="end"
+                          >
+                            {showNewPassword ? (
+                              <Visibility />
+                            ) : (
+                              <VisibilityOff />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Field
+                    as={TextField}
+                    name="new_password"
+                    label="Confirmar contraseña"
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                    type={showNewPasswordConfirmation ? "text" : "password"}
+                    error={
+                      formik.touched.new_password && formik.errors.new_password
+                        ? true
+                        : false
+                    }
+                    helperText={<ErrorMessage name="new_password" />}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() =>
+                              setShowNewPasswordConfirmation(
+                                !showNewPasswordConfirmation
+                              )
+                            }
+                            edge="end"
+                          >
+                            {showNewPasswordConfirmation ? (
+                              <Visibility />
+                            ) : (
+                              <VisibilityOff />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6} sm={6}>
+                  {error ? (
+                    <Alert sx={{ mt: 0, mb: 0 }} severity="error">
+                      {message}
+                    </Alert>
+                  ) : (
+                    ""
+                  )}
+                  {isLoading && !error ? (
+                    <Alert sx={{ mt: 0, mb: 0 }} severity="success">
+                      Enviando datos...
+                    </Alert>
+                  ) : (
+                    ""
+                  )}
+                </Grid>
+                <Grid
+                  display={"flex"}
+                  justifyContent={"end"}
+                  item
+                  xs={12}
+                  md={12}
+                  sx={{ mb: "2rem" }}
+                >
+                  <Button type="submit" variant="contained">
+                    Cambiar contraseña
+                  </Button>
+                </Grid>
+              </Grid>
             </Form>
           )}
         </Formik>

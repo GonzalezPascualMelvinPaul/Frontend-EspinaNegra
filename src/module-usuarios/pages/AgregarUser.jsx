@@ -18,6 +18,7 @@ import { addUserProvider } from "../../providers/usuario/providerUsuario";
 import { getRolesProvider } from "../../providers/role/providerRole";
 
 import { getEmpleadosProvider } from "../../providers/empleado/providerEmpleado";
+import { useNavigate } from "react-router-dom";
 
 const validationSchema = Yup.object({
   email_usuario: Yup.string().required("El email es requerido"),
@@ -41,6 +42,7 @@ export const AgregarUser = () => {
   const [open, setOpen] = useState(false);
   const [rol, setRol] = useState([]);
   const [empleados, setEmpleados] = useState([]);
+  const navigate = useNavigate();
 
   const getRoles = async () => {
     const { data } = await getRolesProvider();
@@ -49,7 +51,7 @@ export const AgregarUser = () => {
 
   const getEmpleados = async () => {
     const { data } = await getEmpleadosProvider();
-    console.log(data);
+
     setEmpleados(data?.empleados);
   };
 
@@ -66,6 +68,9 @@ export const AgregarUser = () => {
     if (ok) {
       setOpen(true);
       setError(false);
+      setTimeout(() => {
+        navigate("/usuario/inicio");
+      }, 3000);
     } else {
       setError(true);
       setOpen(false);

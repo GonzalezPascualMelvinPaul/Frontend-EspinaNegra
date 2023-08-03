@@ -100,6 +100,7 @@ export const AgregarEmpleado = () => {
     const { data } = await getEstadosProvider();
     setEstados(data?.estados);
   };
+
   const onSubmit = async (values, e) => {
     values.fecha_ingreso_empleado = dayjs(values.fecha_ingreso_empleado).format(
       "YYYY-MM-DD"
