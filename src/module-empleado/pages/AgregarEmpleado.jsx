@@ -65,13 +65,13 @@ const initialValues = {
   nombre_empleado: "",
   apellido_paterno_empleado: "",
   apellido_materno_empleado: "",
-  salario_empleado: "",
-  comision_empleado: "",
+  salario_empleado: 0,
+  comision_empleado: 0,
   fecha_ingreso_empleado: new Date(),
   fecha_nacimiento_empleado: new Date(),
   celular_empleado: "",
   direccion: {
-    municipio: "",
+    id_municipio: "",
     estado: "",
     calle_direccion: "",
     ciudad_direccion: "",
@@ -111,7 +111,7 @@ export const AgregarEmpleado = () => {
     setError(false);
     setOpen(false);
     console.log("Values", values);
-    //const { data, ok, message } = await addEmpleadoProvider(values);
+    const { data, ok, message } = await addEmpleadoProvider(values);
     if (ok) {
       setOpen(true);
       setError(false);
@@ -163,7 +163,6 @@ export const AgregarEmpleado = () => {
                 );
                 if (stateData && stateData.municipio) {
                   setMunicipios(stateData.municipio);
-                  formik.setFieldValue("direccion.estado", "888");
                 } else {
                   setMunicipios([]);
                 }
@@ -256,6 +255,7 @@ export const AgregarEmpleado = () => {
                       variant="outlined"
                       fullWidth
                       margin="normal"
+                      inputMode="numeric"
                       error={
                         formik.touched.salario_empleado &&
                         formik.errors.salario_empleado
@@ -410,8 +410,8 @@ export const AgregarEmpleado = () => {
                           id="estado-select"
                           options={estados || []} // Verificar si estados es undefined y proporcionar una lista vacía en ese caso
                           sx={{
-                            paddingTop: { xs: 2, md: 1.5 },
-                            paddingBottom: { xs: 2, md: 1.5 },
+                            paddingTop: { xs: 2, md: 2 },
+                            paddingBottom: { xs: 2, md: 2 },
                           }}
                           getOptionLabel={(option) => option.nombre_estado}
                           onChange={(event, newValue) => {
@@ -439,7 +439,7 @@ export const AgregarEmpleado = () => {
                   </Grid>
 
                   <Grid item xs={12} md={6}>
-                    <Field name="direccion.municipio">
+                    <Field name="direccion.id_municipio">
                       {({ field, form }) => (
                         <Autocomplete
                           sx={{
@@ -452,8 +452,8 @@ export const AgregarEmpleado = () => {
                           disabled={!formik.values.direccion.estado}
                           onChange={(event, newValue) => {
                             form.setFieldValue(
-                              "direccion.municipio",
-                              newValue?.nombre_municipio || ""
+                              "direccion.id_municipio",
+                              newValue?.id_municipio || ""
                             );
                           }}
                           renderInput={(params) => (
@@ -462,8 +462,8 @@ export const AgregarEmpleado = () => {
                               label="Municipio"
                               variant="outlined"
                               error={
-                                formik.touched.direccion?.municipio &&
-                                formik.errors.direccion?.municipio
+                                formik.touched.direccion?.id_municipio &&
+                                formik.errors.direccion?.id_municipio
                                   ? true
                                   : false
                               }
@@ -651,7 +651,7 @@ export const AgregarEmpleado = () => {
                       }
                     />
                   </Grid>
-                  <Grid item xs={12} md={6}>
+                  <Grid item xs={12} md={12}>
                     {error ? (
                       <Alert sx={{ mt: 0, mb: 0 }} severity="error">
                         {message}

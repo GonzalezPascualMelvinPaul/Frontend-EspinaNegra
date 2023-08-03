@@ -1,4 +1,4 @@
-import { Box, Button, Skeleton, Stack } from "@mui/material";
+import { Box, Button, Grid, Skeleton, Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getBodegasProvider } from "../../providers/bodega/providerBodega";
@@ -103,16 +103,25 @@ export const IndexBodega = () => {
     <>
       <Box>
         <IndexLayout title={"Bodegas"}>
-          <Box display={"flex"} alignItems={"center"}>
-            <Button
-              onClick={() => navigate("/bodega/agregar")}
-              variant="contained"
-              endIcon={<AddCircleOutline />}
-            >
-              Agregar
-            </Button>
-            <Buscador buscador={buscador} handleSearch={handleSearch} />
-          </Box>
+          <Grid
+            alignItems={"center"}
+            justifyContent={{ xs: "center", md: "space-between" }}
+            flexDirection={{ xs: "column", md: "row" }}
+            display={"flex"}
+          >
+            <Grid item xs={12} md={4}>
+              <Button
+                onClick={() => navigate("/bodega/agregar")}
+                variant="contained"
+                endIcon={<AddCircleOutline />}
+              >
+                Agregar
+              </Button>
+            </Grid>
+            <Grid item xs={12} md={8}>
+              <Buscador buscador={buscador} handleSearch={handleSearch} />
+            </Grid>
+          </Grid>
           {isLoading ? (
             <Skeleton variant="rectangular" width={"100%"} height={"80%"} />
           ) : (

@@ -20,17 +20,17 @@ import { getRolesProvider } from "../../providers/role/providerRole";
 import { getEmpleadosProvider } from "../../providers/empleado/providerEmpleado";
 
 const validationSchema = Yup.object({
-  email: Yup.string().required("El email es requerido"),
-  username: Yup.string().required("El username es requerido"),
-  rol_id: Yup.number().required("El rol es requerido"),
-  empleado_id: Yup.number().required("El empleado es requerido"),
+  email_usuario: Yup.string().required("El email es requerido"),
+  username_usuario: Yup.string().required("El username es requerido"),
+  id_rol: Yup.number().required("El rol es requerido"),
+  id_empleado: Yup.number().required("El empleado es requerido"),
 });
 
 const initialValues = {
-  email: "",
-  username: "",
-  rol_id: "",
-  empleado_id: "",
+  email_usuario: "",
+  username_usuario: "",
+  id_rol: "",
+  id_empleado: "",
 };
 
 export const AgregarUser = () => {
@@ -55,7 +55,7 @@ export const AgregarUser = () => {
 
   const onSubmit = async (values, e) => {
     const formData = new FormData();
-    formData.append("imagen", picture);
+    formData.append("imagen_usuario", picture);
     for (const [key, value] of Object.entries(values)) {
       formData.append(key, value);
     }
@@ -121,30 +121,34 @@ export const AgregarUser = () => {
                   <Field
                     as={TextField}
                     label="Email"
-                    name="email"
+                    name="email_usuario"
                     variant="outlined"
                     fullWidth
                     margin="normal"
                     error={
-                      formik.touched.email && formik.errors.email ? true : false
+                      formik.touched.email_usuario &&
+                      formik.errors.email_usuario
+                        ? true
+                        : false
                     }
-                    helperText={<ErrorMessage name="email" />}
+                    helperText={<ErrorMessage name="email_usuario" />}
                   />
                 </Grid>
                 <Grid item xs={12} md={6} sm={6}>
                   <Field
                     as={TextField}
                     label="Username"
-                    name="username"
+                    name="username_usuario"
                     variant="outlined"
                     fullWidth
                     margin="normal"
                     error={
-                      formik.touched.username && formik.errors.username
+                      formik.touched.username_usuario &&
+                      formik.errors.username_usuario
                         ? true
                         : false
                     }
-                    helperText={<ErrorMessage name="username" />}
+                    helperText={<ErrorMessage name="username_usuario" />}
                   />
                 </Grid>
                 <Grid item xs={12} md={6} sm={6}>
@@ -174,17 +178,17 @@ export const AgregarUser = () => {
                   <Field
                     as={TextField}
                     label="Rol"
-                    name="rol_id"
+                    name="id_rol"
                     variant="outlined"
                     fullWidth
                     margin="normal"
                     select
                     error={
-                      formik.touched.rol_id && formik.errors.rol_id
+                      formik.touched.id_rol && formik.errors.id_rol
                         ? true
                         : false
                     }
-                    helperText={<ErrorMessage name="rol_id" />}
+                    helperText={<ErrorMessage name="id_rol" />}
                   >
                     {rol.map((option) => (
                       <MenuItem key={option.id_rol} value={option.id_rol}>
@@ -195,7 +199,7 @@ export const AgregarUser = () => {
                 </Grid>
                 <Grid item xs={12} md={6} sm={6}>
                   <Field
-                    name="empleado_id"
+                    name="id_empleado"
                     label="Empleado"
                     as={TextField}
                     variant="outlined"
@@ -203,11 +207,11 @@ export const AgregarUser = () => {
                     select
                     margin="normal"
                     error={
-                      formik.touched.empleado_id && formik.errors.empleado_id
+                      formik.touched.id_empleado && formik.errors.id_empleado
                         ? true
                         : false
                     }
-                    helperText={<ErrorMessage name="empleado_id" />}
+                    helperText={<ErrorMessage name="id_empleado" />}
                     SelectProps={{
                       MenuProps: {
                         PaperProps: {

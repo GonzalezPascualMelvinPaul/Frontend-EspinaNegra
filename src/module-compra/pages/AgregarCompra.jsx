@@ -24,11 +24,13 @@ import { addCompraProvider } from "../../providers/compra/providerCompra";
 import { is, tr } from "date-fns/locale";
 
 const validationSchema = Yup.object({
-  total: Yup.number()
+  total_compra: Yup.number()
     .required("El total es requerido")
     .min(0, "El total no puede ser negativo"),
-  observaciones: Yup.string().required("Las observaciones son requeridas"),
-  recibo: Yup.string(),
+  observaciones_compra: Yup.string().required(
+    "Las observaciones son requeridas"
+  ),
+  numero_factura_compra: Yup.string(),
   productos: Yup.array()
     .of(
       Yup.object().shape({
@@ -42,15 +44,16 @@ const validationSchema = Yup.object({
 });
 
 const initialValues = {
-  total: 0,
-  observaciones: "",
-  recibo: "",
+  total_compra: 0,
+  observaciones_compra: "",
+  numero_factura_compra: "",
   productos: [],
 };
 
 const calculateTotal = (productos) => {
   return productos.reduce(
-    (total, producto) => total + producto.cantidad * producto.precio_compra,
+    (total_compra, producto) =>
+      total_compra + producto.cantidad * producto.precio_venta,
     0
   );
 };
@@ -101,8 +104,10 @@ export const AgregarCompra = () => {
 
   const agregarProducto = (producto, arrayHelpers) => {
     const index = arrayHelpers.form.values.productos.findIndex(
-      (p) => p.producto === producto.id
+      (p) => p.producto === producto.id_producto
     );
+    console.log(producto);
+    console.log(index);
     if (index !== -1) {
       arrayHelpers.form.setFieldValue(
         `productos.${index}.cantidad`,
@@ -111,12 +116,23 @@ export const AgregarCompra = () => {
     } else {
       const cantidad = 1;
       if (cantidad > 0) {
-        // Validación de cantidad mayor a cero
-        arrayHelpers.push({
-          producto: producto.id,
-          cantidad: cantidad,
-          precio_compra: producto.precio_compra,
-        });
+        // Obtener el stock del producto
+        const stock = productos.find(
+          (p) => p.id_producto === producto.id_producto
+        )?.cantidad_stock;
+
+        // Validar que la cantidad no exceda el stock
+        const cantidadInicial = Math.min(cantidad, stock);
+
+        // Crear el nuevo producto con la cantidad inicial
+        const nuevoProducto = {
+          producto: producto.id_producto,
+          cantidad: cantidadInicial,
+          precio_venta: producto.precio_compra_producto,
+        };
+
+        // Agregar el nuevo producto al array de productos
+        arrayHelpers.push(nuevoProducto);
       }
     }
   };
@@ -168,8 +184,8 @@ export const AgregarCompra = () => {
             >
               {(formik) => {
                 useEffect(() => {
-                  const total = calculateTotal(formik.values.productos);
-                  formik.setFieldValue("total", total);
+                  const total_compra = calculateTotal(formik.values.productos);
+                  formik.setFieldValue("total_compra", total_compra);
                 }, [formik.values.productos]);
 
                 return (
@@ -177,31 +193,32 @@ export const AgregarCompra = () => {
                     <Field
                       as={TextField}
                       label="Observaciones"
-                      name="observaciones"
+                      name="observaciones_compra"
                       variant="outlined"
                       fullWidth
                       margin="normal"
                       error={
-                        formik.touched.observaciones &&
-                        formik.errors.observaciones
+                        formik.touched.observaciones_compra &&
+                        formik.errors.observaciones_compra
                           ? true
                           : false
                       }
-                      helperText={<ErrorMessage name="observaciones" />}
+                      helperText={<ErrorMessage name="observaciones_compra" />}
                     />
                     <Field
                       as={TextField}
                       label="Recibo"
-                      name="recibo"
+                      name="numero_factura_compra"
                       variant="outlined"
                       fullWidth
                       margin="normal"
                       error={
-                        formik.touched.recibo && formik.errors.recibo
+                        formik.touched.numero_factura_compra &&
+                        formik.errors.numero_factura_compra
                           ? true
                           : false
                       }
-                      helperText={<ErrorMessage name="recibo" />}
+                      helperText={<ErrorMessage name="numero_factura_compra" />}
                     />
 
                     <FieldArray
@@ -217,7 +234,7 @@ export const AgregarCompra = () => {
                         // Chequear si el último producto tiene un producto y una cantidad
                         const isLastProductValid =
                           formik.values.productos.length === 0 ||
-                          (lastProduct.producto && lastProduct.cantidad);
+                          (lastProduct.productos && lastProduct.cantidad);
 
                         return (
                           <div>
@@ -233,24 +250,33 @@ export const AgregarCompra = () => {
                                 </TableHead>
                                 <TableBody>
                                   {productos.map((producto) => (
-                                    <TableRow key={producto.id}>
-                                      <TableCell>{producto.nombre}</TableCell>
+                                    <TableRow key={producto.id_producto}>
                                       <TableCell>
-                                        {producto.precio_compra}
+                                        {producto.nombre_producto}
                                       </TableCell>
                                       <TableCell>
-                                        {formik.values.productos.reduce(
-                                          (total, p) => {
-                                            if (p.producto === producto.id) {
-                                              return total + p.cantidad;
-                                            } else {
-                                              return total;
-                                            }
-                                          },
-                                          0
-                                        )}
+                                        {producto.precio_compra_producto}
                                       </TableCell>
                                       <TableCell>
+                                        {/* Mostrar input para la cantidad */}
+                                        <Field
+                                          as={TextField}
+                                          name={`productos.${formik.values.productos.findIndex(
+                                            (p) =>
+                                              p.producto ===
+                                              producto.id_producto
+                                          )}.cantidad`}
+                                          type="number"
+                                          InputProps={{
+                                            inputProps: {
+                                              min: 0, // No permitir números negativos
+                                              max: producto.cantidad_maxima_stock, // Establecer la cantidad máxima según la cantidad en stock
+                                            },
+                                          }}
+                                        />
+                                      </TableCell>
+                                      <TableCell>
+                                        {/* Botones de agregar y quitar */}
                                         <Button
                                           onClick={() =>
                                             agregarProducto(
@@ -258,19 +284,38 @@ export const AgregarCompra = () => {
                                               arrayHelpers
                                             )
                                           }
+                                          disabled={
+                                            formik.values.productos.reduce(
+                                              (total_venta, p) => {
+                                                if (
+                                                  p.producto ===
+                                                  producto.id_producto
+                                                ) {
+                                                  return (
+                                                    total_venta + p.cantidad
+                                                  );
+                                                } else {
+                                                  return total_venta;
+                                                }
+                                              },
+                                              0
+                                            ) >= producto.cantidad_maxima_stock // Deshabilitar el botón "+" cuando la cantidad es igual a la cantidad en stock
+                                          }
                                         >
                                           +
                                         </Button>
                                         <Button
                                           onClick={() =>
                                             quitarProducto(
-                                              producto.id,
+                                              producto.id_producto,
                                               arrayHelpers
                                             )
                                           }
                                           disabled={
                                             !formik.values.productos.some(
-                                              (p) => p.producto === producto.id
+                                              (p) =>
+                                                p.producto ===
+                                                producto.id_producto
                                             )
                                           }
                                         >
@@ -289,17 +334,18 @@ export const AgregarCompra = () => {
                     <Field
                       as={TextField}
                       label="Total"
-                      name="total"
+                      name="total_compra"
                       variant="outlined"
                       fullWidth
                       disabled
                       margin="normal"
                       error={
-                        formik.touched.total && formik.errors.total
+                        formik.touched.total_compra &&
+                        formik.errors.total_compra
                           ? true
                           : false
                       }
-                      helperText={<ErrorMessage name="total" />}
+                      helperText={<ErrorMessage name="total_compra" />}
                       InputProps={{
                         inputProps: {
                           maxLength: 5,

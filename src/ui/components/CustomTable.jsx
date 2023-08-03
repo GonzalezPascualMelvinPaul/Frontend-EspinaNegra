@@ -17,24 +17,9 @@ export const CustomTable = ({
   return (
     <Box sx={{ height: 400, width: "100%" }}>
       <DataGrid
-        rows={data}
-        columns={columns}
-        getRowId={(row) => row[idData]}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 5,
-            },
-          },
-        }}
-        pageSizeOptions={[5]}
-        checkboxSelection
-        disableRowSelectionOnClick
-      />
-      {/* <DataGrid
         loading={loading}
         scroll={{ x: isSmallScreen ? "scroll" : "auto", y: "auto" }}
-       
+        getRowId={(row) => row[idData]}
         disableSelectionOnClick
         rows={data}
         columns={columns}
@@ -58,7 +43,7 @@ export const CustomTable = ({
             outline: "none !important",
           },
         }}
-      /> */}
+      />
     </Box>
   );
 };

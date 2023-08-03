@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Container,
+  Grid,
   Skeleton,
   Stack,
   Typography,
@@ -130,16 +131,25 @@ export const IndexProducto = () => {
     <>
       <Box>
         <IndexLayout title={"Producto"}>
-          <Box display={"flex"} alignItems={"center"}>
-            <Button
-              onClick={() => navigate("/producto/agregar")}
-              variant="contained"
-              endIcon={<AddCircleOutline />}
-            >
-              Agregar
-            </Button>
-            <Buscador buscador={buscador} handleSearch={handleSearch} />
-          </Box>
+          <Grid
+            alignItems={"center"}
+            justifyContent={{ xs: "center", md: "space-between" }}
+            flexDirection={{ xs: "column", md: "row" }}
+            display={"flex"}
+          >
+            <Grid item xs={12} md={4}>
+              <Button
+                onClick={() => navigate("/producto/agregar")}
+                variant="contained"
+                endIcon={<AddCircleOutline />}
+              >
+                Agregar
+              </Button>
+            </Grid>
+            <Grid item xs={12} md={8}>
+              <Buscador buscador={buscador} handleSearch={handleSearch} />
+            </Grid>
+          </Grid>
           {isLoading ? (
             <Skeleton variant="rectangular" width={"100%"} height={"80%"} />
           ) : (
