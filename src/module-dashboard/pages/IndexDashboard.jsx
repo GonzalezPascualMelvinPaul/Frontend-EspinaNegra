@@ -15,9 +15,13 @@ import { Helmet } from "react-helmet-async";
 import Iconify from "../../components/iconify/Iconify";
 import { IndexLayout } from "../../layouts";
 import { useNavigate } from "react-router-dom";
+import AppCurrentVisits from "../../sections/@dashboard/app/AppCurrentVisits";
+import { useTheme } from "@mui/material/styles";
+import { PieChart } from "@mui/x-charts";
 
 export const IndexDashboard = () => {
   const navigate = useNavigate();
+  const theme = useTheme();
   const cards = [
     {
       title: "Agregar Productos",
@@ -76,7 +80,7 @@ export const IndexDashboard = () => {
             <Typography variant="h6">Atajos Rapidos</Typography>
           </Grid>
           {cards.map((option) => (
-            <Grid item key={option.title} sx={4}>
+            <Grid item key={option.title} xs={4}>
               <Card sx={{ maxWidth: 345 }}>
                 <CardActionArea onClick={() => navigate(option.url)}>
                   <CardMedia
@@ -97,6 +101,33 @@ export const IndexDashboard = () => {
               </Card>
             </Grid>
           ))}
+          <Grid display={"flex"} justifyContent={"center"} item xs={12}>
+            <Typography variant="h6">Graficas</Typography>
+          </Grid>
+          <Grid mb={5} item xs={12} md={6} lg={4}>
+            <Card sx={{ maxWidth: 500 }}>
+              <CardActionArea>
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    Compras del Mes
+                  </Typography>
+                  <PieChart
+                    series={[
+                      {
+                        data: [
+                          { id: 0, value: 100, label: "Corchos" },
+                          { id: 1, value: 20, label: "Botellas" },
+                          { id: 2, value: 20, label: "Etiquetas" },
+                        ],
+                      },
+                    ]}
+                    width={400}
+                    height={200}
+                  />
+                </CardContent>
+              </CardActionArea>
+            </Card>
+          </Grid>
         </Grid>
       </IndexLayout>
     </>
