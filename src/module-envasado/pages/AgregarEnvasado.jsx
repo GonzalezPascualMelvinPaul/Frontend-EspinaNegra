@@ -11,24 +11,18 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 dayjs.locale("es");
 
 const validationSchema = Yup.object({
-  fecha_inicio_produccion: Yup.date().required(
-    "La fecha de inicio es requerida"
-  ),
-  fecha_final_produccion: Yup.date().required("La fecha final es requerida"),
-  descripcion_produccion: Yup.string(),
-  litros_obtenidos_produccion: Yup.number(),
-  lote_produccion: Yup.string().required("El lote de produccion es requerido"),
+  fecha_inicio_envasado: Yup.date().required("La fecha de inicio es requerida"),
+  fecha_final_envasado: Yup.date().required("La fecha final es requerida"),
+  descripcion_envasado: Yup.string(),
 });
 
 const initialValues = {
-  fecha_inicio_produccion: new Date(),
-  fecha_final_produccion: new Date(),
-  descripcion_produccion: "",
-  litros_obtenidos_produccion: 0,
-  lote_produccion: "",
+  fecha_inicio_envasado: new Date(),
+  fecha_final_envasado: new Date(),
+  descripcion_envasado: "",
 };
 
-export const AgregarProduccion = () => {
+export const AgregarEnvasado = () => {
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -37,10 +31,10 @@ export const AgregarProduccion = () => {
     setOpen(false);
   };
   const onSubmit = async (values, e) => {
-    values.fecha_inicio_produccion = dayjs(
-      values.fecha_inicio_produccion
-    ).format("YYYY-MM-DD");
-    values.fecha_final_produccion = dayjs(values.fecha_final_produccion).format(
+    values.fecha_inicio_envasado = dayjs(values.fecha_inicio_envasado).format(
+      "YYYY-MM-DD"
+    );
+    values.fecha_final_envasado = dayjs(values.fecha_final_envasado).format(
       "YYYY-MM-DD"
     );
     setIsLoading(true);
@@ -67,15 +61,15 @@ export const AgregarProduccion = () => {
         open={open}
         severity="success"
       />
-      <IndexLayout title={"Produccion"}>
+      <IndexLayout title={"Envasado"}>
         <BreadCrumbsCustom
           routes={[
             {
-              name: "Producciones",
-              url: "/produccion/inicio",
+              name: "Envasados",
+              url: "/envasado/inicio",
             },
             {
-              name: "Agregar produccion",
+              name: "Agregar envasado",
               url: "",
             },
           ]}
@@ -90,10 +84,10 @@ export const AgregarProduccion = () => {
               <Form>
                 <Grid container spacing={2}>
                   <Grid item xs={12} md={12}>
-                    <Typography variant="h6">Datos Produccion</Typography>
+                    <Typography variant="h6">Datos del Envasado</Typography>
                   </Grid>
                   <Grid item xs={12} md={6}>
-                    <Field name="fecha_inicio_produccion">
+                    <Field name="fecha_inicio_envasado">
                       {({ field, form }) => (
                         <LocalizationProvider
                           dateAdapter={AdapterDateFns}
@@ -101,22 +95,19 @@ export const AgregarProduccion = () => {
                         >
                           <DatePicker
                             label="Fecha de inicio"
-                            name="fecha_inicio_produccion"
+                            name="fecha_inicio_envasado"
                             value={field.value}
                             onChange={(date) =>
-                              form.setFieldValue(
-                                "fecha_inicio_produccion",
-                                date
-                              )
+                              form.setFieldValue("fecha_inicio_envasado", date)
                             }
                             error={
-                              formik.touched.fecha_inicio_produccion &&
-                              formik.errors.fecha_inicio_produccion
+                              formik.touched.fecha_inicio_envasado &&
+                              formik.errors.fecha_inicio_envasado
                                 ? true
                                 : false
                             }
                             helperText={
-                              <ErrorMessage name="fecha_inicio_produccion" />
+                              <ErrorMessage name="fecha_inicio_envasado" />
                             }
                             renderInput={(params) => (
                               <TextField
@@ -132,7 +123,7 @@ export const AgregarProduccion = () => {
                     </Field>
                   </Grid>
                   <Grid item xs={12} md={6}>
-                    <Field name="fecha_final_produccion">
+                    <Field name="fecha_final_envasado">
                       {({ field, form }) => (
                         <LocalizationProvider
                           dateAdapter={AdapterDateFns}
@@ -140,19 +131,19 @@ export const AgregarProduccion = () => {
                         >
                           <DatePicker
                             label="Fecha final"
-                            name="fecha_final_produccion"
+                            name="fecha_final_envasado"
                             value={field.value}
                             onChange={(date) =>
-                              form.setFieldValue("fecha_final_produccion", date)
+                              form.setFieldValue("fecha_final_envasado", date)
                             }
                             error={
-                              formik.touched.fecha_final_produccion &&
-                              formik.errors.fecha_final_produccion
+                              formik.touched.fecha_final_envasado &&
+                              formik.errors.fecha_final_envasado
                                 ? true
                                 : false
                             }
                             helperText={
-                              <ErrorMessage name="fecha_final_produccion" />
+                              <ErrorMessage name="fecha_final_envasado" />
                             }
                             renderInput={(params) => (
                               <TextField
@@ -172,64 +163,20 @@ export const AgregarProduccion = () => {
                     <Field
                       as={TextField}
                       label="Descripcion"
-                      name="descripcion_produccion"
+                      name="descripcion_envasado"
                       variant="outlined"
                       fullWidth
                       margin="normal"
                       error={
-                        formik.touched.descripcion_produccion &&
-                        formik.errors.descripcion_produccion
+                        formik.touched.descripcion_envasado &&
+                        formik.errors.descripcion_envasado
                           ? true
                           : false
                       }
-                      helperText={
-                        <ErrorMessage name="descripcion_produccion" />
-                      }
+                      helperText={<ErrorMessage name="descripcion_envasado" />}
                     />
                   </Grid>
-                  <Grid item xs={12} md={6}>
-                    <Field
-                      as={TextField}
-                      label="Litro Obtenidos"
-                      name="litros_obtenidos_produccion"
-                      variant="outlined"
-                      fullWidth
-                      margin="normal"
-                      inputMode="numeric"
-                      error={
-                        formik.touched.litros_obtenidos_produccion &&
-                        formik.errors.litros_obtenidos_produccion
-                          ? true
-                          : false
-                      }
-                      helperText={
-                        <ErrorMessage name="litros_obtenidos_produccion" />
-                      }
-                      InputProps={{
-                        inputProps: {
-                          maxLength: 10,
-                          minLength: 2,
-                        },
-                      }}
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <Field
-                      as={TextField}
-                      label="Lote de Produccion"
-                      name="lote_produccion"
-                      variant="outlined"
-                      fullWidth
-                      margin="normal"
-                      error={
-                        formik.touched.lote_produccion &&
-                        formik.errors.lote_produccion
-                          ? true
-                          : false
-                      }
-                      helperText={<ErrorMessage name="lote_produccion" />}
-                    />
-                  </Grid>
+
                   <Grid item xs={12} md={12}>
                     {error ? (
                       <Alert sx={{ mt: 0, mb: 0 }} severity="error">

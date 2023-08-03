@@ -1,33 +1,63 @@
-import { Button, Container, Stack, Typography } from "@mui/material";
-import React from "react";
+import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
+import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import Iconify from "../../components/iconify/Iconify";
+import { IndexLayout } from "../../layouts";
+import { Buscador } from "../../ui";
+import { AddCircleOutline } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 export const IndexEnvasado = () => {
+  const [envasados, setEnvasados] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [buscador, setBuscador] = useState("");
+  const [envasadosBuscador, setEnvasadosBuscador] = useState([]);
+  const [envasado, setEnvasado] = useState(null);
+  const [modalDelete, setModalDelete] = useState(false);
+  const navigate = useNavigate();
+  const handleSearch = (event) => {
+    setBuscador(event.target.value);
+    searching(envasados, event.target.value);
+  };
+
+  const searching = (envasados, buscador) => {
+    const newEnvasados = envasados.filter((envasado) => {
+      if (envasado.nombre.toUpperCase().includes(buscador.toUpperCase()))
+        return envasado;
+    });
+
+    setEnvasadosBuscador(newEnvasados);
+  };
+  const handleDelete = (row) => {
+    setEnvasado(row);
+    setModalDelete(!modalDelete);
+  };
+
   return (
     <>
-      <Helmet>
-        <title>Envasado</title>
-      </Helmet>
-      <Container>
-        <Stack
-          direction={"row"}
-          alignItems={"center"}
-          justifyContent={"space-between"}
-          mb={5}
-        >
-          <Typography variant="h4" gutterBottom>
-            Envasado
-          </Typography>
-          <Button
-            onClick={() => {}}
-            variant="contained"
-            startIcon={<Iconify icon="eva:plus-fill" />}
+      <Box>
+        <IndexLayout title={"Envasado"}>
+          <Grid
+            alignItems={"center"}
+            justifyContent={{ xs: "center", md: "space-between" }}
+            flexDirection={{ xs: "column", md: "row" }}
+            display={"flex"}
           >
-            Envasado
-          </Button>
-        </Stack>
-      </Container>
+            <Grid item xs={12} md={4}>
+              <Button
+                onClick={() => navigate("/envasado/agregar")}
+                variant="contained"
+                endIcon={<AddCircleOutline />}
+              >
+                Agregar
+              </Button>
+            </Grid>
+            <Grid item xs={12} md={8}>
+              <Buscador buscador={[]} handleSearch={handleSearch} />
+            </Grid>
+          </Grid>
+        </IndexLayout>
+      </Box>
     </>
   );
 };
