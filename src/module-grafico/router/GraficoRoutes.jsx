@@ -1,14 +1,14 @@
 import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { LayoutRouter } from "../../router";
-import { IndexGasto } from "../pages";
+import { IndexGrafico } from "../pages";
 
-export const GastoRoutes = () => {
+export const GraficoRoutes = () => {
   return (
     <Routes>
       <Route element={<LayoutRouter />}>
-        <Route path="inicio" element={<IndexGasto />} />
-        <Route path="/*" element={<Navigate to={"/gasto/inicio"} />} />
+        <Route path="inicio" element={<IndexGrafico />} />
+        <Route path="/*" element={<Navigate to={"/grafico/inicio"} />} />
       </Route>
     </Routes>
   );

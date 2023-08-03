@@ -3,11 +3,11 @@ import React from "react";
 import { Helmet } from "react-helmet-async";
 import Iconify from "../../components/iconify/Iconify";
 
-export const IndexGasto = () => {
+export const IndexGrafico = () => {
   return (
     <>
       <Helmet>
-        <title>Gasto</title>
+        <title>Graficos</title>
       </Helmet>
       <Container>
         <Stack
@@ -17,14 +17,14 @@ export const IndexGasto = () => {
           mb={5}
         >
           <Typography variant="h4" gutterBottom>
-            Gasto
+            Graficos
           </Typography>
           <Button
             onClick={() => {}}
             variant="contained"
             startIcon={<Iconify icon="eva:plus-fill" />}
           >
-            Gasto
+            Graficos
           </Button>
         </Stack>
       </Container>

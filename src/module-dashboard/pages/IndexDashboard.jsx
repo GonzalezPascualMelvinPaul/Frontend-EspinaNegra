@@ -106,7 +106,7 @@ export const IndexDashboard = () => {
           </Grid>
           <Grid mb={5} item xs={12} md={6} lg={4}>
             <Card sx={{ maxWidth: 500 }}>
-              <CardActionArea>
+              <CardActionArea onClick={() => navigate("/grafico/inicio")}>
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
                     Compras del Mes

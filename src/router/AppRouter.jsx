@@ -24,7 +24,7 @@ import { CompraRoutes } from "../module-compra/router";
 import { VentaRoutes } from "../module-venta/router";
 import { EnvasadoRoutes } from "../module-envasado/router";
 import { ProduccionRoutes } from "../module-produccion/router";
-import { GastoRoutes } from "../module-gastos/router";
+import { GraficoRoutes } from "../module-grafico/router";
 
 /* const routes = createBrowserRouter([
   {
@@ -150,10 +150,10 @@ export const AppRouter = () => {
           }
         />
         <Route
-          path="/gasto/*"
+          path="/grafico/*"
           element={
             <PrivateRouter>
-              <GastoRoutes />
+              <GraficoRoutes />
             </PrivateRouter>
           }
         />

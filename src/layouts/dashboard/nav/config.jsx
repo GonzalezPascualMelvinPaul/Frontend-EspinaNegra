@@ -65,8 +65,8 @@ const navConfig = [
     icon: <LocalMallOutlined />,
   },
   {
-    title: "Gastos",
-    path: "/gasto",
+    title: "Graficos",
+    path: "/grafico",
     icon: <ShowChartOutlined />,
   },
   {
