@@ -70,6 +70,7 @@ const initialValues = {
   fecha_ingreso_empleado: new Date(),
   fecha_nacimiento_empleado: new Date(),
   celular_empleado: "",
+  rfc_empleado: "",
   direccion: {
     id_municipio: "",
     estado: "",

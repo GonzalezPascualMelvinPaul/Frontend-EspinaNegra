@@ -3,6 +3,8 @@ import React from "react";
 import { Helmet } from "react-helmet-async";
 import Iconify from "../../components/iconify/Iconify";
 
+import GoogleMaps from "../../ui/components/GoogleMaps";
+
 export const IndexGrafico = () => {
   return (
     <>
@@ -26,6 +28,7 @@ export const IndexGrafico = () => {
           >
             Graficos
           </Button>
+          <GoogleMaps />
         </Stack>
       </Container>
     </>

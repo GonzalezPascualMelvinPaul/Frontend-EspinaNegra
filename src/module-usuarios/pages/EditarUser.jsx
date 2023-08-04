@@ -40,6 +40,7 @@ export const EditarUser = () => {
   const getEmpleados = async () => {
     const { data } = await getEmpleadosProvider();
     setEmpleados(data?.empleados);
+    console.log("empleados", data?.empleados);
   };
   const getRoles = async () => {
     const { data } = await getRolesProvider();
@@ -199,9 +200,9 @@ export const EditarUser = () => {
                         key={option.id_empleado}
                         value={option.id_empleado}
                       >
-                        {option.nombre_persona_fisica}{" "}
-                        {option.apellido_paterno_persona_fisica}{" "}
-                        {option.apellido_materno_persona_fisica}
+                        {option.nombre_empleado}{" "}
+                        {option.apellido_paterno_empleado}{" "}
+                        {option.apellido_materno_empleado}
                       </MenuItem>
                     ))}
                   </Field>

@@ -58,7 +58,7 @@ export const IndexProducto = () => {
 
   const handleDelete = (row) => {
     setProducto(row);
-    console.log(modalDelete);
+
     setModalDelete(!modalDelete);
   };
 
@@ -106,7 +106,6 @@ export const IndexProducto = () => {
       sortable: false,
       disableColumnMenu: true,
       renderCell: ({ row }) => {
-        console.log("Row__", row);
         return (
           <Stack spacing={2} direction="row">
             <Button onClick={() => {}} variant="contained" color="info">

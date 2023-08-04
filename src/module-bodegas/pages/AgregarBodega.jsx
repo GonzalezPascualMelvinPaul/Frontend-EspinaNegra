@@ -125,6 +125,15 @@ export const AgregarBodega = () => {
           onSubmit={onSubmit}
         >
           {(formik) => {
+            const handleMapClick = (event) => {
+              const lat = event.latLng.lat();
+              const lng = event.latLng.lng();
+              setPosition({ lat, lng });
+              geocodeLatLng(lat, lng); // Llamar al geocodificador para obtener la dirección
+              formik.setFieldValue("direccion.latitud_direccion", lat); // Actualizar el campo de latitud en el formulario
+              formik.setFieldValue("direccion.longitud_direccion", lng); // Actualizar el campo de longitud en el formulario
+            };
+
             useEffect(() => {
               if (estados && formik.values.direccion.estado) {
                 const stateData = estados.find(

@@ -5,9 +5,8 @@ import { useCheckAuth } from "../hooks";
 import { useSelector } from "react-redux";
 
 export const PrivateRouter = ({ children }) => {
-  //const statuus = useCheckAuth();
   const { status } = useSelector((state) => state.auth);
-  //console.log(statuus);
+
   if (status === "checking") {
     return <CheckingAuth />;
   }
@@ -15,9 +14,6 @@ export const PrivateRouter = ({ children }) => {
   const { pathname, search } = useLocation();
   const lastPath = pathname + search;
 
-  /* useEffect(() => {
-    localStorage.setItem("lastPath", lastPath);
-  }, [lastPath]); */
   localStorage.setItem("lastPath", lastPath);
   const location = useLocation();
 

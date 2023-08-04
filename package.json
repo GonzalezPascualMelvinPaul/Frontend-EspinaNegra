@@ -23,6 +23,7 @@
     "@mui/x-charts": "^6.0.0-alpha.5",
     "@mui/x-data-grid": "^5.17.14",
     "@mui/x-date-pickers": "^5.0.10",
+    "@react-google-maps/api": "^2.19.2",
     "@reduxjs/toolkit": "^1.9.3",
     "apexcharts": "^3.37.0",
     "axios": "^1.2.1",
