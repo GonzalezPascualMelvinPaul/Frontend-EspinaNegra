@@ -16,6 +16,7 @@ import { Buscador, CustomTable } from "../../ui";
 import { AddCircleOutline } from "@mui/icons-material";
 import { EliminarProducto } from "./EliminarProducto";
 import { getProductosProvider } from "../../providers/producto/providerProducto";
+import { useSelector } from "react-redux";
 
 export const IndexProducto = () => {
   const [productos, setProductos] = useState([]);
@@ -25,6 +26,21 @@ export const IndexProducto = () => {
   const [producto, setProducto] = useState(null);
   const [modalDelete, setModalDelete] = useState(false);
   const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth);
+  const [permisos, setPermisos] = useState("Usuario");
+
+  useEffect(() => {
+    const { nombre_rol } = user;
+    if (nombre_rol === "Usuario") {
+      setPermisos("Usuario");
+    }
+    if (nombre_rol === "Gerente") {
+      setPermisos("Gerente");
+    }
+    if (nombre_rol === "Administrador") {
+      setPermisos("Administrador");
+    }
+  }, [user]);
 
   const handleSearch = (event) => {
     setBuscador(event.target.value);
@@ -90,27 +106,32 @@ export const IndexProducto = () => {
       sortable: false,
       disableColumnMenu: true,
       renderCell: ({ row }) => {
+        console.log("Row__", row);
         return (
           <Stack spacing={2} direction="row">
             <Button onClick={() => {}} variant="contained" color="info">
               Ver
             </Button>
-            <Button
-              onClick={() => {
-                navigate(`/producto/editar/${row.id}`);
-              }}
-              variant="contained"
-              color="secondary"
-            >
-              Editar
-            </Button>
-            <Button
-              variant="contained"
-              color="error"
-              onClick={() => handleDelete(row)}
-            >
-              Eliminar
-            </Button>
+            {(permisos === "Administrador" || permisos === "Gerente") && (
+              <Button
+                onClick={() => {
+                  navigate(`/producto/editar/${row.id_producto}`);
+                }}
+                variant="contained"
+                color="secondary"
+              >
+                Editar
+              </Button>
+            )}
+            {permisos === "Administrador" && (
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => handleDelete(row)}
+              >
+                Eliminar
+              </Button>
+            )}
           </Stack>
         );
       },
@@ -137,15 +158,18 @@ export const IndexProducto = () => {
             flexDirection={{ xs: "column", md: "row" }}
             display={"flex"}
           >
-            <Grid item xs={12} md={4}>
-              <Button
-                onClick={() => navigate("/producto/agregar")}
-                variant="contained"
-                endIcon={<AddCircleOutline />}
-              >
-                Agregar
-              </Button>
-            </Grid>
+            {(permisos === "Administrador" || permisos === "Gerente") && (
+              <Grid item xs={12} md={4}>
+                <Button
+                  onClick={() => navigate("/producto/agregar")}
+                  variant="contained"
+                  endIcon={<AddCircleOutline />}
+                >
+                  Agregar
+                </Button>
+              </Grid>
+            )}
+
             <Grid item xs={12} md={8}>
               <Buscador buscador={buscador} handleSearch={handleSearch} />
             </Grid>

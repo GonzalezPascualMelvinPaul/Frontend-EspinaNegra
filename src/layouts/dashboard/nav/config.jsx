@@ -17,7 +17,7 @@ import {
 } from "@mui/icons-material";
 // ----------------------------------------------------------------------
 
-const navConfig = [
+export const navConfig = [
   {
     title: "Dashboard",
     path: "/dashboard",
@@ -81,4 +81,95 @@ const navConfig = [
   },
 ];
 
-export default navConfig;
+export const navConfigGerente = [
+  {
+    title: "Dashboard",
+    path: "/dashboard",
+    icon: <DashboardOutlined />,
+  },
+  {
+    title: "Empleados",
+    path: "/empleado",
+    icon: <GroupOutlined />,
+  },
+  {
+    title: "Proveedor",
+    path: "/proveedor",
+    icon: <MapsHomeWorkOutlined />,
+  },
+  {
+    title: "Clientes",
+    path: "/cliente",
+    icon: <PermContactCalendarOutlined />,
+  },
+  {
+    title: "Productos",
+    path: "/producto",
+    icon: <WarehouseOutlined />,
+  },
+
+  {
+    title: "Venta",
+    path: "/venta",
+    icon: <LocalShippingOutlined />,
+  },
+  {
+    title: "Compra",
+    path: "/compra",
+    icon: <LocalMallOutlined />,
+  },
+  {
+    title: "Produccion",
+    path: "/produccion",
+    icon: <CropRotateOutlined />,
+  },
+  {
+    title: "Envasado",
+    path: "/envasado",
+    icon: <ScienceOutlined />,
+  },
+  {
+    title: "Graficos",
+    path: "/grafico",
+    icon: <ShowChartOutlined />,
+  },
+];
+
+export const navConfigEmpleado = [
+  {
+    title: "Dashboard",
+    path: "/dashboard",
+    icon: <DashboardOutlined />,
+  },
+  {
+    title: "Empleados",
+    path: "/empleado",
+    icon: <GroupOutlined />,
+  },
+  {
+    title: "Proveedor",
+    path: "/proveedor",
+    icon: <MapsHomeWorkOutlined />,
+  },
+  {
+    title: "Clientes",
+    path: "/cliente",
+    icon: <PermContactCalendarOutlined />,
+  },
+  {
+    title: "Productos",
+    path: "/producto",
+    icon: <WarehouseOutlined />,
+  },
+
+  {
+    title: "Venta",
+    path: "/venta",
+    icon: <LocalShippingOutlined />,
+  },
+  {
+    title: "Graficos",
+    path: "/grafico",
+    icon: <ShowChartOutlined />,
+  },
+];

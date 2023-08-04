@@ -6,6 +6,7 @@ import { IndexLayout } from "../../layouts";
 import { Buscador } from "../../ui";
 import { AddCircleOutline } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export const IndexEnvasado = () => {
   const [envasados, setEnvasados] = useState([]);
@@ -15,6 +16,22 @@ export const IndexEnvasado = () => {
   const [envasado, setEnvasado] = useState(null);
   const [modalDelete, setModalDelete] = useState(false);
   const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth);
+  const [permisos, setPermisos] = useState("Usuario");
+
+  useEffect(() => {
+    const { nombre_rol } = user;
+    if (nombre_rol === "Usuario") {
+      setPermisos("Usuario");
+    }
+    if (nombre_rol === "Gerente") {
+      setPermisos("Gerente");
+    }
+    if (nombre_rol === "Administrador") {
+      setPermisos("Administrador");
+    }
+  }, [user]);
+
   const handleSearch = (event) => {
     setBuscador(event.target.value);
     searching(envasados, event.target.value);
@@ -43,15 +60,18 @@ export const IndexEnvasado = () => {
             flexDirection={{ xs: "column", md: "row" }}
             display={"flex"}
           >
-            <Grid item xs={12} md={4}>
-              <Button
-                onClick={() => navigate("/envasado/agregar")}
-                variant="contained"
-                endIcon={<AddCircleOutline />}
-              >
-                Agregar
-              </Button>
-            </Grid>
+            {(permisos === "Administrador" || permisos === "Gerente") && (
+              <Grid item xs={12} md={4}>
+                <Button
+                  onClick={() => navigate("/envasado/agregar")}
+                  variant="contained"
+                  endIcon={<AddCircleOutline />}
+                >
+                  Agregar
+                </Button>
+              </Grid>
+            )}
+
             <Grid item xs={12} md={8}>
               <Buscador buscador={[]} handleSearch={handleSearch} />
             </Grid>

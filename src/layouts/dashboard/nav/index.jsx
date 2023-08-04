@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 // @mui
 import { styled, alpha } from "@mui/material/styles";
@@ -21,9 +21,10 @@ import Logo from "../../../components/logo";
 import Scrollbar from "../../../components/scrollbar";
 import NavSection from "../../../components/nav-section";
 //
-import navConfig from "./config";
+
 import { useSelector } from "react-redux";
 import { getEnvVariables } from "../../../helpers/getEnvVariables";
+import { navConfig, navConfigEmpleado, navConfigGerente } from "./config";
 
 // ----------------------------------------------------------------------
 
@@ -49,6 +50,7 @@ export default function Nav({ openNav, onCloseNav }) {
   const { user } = useSelector((state) => state.auth);
   const { VITE_API_URL_IMAGE } = getEnvVariables();
   const isDesktop = useResponsive("up", "lg");
+  const [permisos, setPermisos] = useState(navConfigEmpleado);
 
   useEffect(() => {
     if (openNav) {
@@ -56,6 +58,19 @@ export default function Nav({ openNav, onCloseNav }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
+
+  useEffect(() => {
+    const { nombre_rol } = user;
+    if (nombre_rol === "Usuario") {
+      setPermisos(navConfigEmpleado);
+    }
+    if (nombre_rol === "Gerente") {
+      setPermisos(navConfigGerente);
+    }
+    if (nombre_rol === "Administrador") {
+      setPermisos(navConfig);
+    }
+  }, [user]);
 
   const renderContent = (
     <Scrollbar
@@ -95,7 +110,7 @@ export default function Nav({ openNav, onCloseNav }) {
           </StyledAccount>
         </Link>
       </Box>
-      <NavSection data={navConfig} />
+      <NavSection data={permisos} />
       <Box sx={{ flexGrow: 1 }} />
     </Scrollbar>
   );

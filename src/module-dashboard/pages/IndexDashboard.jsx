@@ -10,7 +10,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import Iconify from "../../components/iconify/Iconify";
 import { IndexLayout } from "../../layouts";
@@ -18,10 +18,27 @@ import { useNavigate } from "react-router-dom";
 import AppCurrentVisits from "../../sections/@dashboard/app/AppCurrentVisits";
 import { useTheme } from "@mui/material/styles";
 import { PieChart } from "@mui/x-charts";
+import { useSelector } from "react-redux";
 
 export const IndexDashboard = () => {
   const navigate = useNavigate();
   const theme = useTheme();
+  const { user } = useSelector((state) => state.auth);
+  const [permisos, setPermisos] = useState("Usuario");
+
+  useEffect(() => {
+    const { nombre_rol } = user;
+    if (nombre_rol === "Usuario") {
+      setPermisos("Usuario");
+    }
+    if (nombre_rol === "Gerente") {
+      setPermisos("Gerente");
+    }
+    if (nombre_rol === "Administrador") {
+      setPermisos("Administrador");
+    }
+  }, [user]);
+
   const cards = [
     {
       title: "Agregar Productos",
@@ -76,37 +93,42 @@ export const IndexDashboard = () => {
           container
           spacing={3}
         >
-          <Grid
-            display={"flex"}
-            justifyContent={"center"}
-            alignItems={"center"}
-            item
-            xs={12}
-          >
-            <Typography variant="h6">Atajos Rapidos</Typography>
-          </Grid>
-          {cards.map((option) => (
-            <Grid item key={option.title} xs={6} md={4}>
-              <Card sx={{ maxWidth: 345 }}>
-                <CardActionArea onClick={() => navigate(option.url)}>
-                  <CardMedia
-                    component="img"
-                    height="140"
-                    image={option.urlImage}
-                    alt="green iguana"
-                  />
-                  <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                      {option.title}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {option.description}
-                    </Typography>
-                  </CardContent>
-                </CardActionArea>
-              </Card>
-            </Grid>
-          ))}
+          {(permisos === "Administrador" || permisos === "Gerente") && (
+            <>
+              <Grid
+                display={"flex"}
+                justifyContent={"center"}
+                alignItems={"center"}
+                item
+                xs={12}
+              >
+                <Typography variant="h6">Atajos Rapidos</Typography>
+              </Grid>
+              {cards.map((option) => (
+                <Grid item key={option.title} xs={6} md={4}>
+                  <Card sx={{ maxWidth: 345 }}>
+                    <CardActionArea onClick={() => navigate(option.url)}>
+                      <CardMedia
+                        component="img"
+                        height="140"
+                        image={option.urlImage}
+                        alt="green iguana"
+                      />
+                      <CardContent>
+                        <Typography gutterBottom variant="h5" component="div">
+                          {option.title}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {option.description}
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                  </Card>
+                </Grid>
+              ))}
+            </>
+          )}
+
           <Grid display={"flex"} justifyContent={"center"} item xs={12}>
             <Typography variant="h6">Graficas</Typography>
           </Grid>

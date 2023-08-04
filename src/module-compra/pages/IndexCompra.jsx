@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom/dist";
 import { Buscador, CustomTable } from "../../ui";
 import { EliminarCompra } from "./EliminarCompra";
 import { getComprasProvider } from "../../providers/compra/providerCompra";
+import { useSelector } from "react-redux";
 
 export const IndexCompra = () => {
   const [compras, setCompras] = useState([]);
@@ -27,6 +28,21 @@ export const IndexCompra = () => {
   const [modalDelete, setModalDelete] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth);
+  const [permisos, setPermisos] = useState("Usuario");
+
+  useEffect(() => {
+    const { nombre_rol } = user;
+    if (nombre_rol === "Usuario") {
+      setPermisos("Usuario");
+    }
+    if (nombre_rol === "Gerente") {
+      setPermisos("Gerente");
+    }
+    if (nombre_rol === "Administrador") {
+      setPermisos("Administrador");
+    }
+  }, [user]);
 
   const getCompras = async () => {
     const { ok, data } = await getComprasProvider();
@@ -101,22 +117,26 @@ export const IndexCompra = () => {
             <Button onClick={() => {}} variant="contained" color="info">
               Ver
             </Button>
-            <Button
-              onClick={() => {
-                navigate(`/compra/editar/${row.id}`);
-              }}
-              variant="contained"
-              color="secondary"
-            >
-              Editar
-            </Button>
-            <Button
-              variant="contained"
-              color="error"
-              onClick={() => handleDelete(row)}
-            >
-              Eliminar
-            </Button>
+            {(permisos === "Administrador" || permisos === "Gerente") && (
+              <Button
+                onClick={() => {
+                  navigate(`/compra/editar/${row.id}`);
+                }}
+                variant="contained"
+                color="secondary"
+              >
+                Editar
+              </Button>
+            )}
+            {permisos === "Administrador" && (
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => handleDelete(row)}
+              >
+                Eliminar
+              </Button>
+            )}
           </Stack>
         );
       },
@@ -133,15 +153,18 @@ export const IndexCompra = () => {
             flexDirection={{ xs: "column", md: "row" }}
             display={"flex"}
           >
-            <Grid item xs={12} md={4}>
-              <Button
-                onClick={() => navigate("/compra/agregar")}
-                variant="contained"
-                endIcon={<AddCircleOutline />}
-              >
-                Agregar
-              </Button>
-            </Grid>
+            {(permisos === "Administrador" || permisos === "Gerente") && (
+              <Grid item xs={12} md={4}>
+                <Button
+                  onClick={() => navigate("/compra/agregar")}
+                  variant="contained"
+                  endIcon={<AddCircleOutline />}
+                >
+                  Agregar
+                </Button>
+              </Grid>
+            )}
+
             <Grid item xs={12} md={8}>
               <Buscador buscador={buscador} handleSearch={handleSearch} />
             </Grid>
