@@ -7,8 +7,7 @@ import { useSelector } from "react-redux";
 export const ClienteRoutes = () => {
   const { user } = useSelector((state) => state.auth);
 
-  function tienePermiso(roles) {
-    // función ficticia para obtener el usuario actual
+  function havePermision(roles) {
     return user && roles.includes(user.nombre_rol);
   }
   return (
@@ -18,14 +17,23 @@ export const ClienteRoutes = () => {
         <Route
           path="agregar"
           element={
-            tienePermiso(["Administrador", "Gerente"]) ? (
+            havePermision(["Administrador", "Gerente"]) ? (
               <AgregarCliente />
             ) : (
               <Navigate to="/cliente/inicio" />
             )
           }
         />
-        <Route path="editar/:id" element={<EditarCliente />} />
+        <Route
+          path="editar/:id"
+          element={
+            havePermision(["Administrador", "Gerente"]) ? (
+              <EditarCliente />
+            ) : (
+              <Navigate to="/cliente/inicio" />
+            )
+          }
+        />
         <Route path="/*" element={<Navigate to={"/cliente/inicio"} />} />
       </Route>
     </Routes>

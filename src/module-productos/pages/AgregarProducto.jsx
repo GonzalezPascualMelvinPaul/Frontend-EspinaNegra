@@ -17,6 +17,7 @@ import { getProveedoresProvider } from "../../providers/proveedor/providerProvee
 import { getCategoriasProvider } from "../../providers/categoria/providerCategoria";
 import { getTipoProductoProvider } from "../../providers/tipo_producto/providerTipoProducto";
 import { getUnidadMedidaProvider } from "../../providers/unidad_medida/providerUnidadMedida";
+import { useNavigate } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({
   nombre_producto: Yup.string().required("El nombre es requerido"),
@@ -79,7 +80,7 @@ export const AgregarProducto = () => {
   const [categorias, setCategorias] = useState([]);
   const [tipoProductos, setTipoProductos] = useState([]);
   const [unididadMedidas, setUnidadMedidas] = useState([]);
-
+  const navigate = useNavigate();
   const getProveedores = async () => {
     const { data } = await getProveedoresProvider();
     setProveedores(data?.proveedores);

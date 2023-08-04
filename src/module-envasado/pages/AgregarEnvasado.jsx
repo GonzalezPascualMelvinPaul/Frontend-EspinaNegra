@@ -8,6 +8,8 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import { Alert, Button, Grid, TextField, Typography } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { useNavigate } from "react-router-dom";
+import { addEnvasadoProvider } from "../../providers/envasado/providerEnvasado";
 dayjs.locale("es");
 
 const validationSchema = Yup.object({
@@ -27,6 +29,7 @@ export const AgregarEnvasado = () => {
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
   const handleClose = () => {
     setOpen(false);
   };
@@ -41,10 +44,13 @@ export const AgregarEnvasado = () => {
     setError(false);
     setOpen(false);
     console.log("Values", values);
-    //const { data, ok, message } = await addEmpleadoProvider(values);
+    const { data, ok, message } = await addEnvasadoProvider(values);
     if (ok) {
       setOpen(true);
       setError(false);
+      setTimeout(() => {
+        navigate("/envasado/inicio");
+      }, 3000);
     } else {
       setError(true);
       setOpen(false);

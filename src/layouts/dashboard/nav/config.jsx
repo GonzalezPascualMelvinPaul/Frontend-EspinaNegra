@@ -161,7 +161,11 @@ export const navConfigEmpleado = [
     path: "/producto",
     icon: <WarehouseOutlined />,
   },
-
+  {
+    title: "Compra",
+    path: "/compra",
+    icon: <LocalMallOutlined />,
+  },
   {
     title: "Venta",
     path: "/venta",

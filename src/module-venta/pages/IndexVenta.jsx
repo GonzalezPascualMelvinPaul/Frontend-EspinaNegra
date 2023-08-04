@@ -66,7 +66,20 @@ export const IndexVenta = () => {
 
   const handleSearch = (event) => {
     setBuscador(event.target.value);
-    searching(users, event.target.value);
+    searching(ventas, event.target.value);
+  };
+
+  const searching = (ventas, buscador) => {
+    const newVentas = ventas.filter((venta) => {
+      if (
+        venta.empleado?.nombre_persona_fisica
+          .toUpperCase()
+          .includes(buscador.toUpperCase())
+      )
+        return venta;
+    });
+
+    setVentasBuscador(newVentas);
   };
 
   useEffect(() => {
