@@ -6,6 +6,7 @@ import {
   Skeleton,
   Stack,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
@@ -17,6 +18,8 @@ import { Buscador, CustomTable } from "../../ui";
 import { AddCircleOutline } from "@mui/icons-material";
 import { EliminarProveedor } from "./EliminarProveedor";
 import { useSelector } from "react-redux";
+import { useTheme } from "@mui/material/styles";
+import { TableResponsiveCustom } from "../../ui/components/TableResponsiveCustom";
 
 export const IndexProveedor = () => {
   const [proveedores, setProveedores] = useState([]);
@@ -26,6 +29,8 @@ export const IndexProveedor = () => {
   const [proveedor, setProveedor] = useState(null);
   const [modalDelete, setModalDelete] = useState(false);
   const navigate = useNavigate();
+  const theme = useTheme();
+  const xssize = useMediaQuery(theme.breakpoints.only("xs"));
 
   const { user } = useSelector((state) => state.auth);
   const [permisos, setPermisos] = useState("Usuario");
@@ -166,12 +171,21 @@ export const IndexProveedor = () => {
             <Skeleton variant="rectangular" width={"100%"} height={"80%"} />
           ) : (
             <>
-              <CustomTable
-                isLoading={isLoading}
-                data={proveedorBuscador}
-                columns={columns}
-                idData={"id_proveedor"}
-              />
+              {xssize ? (
+                <TableResponsiveCustom
+                  isLoading={isLoading}
+                  data={proveedorBuscador}
+                  columns={columns}
+                  idData={"id_proveedor"}
+                />
+              ) : (
+                <CustomTable
+                  isLoading={isLoading}
+                  data={proveedorBuscador}
+                  columns={columns}
+                  idData={"id_proveedor"}
+                />
+              )}
             </>
           )}
         </IndexLayout>

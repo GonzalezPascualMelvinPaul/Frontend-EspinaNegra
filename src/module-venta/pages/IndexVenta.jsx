@@ -7,6 +7,7 @@ import {
   Skeleton,
   Stack,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
@@ -18,6 +19,8 @@ import { useNavigate } from "react-router-dom/dist";
 import { Buscador, CustomTable } from "../../ui";
 import { getVentasProvider } from "../../providers/venta/providerVenta";
 import { useSelector } from "react-redux";
+import { TableResponsiveCustom } from "../../ui/components/TableResponsiveCustom";
+import { useTheme } from "@mui/material/styles";
 
 export const IndexVenta = () => {
   const [ventas, setVentas] = useState([]);
@@ -30,6 +33,8 @@ export const IndexVenta = () => {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
   const [permisos, setPermisos] = useState("Usuario");
+  const theme = useTheme();
+  const xssize = useMediaQuery(theme.breakpoints.only("xs"));
 
   useEffect(() => {
     const { nombre_rol } = user;
@@ -197,12 +202,21 @@ export const IndexVenta = () => {
             <Alert severity="error">Algo salio mal</Alert>
           ) : (
             <>
-              <CustomTable
-                isLoading={isLoading}
-                data={ventasBuscador}
-                columns={columns}
-                idData={"id_venta"}
-              />
+              {xssize ? (
+                <TableResponsiveCustom
+                  isLoading={isLoading}
+                  data={ventasBuscador}
+                  columns={columns}
+                  idData={"id_venta"}
+                />
+              ) : (
+                <CustomTable
+                  isLoading={isLoading}
+                  data={ventasBuscador}
+                  columns={columns}
+                  idData={"id_venta"}
+                />
+              )}
             </>
           )}
         </IndexLayout>

@@ -6,6 +6,7 @@ import {
   Skeleton,
   Stack,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
@@ -17,6 +18,8 @@ import { Buscador, CustomTable } from "../../ui";
 import { AddCircleOutline } from "@mui/icons-material";
 import { EliminarCliente } from "./EliminarCliente";
 import { useSelector } from "react-redux";
+import { useTheme } from "@mui/material/styles";
+import { TableResponsiveCustom } from "../../ui/components/TableResponsiveCustom";
 
 export const IndexCliente = () => {
   const { user } = useSelector((state) => state.auth);
@@ -28,6 +31,8 @@ export const IndexCliente = () => {
   const [modalDelete, setModalDelete] = useState(false);
   const [permisos, setPermisos] = useState("Usuario");
   const navigate = useNavigate();
+  const theme = useTheme();
+  const xssize = useMediaQuery(theme.breakpoints.only("xs"));
 
   const handleSearch = (event) => {
     setBuscador(event.target.value);
@@ -173,12 +178,21 @@ export const IndexCliente = () => {
             <Skeleton variant="rectangular" width={"100%"} height={"80%"} />
           ) : (
             <>
-              <CustomTable
-                isLoading={isLoading}
-                data={clienteBuscador}
-                columns={columns}
-                idData={"id_cliente"}
-              />
+              {xssize ? (
+                <TableResponsiveCustom
+                  isLoading={isLoading}
+                  data={clienteBuscador}
+                  columns={columns}
+                  idData={"id_cliente"}
+                />
+              ) : (
+                <CustomTable
+                  isLoading={isLoading}
+                  data={clienteBuscador}
+                  columns={columns}
+                  idData={"id_cliente"}
+                />
+              )}
             </>
           )}
         </IndexLayout>

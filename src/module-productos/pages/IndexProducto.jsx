@@ -6,6 +6,7 @@ import {
   Skeleton,
   Stack,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
@@ -17,6 +18,8 @@ import { AddCircleOutline } from "@mui/icons-material";
 import { EliminarProducto } from "./EliminarProducto";
 import { getProductosProvider } from "../../providers/producto/providerProducto";
 import { useSelector } from "react-redux";
+import { useTheme } from "@mui/material/styles";
+import { TableResponsiveCustom } from "../../ui/components/TableResponsiveCustom";
 
 export const IndexProducto = () => {
   const [productos, setProductos] = useState([]);
@@ -28,6 +31,8 @@ export const IndexProducto = () => {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
   const [permisos, setPermisos] = useState("Usuario");
+  const theme = useTheme();
+  const xssize = useMediaQuery(theme.breakpoints.only("xs"));
 
   useEffect(() => {
     const { nombre_rol } = user;
@@ -179,12 +184,21 @@ export const IndexProducto = () => {
             <Skeleton variant="rectangular" width={"100%"} height={"80%"} />
           ) : (
             <>
-              <CustomTable
-                isLoading={isLoading}
-                data={productosBuscador}
-                columns={columns}
-                idData={"id_producto"}
-              />
+              {xssize ? (
+                <TableResponsiveCustom
+                  isLoading={isLoading}
+                  data={productosBuscador}
+                  columns={columns}
+                  idData={"id_producto"}
+                />
+              ) : (
+                <CustomTable
+                  isLoading={isLoading}
+                  data={productosBuscador}
+                  columns={columns}
+                  idData={"id_producto"}
+                />
+              )}
             </>
           )}
         </IndexLayout>

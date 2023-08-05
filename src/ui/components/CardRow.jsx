@@ -18,9 +18,24 @@ export const CardRow = ({ columns = [], row }) => {
       {columns.map(({ field, headerName, renderCell }) => (
         <React.Fragment key={field}>
           {field !== "acciones" && (
-            <Typography>
-              <strong>{headerName}:</strong> {row[field]}
-            </Typography>
+            <>
+              {renderCell ? (
+                <Stack spacing={2} direction="row">
+                  <Typography>
+                    <strong>
+                      {headerName}:{"    "}
+                    </strong>
+                    {"   "}
+                  </Typography>
+
+                  {renderCell({ value: row[field], row })}
+                </Stack>
+              ) : (
+                <Typography>
+                  <strong>{headerName}:</strong> {row[field]}
+                </Typography>
+              )}
+            </>
           )}
           {field === "acciones" && (
             <Stack spacing={2} direction="row">

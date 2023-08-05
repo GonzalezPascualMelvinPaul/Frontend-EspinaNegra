@@ -7,6 +7,7 @@ import {
   Skeleton,
   Stack,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
@@ -18,6 +19,8 @@ import { Buscador, CustomTable } from "../../ui";
 import { EliminarCompra } from "./EliminarCompra";
 import { getComprasProvider } from "../../providers/compra/providerCompra";
 import { useSelector } from "react-redux";
+import { useTheme } from "@mui/material/styles";
+import { TableResponsiveCustom } from "../../ui/components/TableResponsiveCustom";
 
 export const IndexCompra = () => {
   const [compras, setCompras] = useState([]);
@@ -30,6 +33,8 @@ export const IndexCompra = () => {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
   const [permisos, setPermisos] = useState("Usuario");
+  const theme = useTheme();
+  const xssize = useMediaQuery(theme.breakpoints.only("xs"));
 
   useEffect(() => {
     const { nombre_rol } = user;
@@ -189,12 +194,21 @@ export const IndexCompra = () => {
             <Alert severity="error">Algo salio mal</Alert>
           ) : (
             <>
-              <CustomTable
-                isLoading={isLoading}
-                data={comprasBuscador}
-                columns={columns}
-                idData={"id_compra"}
-              />
+              {xssize ? (
+                <TableResponsiveCustom
+                  isLoading={isLoading}
+                  data={comprasBuscador}
+                  columns={columns}
+                  idData={"id_compra"}
+                />
+              ) : (
+                <CustomTable
+                  isLoading={isLoading}
+                  data={comprasBuscador}
+                  columns={columns}
+                  idData={"id_compra"}
+                />
+              )}
             </>
           )}
         </IndexLayout>
