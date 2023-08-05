@@ -49,7 +49,9 @@ export const IndexProducto = () => {
 
   const searching = (productos, buscador) => {
     const newProductos = productos.filter((producto) => {
-      if (producto.nombre.toUpperCase().includes(buscador.toUpperCase()))
+      if (
+        producto.nombre_producto.toUpperCase().includes(buscador.toUpperCase())
+      )
         return producto;
     });
 

@@ -63,7 +63,11 @@ export const IndexEnvasado = () => {
 
   const searching = (envasados, buscador) => {
     const newEnvasados = envasados.filter((envasado) => {
-      if (envasado.id_envasado.toUpperCase().includes(buscador.toUpperCase()))
+      if (
+        envasado.descripcion_envasado
+          .toUpperCase()
+          .includes(buscador.toUpperCase())
+      )
         return envasado;
     });
 

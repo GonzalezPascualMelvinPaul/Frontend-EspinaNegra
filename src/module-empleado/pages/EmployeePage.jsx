@@ -57,7 +57,9 @@ export const EmployeePage = () => {
 
   const searching = (empleados, buscador) => {
     const newEmpleados = empleados.filter((empleado) => {
-      if (empleado.nombre.toUpperCase().includes(buscador.toUpperCase()))
+      if (
+        empleado.nombre_empleado.toUpperCase().includes(buscador.toUpperCase())
+      )
         return empleado;
     });
 

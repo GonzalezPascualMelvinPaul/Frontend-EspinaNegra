@@ -23,7 +23,7 @@ export const IndexBodega = () => {
 
   const searching = (bodegas, buscador) => {
     const newBodega = bodegas.filter((bodega) => {
-      if (bodega.nombre.toUpperCase().includes(buscador.toUpperCase()))
+      if (bodega.nombre_bodega.toUpperCase().includes(buscador.toUpperCase()))
         return bodega;
     });
 

@@ -88,8 +88,7 @@ export const AgregarVenta = () => {
     setIsLoading(true);
     setError(false);
     setOpen(false);
-    console.log("valueees", values);
-    //const { data, ok, message } = await addVentaProvider(values);
+    const { data, ok, message } = await addVentaProvider(values);
     if (ok) {
       setOpen(true);
       setError(false);

@@ -71,7 +71,8 @@ export const deleteEmpleadoProvider = async (empleadoId) => {
       for (let key in response.errors) {
         errorMessage += response.errors[key].join("\n") + "\n";
       }
-      return { ok: false, data: "", errorMessage };
+
+      return { ok: false, data: "", message: errorMessage };
     });
 };
 

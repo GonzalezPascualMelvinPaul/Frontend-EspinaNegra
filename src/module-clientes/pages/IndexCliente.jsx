@@ -36,7 +36,11 @@ export const IndexCliente = () => {
 
   const searching = (clientes, buscador) => {
     const newCliente = clientes.filter((cliente) => {
-      if (cliente.nombre.toUpperCase().includes(buscador.toUpperCase()))
+      if (
+        cliente.nombre_persona_fisica
+          .toUpperCase()
+          .includes(buscador.toUpperCase())
+      )
         return cliente;
     });
 

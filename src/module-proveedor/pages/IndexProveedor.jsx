@@ -50,7 +50,11 @@ export const IndexProveedor = () => {
 
   const searching = (proveedores, buscador) => {
     const newProveedor = proveedores.filter((proveedor) => {
-      if (proveedor.nombre.toUpperCase().includes(buscador.toUpperCase()))
+      if (
+        proveedor.nombre_persona_fisica
+          .toUpperCase()
+          .includes(buscador.toUpperCase())
+      )
         return proveedor;
     });
 

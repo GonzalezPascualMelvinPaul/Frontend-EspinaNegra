@@ -66,7 +66,20 @@ export const IndexCompra = () => {
 
   const handleSearch = (event) => {
     setBuscador(event.target.value);
-    searching(users, event.target.value);
+    searching(compras, event.target.value);
+  };
+
+  const searching = (compras, buscador) => {
+    const newCompra = compras.filter((compra) => {
+      if (
+        compra.empleado?.nombre_persona_fisica
+          .toUpperCase()
+          .includes(buscador.toUpperCase())
+      )
+        return compra;
+    });
+
+    setComprasBuscador(newCompra);
   };
 
   useEffect(() => {
