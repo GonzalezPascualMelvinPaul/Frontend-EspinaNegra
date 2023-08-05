@@ -1,5 +1,13 @@
 import { AddCircleOutline } from "@mui/icons-material";
-import { Box, Button, Container, Grid, Skeleton, Stack } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  Skeleton,
+  Stack,
+  useMediaQuery,
+} from "@mui/material";
 
 import { useEffect, useState } from "react";
 
@@ -12,6 +20,8 @@ import { Buscador } from "../../ui/components/Buscador";
 import { useNavigate } from "react-router-dom";
 import { EliminarEmpleado } from "./EliminarEmpleado";
 import { useSelector } from "react-redux";
+import { TableResponsiveCustom } from "../../ui/components/TableResponsiveCustom";
+import { useTheme } from "@mui/material/styles";
 
 export const EmployeePage = () => {
   const { user } = useSelector((state) => state.auth);
@@ -22,6 +32,8 @@ export const EmployeePage = () => {
   const [empleado, setEmpleado] = useState(null);
   const [modalDelete, setModalDelete] = useState(false);
   const [permisos, setPermisos] = useState("Usuario");
+  const theme = useTheme();
+  const xssize = useMediaQuery(theme.breakpoints.only("xs"));
 
   const navigate = useNavigate();
 
@@ -161,12 +173,21 @@ export const EmployeePage = () => {
             <Skeleton variant="rectangular" width={"100%"} height={"80%"} />
           ) : (
             <>
-              <CustomTable
-                isLoading={isLoading}
-                data={empleadosBuscador}
-                columns={columns}
-                idData={"id_empleado"}
-              />
+              {xssize ? (
+                <TableResponsiveCustom
+                  isLoading={isLoading}
+                  data={empleadosBuscador}
+                  columns={columns}
+                  idData={"id_empleado"}
+                />
+              ) : (
+                <CustomTable
+                  isLoading={isLoading}
+                  data={empleadosBuscador}
+                  columns={columns}
+                  idData={"id_empleado"}
+                />
+              )}
             </>
           )}
         </IndexLayout>
