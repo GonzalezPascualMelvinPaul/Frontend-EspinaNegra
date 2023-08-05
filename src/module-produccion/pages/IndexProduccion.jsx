@@ -7,6 +7,8 @@ import {
   Skeleton,
   Stack,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
@@ -17,6 +19,7 @@ import { AddCircleOutline } from "@mui/icons-material";
 import { Buscador, CustomTable } from "../../ui";
 import { useSelector } from "react-redux";
 import { getProduccionesProvider } from "../../providers/produccion/providerProduccion";
+import { TableResponsiveCustom } from "../../ui/components/TableResponsiveCustom";
 
 export const IndexProduccion = () => {
   const [producciones, setProducciones] = useState([]);
@@ -29,6 +32,8 @@ export const IndexProduccion = () => {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
   const [permisos, setPermisos] = useState("Usuario");
+  const theme = useTheme();
+  const xssize = useMediaQuery(theme.breakpoints.only("xs"));
 
   useEffect(() => {
     const { nombre_rol } = user;
@@ -185,12 +190,21 @@ export const IndexProduccion = () => {
             <Alert severity="error">Algo salio mal</Alert>
           ) : (
             <>
-              <CustomTable
-                isLoading={isLoading}
-                data={produccionesBuscador}
-                columns={columns}
-                idData={"id_produccion"}
-              />
+              {xssize ? (
+                <TableResponsiveCustom
+                  isLoading={isLoading}
+                  data={produccionesBuscador}
+                  columns={columns}
+                  idData={"id_produccion"}
+                />
+              ) : (
+                <CustomTable
+                  isLoading={isLoading}
+                  data={produccionesBuscador}
+                  columns={columns}
+                  idData={"id_produccion"}
+                />
+              )}
             </>
           )}
         </IndexLayout>

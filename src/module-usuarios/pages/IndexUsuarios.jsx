@@ -6,6 +6,7 @@ import {
   Skeleton,
   Stack,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
@@ -16,6 +17,8 @@ import { IndexLayout } from "../../layouts";
 import { Buscador, CustomTable } from "../../ui";
 import { AddCircleOutline } from "@mui/icons-material";
 import { EliminarUser } from "./EliminarUser";
+import { useTheme } from "@mui/material/styles";
+import { TableResponsiveCustom } from "../../ui/components/TableResponsiveCustom";
 
 export const IndexUsuarios = () => {
   const [users, setUsers] = useState([]);
@@ -25,6 +28,8 @@ export const IndexUsuarios = () => {
   const [user, setUser] = useState(null);
   const [modalDelete, setModalDelete] = useState(false);
   const navigate = useNavigate();
+  const theme = useTheme();
+  const xssize = useMediaQuery(theme.breakpoints.only("xs"));
 
   const handleSearch = (event) => {
     setBuscador(event.target.value);
@@ -145,12 +150,21 @@ export const IndexUsuarios = () => {
             <Skeleton variant="rectangular" width={"100%"} height={"80%"} />
           ) : (
             <>
-              <CustomTable
-                isLoading={isLoading}
-                data={userBuscador}
-                columns={columns}
-                idData={"id"}
-              />
+              {xssize ? (
+                <TableResponsiveCustom
+                  isLoading={isLoading}
+                  data={userBuscador}
+                  columns={columns}
+                  idData={"id"}
+                />
+              ) : (
+                <CustomTable
+                  isLoading={isLoading}
+                  data={userBuscador}
+                  columns={columns}
+                  idData={"id"}
+                />
+              )}
             </>
           )}
         </IndexLayout>

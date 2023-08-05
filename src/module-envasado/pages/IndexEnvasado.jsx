@@ -6,6 +6,8 @@ import {
   Skeleton,
   Stack,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
@@ -16,6 +18,7 @@ import { AddCircleOutline } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { getEnvasadosProvider } from "../../providers/envasado/providerEnvasado";
+import { TableResponsiveCustom } from "../../ui/components/TableResponsiveCustom";
 
 export const IndexEnvasado = () => {
   const [envasados, setEnvasados] = useState([]);
@@ -28,6 +31,8 @@ export const IndexEnvasado = () => {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
   const [permisos, setPermisos] = useState("Usuario");
+  const theme = useTheme();
+  const xssize = useMediaQuery(theme.breakpoints.only("xs"));
 
   useEffect(() => {
     const { nombre_rol } = user;
@@ -173,12 +178,21 @@ export const IndexEnvasado = () => {
             <Alert severity="error">Algo salio mal</Alert>
           ) : (
             <>
-              <CustomTable
-                isLoading={isLoading}
-                data={envasadosBuscador}
-                columns={columns}
-                idData={"id_envasado"}
-              />
+              {xssize ? (
+                <TableResponsiveCustom
+                  isLoading={isLoading}
+                  data={envasadosBuscador}
+                  columns={columns}
+                  idData={"id_envasado"}
+                />
+              ) : (
+                <CustomTable
+                  isLoading={isLoading}
+                  data={envasadosBuscador}
+                  columns={columns}
+                  idData={"id_envasado"}
+                />
+              )}
             </>
           )}
         </IndexLayout>

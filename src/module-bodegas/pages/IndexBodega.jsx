@@ -1,4 +1,12 @@
-import { Box, Button, Grid, Skeleton, Stack } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  Skeleton,
+  Stack,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getBodegasProvider } from "../../providers/bodega/providerBodega";
@@ -6,6 +14,7 @@ import { IndexLayout } from "../../layouts";
 import { Buscador, CustomTable } from "../../ui";
 import { AddCircleOutline } from "@mui/icons-material";
 import { EliminarBodega } from "./EliminarBodega";
+import { TableResponsiveCustom } from "../../ui/components/TableResponsiveCustom";
 
 export const IndexBodega = () => {
   const [bodegas, setBodegas] = useState([]);
@@ -15,6 +24,8 @@ export const IndexBodega = () => {
   const [bodega, setBodega] = useState(null);
   const [modalDelete, setModalDelete] = useState(false);
   const navigate = useNavigate();
+  const theme = useTheme();
+  const xssize = useMediaQuery(theme.breakpoints.only("xs"));
 
   const handleSearch = (event) => {
     setBuscador(event.target.value);
@@ -126,12 +137,21 @@ export const IndexBodega = () => {
             <Skeleton variant="rectangular" width={"100%"} height={"80%"} />
           ) : (
             <>
-              <CustomTable
-                isLoading={isLoading}
-                data={bodegaBuscador}
-                columns={columns}
-                idData={"id_bodega"}
-              />
+              {xssize ? (
+                <TableResponsiveCustom
+                  isLoading={isLoading}
+                  data={bodegaBuscador}
+                  columns={columns}
+                  idData={"id_bodega"}
+                />
+              ) : (
+                <CustomTable
+                  isLoading={isLoading}
+                  data={bodegaBuscador}
+                  columns={columns}
+                  idData={"id_bodega"}
+                />
+              )}
             </>
           )}
         </IndexLayout>
