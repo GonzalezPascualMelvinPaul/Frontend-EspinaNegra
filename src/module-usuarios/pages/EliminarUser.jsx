@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { deleteUserProvider } from "../../providers/usuario/providerUsuario";
-import { AlertMessage, ModalDelete } from "../../ui";
+import { AlertMessage, CustomModal } from "../../ui";
 import { Alert, Box, Button, Typography } from "@mui/material";
 
 export const EliminarUser = ({
@@ -34,36 +34,47 @@ export const EliminarUser = ({
   };
   return (
     <>
-      <ModalDelete open={open} onClose={onClose}>
-        <Typography
-          sx={{ fontWeight: "bold" }}
-          variant="h7"
-          textAlign={"center"}
-        >
-          ¿DESEA ELIMINAR EL USUARIO {user?.username} CON EL CORREO{" "}
-          {user?.email}?
-        </Typography>
-        {error ? (
-          <Alert sx={{ mt: 0, mb: 0 }} severity="error">
-            {message}
-          </Alert>
-        ) : (
-          ""
-        )}
-        <Box
-          sx={{ mt: 3 }}
-          display="flex"
-          width={"100%"}
-          justifyContent="space-around"
-        >
-          <Button variant="contained" onClick={onClose} color="error">
-            Cancelar
-          </Button>
-          <Button onClick={deleteUserHandle} type="submit" variant="contained">
-            Sí, deseo eliminarlo
-          </Button>
+      <CustomModal open={open} onClose={onClose}>
+        <Box sx={{ padding: "16px" }}>
+          <Typography
+            sx={{ fontWeight: "bold", textAlign: "center" }}
+            variant="subtitle1"
+          >
+            ¿DESEA ELIMINAR EL USUARIO {user?.username} CON EL CORREO{" "}
+            {user?.email}?
+          </Typography>
+          {error && (
+            <Alert sx={{ mt: 2, mb: 2 }} severity="error">
+              {message}
+            </Alert>
+          )}
+          <Box
+            sx={{
+              mt: 3,
+              display: "flex",
+              flexDirection: { md: "row", xs: "column-reverse" },
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Button
+              sx={{ mb: 1 }}
+              variant="contained"
+              onClick={onClose}
+              color="error"
+            >
+              Cancelar
+            </Button>
+            <Button
+              sx={{ mb: 1 }}
+              onClick={deleteUserHandle}
+              variant="contained"
+            >
+              Sí, deseo eliminarlo
+            </Button>
+          </Box>
         </Box>
-      </ModalDelete>
+      </CustomModal>
       <AlertMessage
         handleClose={handleClose}
         message={message}

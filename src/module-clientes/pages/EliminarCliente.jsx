@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { deleteClienteProvider } from "../../providers/cliente/providerCliente";
-import { AlertMessage, ModalDelete } from "../../ui";
+import { AlertMessage, CustomModal } from "../../ui";
 import { Alert, Box, Button, Typography } from "@mui/material";
 
 export const EliminarCliente = ({
@@ -15,11 +15,15 @@ export const EliminarCliente = ({
   const deleteClienteHandle = async () => {
     setMessage("");
 
-    const { ok, data, message } = await deleteClienteProvider(cliente.id);
+    const { ok, data, message } = await deleteClienteProvider(
+      cliente.id_cliente
+    );
     if (ok) {
       updateClientes();
       setMessage(message);
       setOpenAlert(true);
+      setMessage("");
+      setError(false);
       onClose();
     } else {
       setError(true);
@@ -33,14 +37,14 @@ export const EliminarCliente = ({
   };
   return (
     <>
-      <ModalDelete open={open} onClose={onClose}>
+      <CustomModal open={open} onClose={onClose}>
         <Typography
           sx={{ fontWeight: "bold" }}
           variant="h7"
           textAlign={"center"}
         >
-          ¿DESEA ELIMINAR EL CLIENTE {cliente?.nombre} CON EL CORREO{" "}
-          {cliente?.email}?
+          ¿DESEA ELIMINAR EL CLIENTE {cliente?.nombre_persona_fisica} CON EL
+          CORREO {cliente?.email_cliente}?
         </Typography>
         {error ? (
           <Alert sx={{ mt: 0, mb: 0 }} severity="error">
@@ -50,15 +54,24 @@ export const EliminarCliente = ({
           ""
         )}
         <Box
-          sx={{ mt: 3 }}
-          display="flex"
-          width={"100%"}
-          justifyContent="space-around"
+          sx={{
+            mt: 3,
+            display: "flex",
+            flexDirection: { md: "row", xs: "column-reverse" },
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
         >
-          <Button variant="contained" onClick={onClose} color="error">
+          <Button
+            sx={{ mb: 1 }}
+            variant="contained"
+            onClick={onClose}
+            color="error"
+          >
             Cancelar
           </Button>
           <Button
+            sx={{ mb: 1 }}
             onClick={deleteClienteHandle}
             type="submit"
             variant="contained"
@@ -66,7 +79,7 @@ export const EliminarCliente = ({
             Sí, deseo eliminarlo
           </Button>
         </Box>
-      </ModalDelete>
+      </CustomModal>
       <AlertMessage
         handleClose={handleClose}
         message={message}

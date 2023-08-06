@@ -70,7 +70,7 @@ export const deleteProduccionProvider = async (id_produccion) => {
       for (let key in response.errors) {
         errorMessage += response.errors[key].join("\n") + "\n";
       }
-      return { ok: false, data: "", errorMessage };
+      return { ok: false, data: "", message: errorMessage };
     });
 };
 

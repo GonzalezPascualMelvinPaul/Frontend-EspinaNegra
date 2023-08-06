@@ -20,6 +20,7 @@ import { Buscador, CustomTable } from "../../ui";
 import { useSelector } from "react-redux";
 import { getProduccionesProvider } from "../../providers/produccion/providerProduccion";
 import { TableResponsiveCustom } from "../../ui/components/TableResponsiveCustom";
+import { EliminarProduccion } from "./EliminarProduccion";
 
 export const IndexProduccion = () => {
   const [producciones, setProducciones] = useState([]);
@@ -208,6 +209,12 @@ export const IndexProduccion = () => {
             </>
           )}
         </IndexLayout>
+        <EliminarProduccion
+          open={modalDelete}
+          onClose={handleDelete}
+          produccion={produccion}
+          updateProducciones={getProduccion}
+        />
       </Box>
     </>
   );

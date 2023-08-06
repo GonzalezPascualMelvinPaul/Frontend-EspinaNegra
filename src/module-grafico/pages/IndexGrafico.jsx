@@ -8,19 +8,43 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import Iconify from "../../components/iconify/Iconify";
 
-import GoogleMaps from "../../ui/components/GoogleMaps";
 import { IndexLayout } from "../../layouts";
 import { BarChart, LineChart, PieChart } from "@mui/x-charts";
+import { getSueldosProvider } from "../../providers/empleado/providerEmpleado";
+import { GoogleMaps } from "../../ui";
+import { LoadScript } from "@react-google-maps/api";
 
 export const IndexGrafico = () => {
+  const [sueldo, setSueldo] = useState([]);
+  const [isLoadingSueldo, setIsLoadingSueldo] = useState(false);
+  const [error, setError] = useState();
+
+  const getDataSueldo = async () => {
+    const { ok, data } = await getSueldosProvider();
+    setIsLoadingSueldo(false);
+    if (!ok) {
+      setError("Hubo un error");
+    } else {
+      console.log(data);
+    }
+    setSueldo(data);
+    setIsLoadingSueldo(false);
+  };
+
+  useEffect(() => {
+    getDataSueldo();
+  }, []);
+
   return (
     <>
       <Box>
         <IndexLayout title={""}>
+          <GoogleMaps />
+
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
               <Card sx={{ maxWidth: 600 }}>
@@ -54,7 +78,25 @@ export const IndexGrafico = () => {
               </Card>
             </Grid>
             <Grid item xs={12} md={6}>
-              <Card sx={{ maxWidth: 600 }}>
+              <Card sx={{ overflow: "auto" }}>
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    Sueldos de empleados
+                  </Typography>
+                  <PieChart
+                    series={[
+                      {
+                        data: sueldo,
+                      },
+                    ]}
+                    width={500}
+                    height={250}
+                  />
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Card sx={{ overflow: "auto" }}>
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
                     Producciones
@@ -66,7 +108,7 @@ export const IndexGrafico = () => {
                         data: [2, 5.5, 2, 8.5, 1.5, 5],
                       },
                     ]}
-                    width={500}
+                    width={600}
                     height={300}
                   />
                 </CardContent>

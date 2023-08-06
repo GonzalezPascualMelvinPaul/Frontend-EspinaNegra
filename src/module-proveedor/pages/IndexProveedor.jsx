@@ -20,6 +20,7 @@ import { EliminarProveedor } from "./EliminarProveedor";
 import { useSelector } from "react-redux";
 import { useTheme } from "@mui/material/styles";
 import { TableResponsiveCustom } from "../../ui/components/TableResponsiveCustom";
+import { VerProovedor } from "./VerProovedor";
 
 export const IndexProveedor = () => {
   const [proveedores, setProveedores] = useState([]);
@@ -28,6 +29,7 @@ export const IndexProveedor = () => {
   const [proveedorBuscador, setProveedorBuscador] = useState([]);
   const [proveedor, setProveedor] = useState(null);
   const [modalDelete, setModalDelete] = useState(false);
+  const [modalView, setModalView] = useState(false);
   const navigate = useNavigate();
   const theme = useTheme();
   const xssize = useMediaQuery(theme.breakpoints.only("xs"));
@@ -71,6 +73,11 @@ export const IndexProveedor = () => {
     setModalDelete(!modalDelete);
   };
 
+  const handleView = (row) => {
+    setProveedor(row);
+    setModalView(!modalView);
+  };
+
   const columns = [
     {
       field: "nombre_persona_fisica",
@@ -102,7 +109,11 @@ export const IndexProveedor = () => {
       renderCell: ({ row }) => {
         return (
           <Stack spacing={2} direction="row">
-            <Button onClick={() => {}} variant="contained" color="info">
+            <Button
+              onClick={() => handleView(row)}
+              variant="contained"
+              color="info"
+            >
               Ver
             </Button>
             {(permisos === "Administrador" || permisos === "Gerente") && (
@@ -194,6 +205,11 @@ export const IndexProveedor = () => {
           onClose={handleDelete}
           proveedor={proveedor}
           updateProveedores={getProveedores}
+        />
+        <VerProovedor
+          onClose={handleView}
+          open={modalView}
+          proveedor={proveedor}
         />
       </Box>
     </>

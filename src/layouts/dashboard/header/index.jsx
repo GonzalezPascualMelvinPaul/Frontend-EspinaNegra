@@ -64,7 +64,7 @@ export default function Header({ onOpenNav }) {
           <Menu />
         </IconButton>
 
-        <Avatar sx={{ width: 56, height: 56 }}>
+        <Avatar sx={{ width: { md: 56, xs: 35 }, height: { md: 56, xs: 35 } }}>
           <Logo />
         </Avatar>
         <Stack

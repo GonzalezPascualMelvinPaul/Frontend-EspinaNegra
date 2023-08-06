@@ -19,6 +19,7 @@ import { AddCircleOutline } from "@mui/icons-material";
 import { EliminarUser } from "./EliminarUser";
 import { useTheme } from "@mui/material/styles";
 import { TableResponsiveCustom } from "../../ui/components/TableResponsiveCustom";
+import { VerUser } from "./VerUser";
 
 export const IndexUsuarios = () => {
   const [users, setUsers] = useState([]);
@@ -27,6 +28,7 @@ export const IndexUsuarios = () => {
   const [userBuscador, setUserBuscador] = useState([]);
   const [user, setUser] = useState(null);
   const [modalDelete, setModalDelete] = useState(false);
+  const [modalView, setModalView] = useState(false);
   const navigate = useNavigate();
   const theme = useTheme();
   const xssize = useMediaQuery(theme.breakpoints.only("xs"));
@@ -48,6 +50,11 @@ export const IndexUsuarios = () => {
   const handleDelete = (row) => {
     setUser(row);
     setModalDelete(!modalDelete);
+  };
+
+  const handleView = (row) => {
+    setUser(row);
+    setModalView(!modalView);
   };
 
   const columns = [
@@ -88,7 +95,11 @@ export const IndexUsuarios = () => {
       renderCell: ({ row }) => {
         return (
           <Stack spacing={2} direction="row">
-            <Button onClick={() => {}} variant="contained" color="info">
+            <Button
+              onClick={() => handleView(row)}
+              variant="contained"
+              color="info"
+            >
               Ver
             </Button>
             <Button
@@ -174,6 +185,7 @@ export const IndexUsuarios = () => {
           user={user}
           updateUsers={getUsers}
         />
+        <VerUser open={modalView} onClose={handleView} user={user} />
       </Box>
     </>
   );

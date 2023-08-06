@@ -9,7 +9,7 @@ const useStyles = makeStyles({
   },
 });
 
-export const ModalDelete = ({ open = false, onClose = () => {}, children }) => {
+export const CustomModal = ({ open = false, onClose = () => {}, children }) => {
   const styles = useStyles();
   const closeModal = () => {
     onClose();
@@ -24,18 +24,18 @@ export const ModalDelete = ({ open = false, onClose = () => {}, children }) => {
         flexDirection: "column",
         justifyContent: "space-between",
         position: "fixed",
-        width: "auto",
+        width: { xs: "80%", md: "40%" },
         backgroundColor: "white",
         border: "1px solid rgba(0,0,0,0.0)",
-        borderRadius: "20px",
+        borderRadius: "10px",
         top: "50%",
         left: "50%",
         transform: "translate(-47%,-50%)",
-        pl: "3rem",
-        pr: "3rem",
-        pt: "3rem",
-        height: "200px",
-
+        pl: "1rem",
+        pr: "1rem",
+        pt: "1rem",
+        pb: "1rem",
+        height: "auto",
         alignItems: "center",
         textAlign: "center",
       }}
@@ -53,7 +53,6 @@ export const ModalDelete = ({ open = false, onClose = () => {}, children }) => {
       >
         {children}
       </Box>
-      <br />
     </Box>
   );
 

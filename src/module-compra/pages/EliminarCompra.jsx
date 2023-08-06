@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { AlertMessage, ModalDelete } from "../../ui";
+import { AlertMessage, CustomModal } from "../../ui";
 import { Alert, Box, Button, Typography } from "@mui/material";
 import { deleteCompraProvider } from "../../providers/compra/providerCompra";
 
@@ -17,11 +17,13 @@ export const EliminarCompra = ({
   const deleteCompraHandle = async () => {
     setMessage("");
 
-    const { ok, data, message } = await deleteCompraProvider(compra.id);
+    const { ok, data, message } = await deleteCompraProvider(compra.id_compra);
     if (ok) {
       updateCompras();
       setMessage(message);
       setOpenAlert(true);
+
+      setError(false);
       onClose();
     } else {
       setError(true);
@@ -35,13 +37,14 @@ export const EliminarCompra = ({
   };
   return (
     <>
-      <ModalDelete open={open} onClose={onClose}>
+      <CustomModal open={open} onClose={onClose}>
         <Typography
           sx={{ fontWeight: "bold" }}
           variant="h7"
           textAlign={"center"}
         >
-          ¿DESEA ELIMINAR LA COMPRA con ID: {compra?.id} ?
+          ¿DESEA ELIMINAR LA COMPRA con ID: {compra?.id_compra} hecho por{" "}
+          {compra?.empleado?.nombre_persona_fisica} ?
         </Typography>
         {error ? (
           <Alert sx={{ mt: 0, mb: 0 }} severity="error">
@@ -51,15 +54,24 @@ export const EliminarCompra = ({
           ""
         )}
         <Box
-          sx={{ mt: 3 }}
-          display="flex"
-          width={"100%"}
-          justifyContent="space-around"
+          sx={{
+            mt: 3,
+            display: "flex",
+            flexDirection: { md: "row", xs: "column-reverse" },
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
         >
-          <Button variant="contained" onClick={onClose} color="error">
+          <Button
+            sx={{ mb: 1 }}
+            variant="contained"
+            onClick={onClose}
+            color="error"
+          >
             Cancelar
           </Button>
           <Button
+            sx={{ mb: 1 }}
             onClick={deleteCompraHandle}
             type="submit"
             variant="contained"
@@ -67,7 +79,7 @@ export const EliminarCompra = ({
             Sí, deseo eliminarlo
           </Button>
         </Box>
-      </ModalDelete>
+      </CustomModal>
       <AlertMessage
         handleClose={handleClose}
         message={message}

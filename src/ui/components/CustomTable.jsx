@@ -15,10 +15,9 @@ export const CustomTable = ({
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
-    <Box sx={{ height: 400, width: "100%" }}>
+    <Box sx={{ height: 400, width: "100%", overflowX: "auto" }}>
       <DataGrid
         loading={loading}
-        scroll={{ x: isSmallScreen ? "scroll" : "auto", y: "auto" }}
         getRowId={(row) => row[idData]}
         disableSelectionOnClick
         rows={data}
@@ -26,7 +25,6 @@ export const CustomTable = ({
         pageSize={10}
         rowsPerPageOptions={[10]}
         getRowClassName={colorRow}
-        autoHeight
         sx={{
           border: "0px",
           "& .MuiDataGrid-columnHeaderTitleContainer": {

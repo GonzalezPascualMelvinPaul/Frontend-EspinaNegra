@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { deleteProveedorProvider } from "../../providers/proveedor/providerProveedor";
-import { AlertMessage, ModalDelete } from "../../ui";
+import { AlertMessage, CustomModal } from "../../ui";
 import { Alert, Box, Button, Typography } from "@mui/material";
 
 export const EliminarProveedor = ({
@@ -15,10 +15,13 @@ export const EliminarProveedor = ({
   const deleteProveedorHandle = async () => {
     setMessage("");
 
-    const { ok, data, message } = await deleteProveedorProvider(proveedor.id);
+    const { ok, data, message } = await deleteProveedorProvider(
+      proveedor.id_proveedor
+    );
     if (ok) {
       updateProveedores();
-      setMessage(message);
+      setMessage("");
+      setError(false);
       setOpenAlert(true);
       onClose();
     } else {
@@ -33,14 +36,14 @@ export const EliminarProveedor = ({
   };
   return (
     <>
-      <ModalDelete open={open} onClose={onClose}>
+      <CustomModal open={open} onClose={onClose}>
         <Typography
           sx={{ fontWeight: "bold" }}
           variant="h7"
           textAlign={"center"}
         >
-          ¿DESEA ELIMINAR EL PROVEEDOR {proveedor?.nombre} CON EL CORREO{" "}
-          {proveedor?.email}?
+          ¿DESEA ELIMINAR EL PROVEEDOR {proveedor?.nombre_persona_fisica} CON EL
+          CORREO {proveedor?.email_proveedor}?
         </Typography>
         {error ? (
           <Alert sx={{ mt: 0, mb: 0 }} severity="error">
@@ -66,7 +69,7 @@ export const EliminarProveedor = ({
             Sí, deseo eliminarlo
           </Button>
         </Box>
-      </ModalDelete>
+      </CustomModal>
       <AlertMessage
         handleClose={handleClose}
         message={message}

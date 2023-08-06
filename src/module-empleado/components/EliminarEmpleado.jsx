@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { deleteEmpleadoProvider } from "../../providers/empleado/providerEmpleado";
-import { AlertMessage, ModalDelete } from "../../ui";
+import { AlertMessage, CustomModal } from "../../ui";
 import { Alert, Box, Button, Typography } from "@mui/material";
 
 export const EliminarEmpleado = ({
@@ -13,14 +13,16 @@ export const EliminarEmpleado = ({
   const [message, setMessage] = useState("");
   const [openAlert, setOpenAlert] = useState(false);
 
-  console.log("entrando cada vez");
   const deleteEmpleadoHandle = async () => {
     setError(false);
     setOpenAlert(false);
-    const { ok, data, message } = await deleteEmpleadoProvider(empleado.id);
-    console.log(message);
+    const { ok, data, message } = await deleteEmpleadoProvider(
+      empleado.id_empleado
+    );
     if (ok) {
       updateEmpleados();
+      setMessage("");
+      setError(false);
       setOpenAlert(true);
       onClose();
     } else {
@@ -34,7 +36,7 @@ export const EliminarEmpleado = ({
 
   return (
     <>
-      <ModalDelete open={open} onClose={onClose}>
+      <CustomModal open={open} onClose={onClose}>
         <Typography
           sx={{ fontWeight: "bold" }}
           variant="h7"
@@ -52,23 +54,31 @@ export const EliminarEmpleado = ({
           ""
         )}
         <Box
-          sx={{ mt: 3 }}
-          display="flex"
-          width={"100%"}
-          justifyContent="space-around"
+          sx={{
+            mt: 3,
+            display: "flex",
+            flexDirection: { md: "row", xs: "column-reverse" },
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
         >
-          <Button variant="contained" onClick={onClose} color="error">
+          <Button
+            sx={{ mb: 1 }}
+            variant="contained"
+            onClick={onClose}
+            color="error"
+          >
             Cancelar
           </Button>
           <Button
+            sx={{ mb: 1 }}
             onClick={deleteEmpleadoHandle}
-            type="submit"
             variant="contained"
           >
             Sí, deseo eliminarlo
           </Button>
         </Box>
-      </ModalDelete>
+      </CustomModal>
       <AlertMessage
         handleClose={handleClose}
         message={message}

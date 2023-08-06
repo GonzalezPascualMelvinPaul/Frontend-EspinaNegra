@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { getEnvasadosProvider } from "../../providers/envasado/providerEnvasado";
 import { TableResponsiveCustom } from "../../ui/components/TableResponsiveCustom";
+import { EliminarEnvasado } from "./EliminarEnvasado";
 
 export const IndexEnvasado = () => {
   const [envasados, setEnvasados] = useState([]);
@@ -200,6 +201,12 @@ export const IndexEnvasado = () => {
             </>
           )}
         </IndexLayout>
+        <EliminarEnvasado
+          open={modalDelete}
+          onClose={handleDelete}
+          envasado={envasado}
+          updateEnvasados={getEnvasado}
+        />
       </Box>
     </>
   );

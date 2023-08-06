@@ -18,10 +18,11 @@ import { getEmpleadosProvider } from "../../providers/empleado/providerEmpleado"
 
 import { Buscador } from "../../ui/components/Buscador";
 import { useNavigate } from "react-router-dom";
-import { EliminarEmpleado } from "./EliminarEmpleado";
+import { EliminarEmpleado, VerEmpleado } from "../components";
 import { useSelector } from "react-redux";
 import { TableResponsiveCustom } from "../../ui/components/TableResponsiveCustom";
 import { useTheme } from "@mui/material/styles";
+import { DataGrid } from "@mui/x-data-grid";
 
 export const EmployeePage = () => {
   const { user } = useSelector((state) => state.auth);
@@ -31,6 +32,7 @@ export const EmployeePage = () => {
   const [empleadosBuscador, setEmpleadosBuscador] = useState([]);
   const [empleado, setEmpleado] = useState(null);
   const [modalDelete, setModalDelete] = useState(false);
+  const [modalView, setModalView] = useState(false);
   const [permisos, setPermisos] = useState("Usuario");
   const theme = useTheme();
   const xssize = useMediaQuery(theme.breakpoints.only("xs"));
@@ -71,6 +73,11 @@ export const EmployeePage = () => {
     setModalDelete(!modalDelete);
   };
 
+  const handleView = (row) => {
+    setEmpleado(row);
+    setModalView(!modalView);
+  };
+
   const columns = [
     {
       field: "nombre_empleado",
@@ -97,6 +104,21 @@ export const EmployeePage = () => {
       sortable: true,
     },
     {
+      field: "rfc_empleado",
+      headerName: "RFC",
+      flex: 2,
+      sortable: true,
+    },
+    {
+      field: "codigo_empleado",
+      headerName: "Codigo",
+      flex: 2,
+      sortable: true,
+      renderCell: ({ value }) => {
+        return value ? value.toUpperCase() : "";
+      },
+    },
+    {
       field: "acciones",
       headerName: "Acciones",
       flex: 3,
@@ -105,7 +127,11 @@ export const EmployeePage = () => {
       renderCell: ({ row }) => {
         return (
           <Stack spacing={2} direction="row">
-            <Button onClick={() => {}} variant="contained" color="info">
+            <Button
+              onClick={() => handleView(row)}
+              variant="contained"
+              color="info"
+            >
               Ver
             </Button>
             {(permisos === "Administrador" || permisos === "Gerente") && (
@@ -199,7 +225,21 @@ export const EmployeePage = () => {
           empleado={empleado}
           updateEmpleados={getEmpleados}
         />
+        <VerEmpleado
+          empleado={empleado}
+          onClose={handleView}
+          open={modalView}
+        />
       </Box>
     </>
   );
 };
+
+{
+  /* <CustomTable
+                  isLoading={isLoading}
+                  data={empleadosBuscador}
+                  columns={columns}
+                  idData={"id_empleado"}
+                /> */
+}
