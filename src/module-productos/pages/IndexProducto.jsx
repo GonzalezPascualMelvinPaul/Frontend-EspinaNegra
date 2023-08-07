@@ -138,9 +138,10 @@ export const IndexProducto = () => {
           <Stack spacing={2} direction="row">
             <Button
               onClick={() => {
-                console.log(row);
                 const newRow = {
                   ...row,
+                  precio_compra_producto: "$" + row.precio_compra_producto,
+                  precio_venta_producto: "$" + row.precio_venta_producto,
                 };
 
                 handleView(newRow);

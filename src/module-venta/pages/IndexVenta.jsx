@@ -21,6 +21,18 @@ import { getVentasProvider } from "../../providers/venta/providerVenta";
 import { useSelector } from "react-redux";
 import { TableResponsiveCustom } from "../../ui/components/TableResponsiveCustom";
 import { useTheme } from "@mui/material/styles";
+import { VerGeneral } from "../../ui/components/VerGeneral";
+
+const formartView = [
+  { name: "id_venta", title: "ID de Venta" },
+  { name: "fecha_venta", title: "Fecha de Venta" },
+  { name: "observaciones_venta", title: "Observaciones de Venta" },
+  { name: "total_venta", title: "Total de Venta" },
+  { name: "numero_factura_venta", title: "Número de Factura de Venta" },
+  { name: "empleado", title: "Nombre de Empleado" },
+  { name: "cliente", title: "Nombre de Cliente" },
+  { name: "productos", title: "Productos Vendidos" },
+];
 
 export const IndexVenta = () => {
   const [ventas, setVentas] = useState([]);
@@ -35,6 +47,12 @@ export const IndexVenta = () => {
   const [permisos, setPermisos] = useState("Usuario");
   const theme = useTheme();
   const xssize = useMediaQuery(theme.breakpoints.only("xs"));
+
+  const [modalView, setModalView] = useState(false);
+  const handleView = (row) => {
+    setVenta(row);
+    setModalView(!modalView);
+  };
 
   useEffect(() => {
     const { nombre_rol } = user;
@@ -141,7 +159,23 @@ export const IndexVenta = () => {
       renderCell: ({ row }) => {
         return (
           <Stack spacing={2} direction="row">
-            <Button onClick={() => {}} variant="contained" color="info">
+            <Button
+              onClick={() => {
+                const vendidos = row.productos_vendidos.map((prod) => {
+                  return prod.cantidad + " " + prod.producto + "| ";
+                });
+                const newRow = {
+                  ...row,
+                  empleado: row.empleado.nombre_persona_fisica,
+                  cliente: row.cliente.nombre_persona_fisica,
+                  productos: vendidos,
+                };
+
+                handleView(newRow);
+              }}
+              variant="contained"
+              color="info"
+            >
               Ver
             </Button>
             {(permisos === "Administrador" || permisos === "Gerente") && (
@@ -225,6 +259,13 @@ export const IndexVenta = () => {
           onClose={handleDelete}
           venta={venta}
           updateventas={getVentas}
+        />
+        <VerGeneral
+          titulo="Detalle Venta"
+          onClose={handleView}
+          open={modalView}
+          datos={venta}
+          names={formartView}
         />
       </Box>
     </>

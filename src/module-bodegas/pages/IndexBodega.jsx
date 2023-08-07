@@ -15,6 +15,19 @@ import { Buscador, CustomTable } from "../../ui";
 import { AddCircleOutline } from "@mui/icons-material";
 import { EliminarBodega } from "./EliminarBodega";
 import { TableResponsiveCustom } from "../../ui/components/TableResponsiveCustom";
+import { VerGeneral } from "../../ui/components/VerGeneral";
+
+const formatView = [
+  { name: "id_bodega", title: "ID" },
+  { name: "nombre_bodega", title: "Nombre" },
+  { name: "descripcion_bodega", title: "Descripción" },
+  { name: "capacidad_bodega", title: "Capacidad" },
+  {
+    name: "capacidad_disponible_bodega",
+    title: "Capacidad Disponible",
+  },
+  { name: "direction", title: "Dirección" },
+];
 
 export const IndexBodega = () => {
   const [bodegas, setBodegas] = useState([]);
@@ -26,6 +39,11 @@ export const IndexBodega = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const xssize = useMediaQuery(theme.breakpoints.only("xs"));
+  const [modalView, setModalView] = useState(false);
+  const handleView = (row) => {
+    setBodega(row);
+    setModalView(!modalView);
+  };
 
   const handleSearch = (event) => {
     setBuscador(event.target.value);
@@ -75,7 +93,26 @@ export const IndexBodega = () => {
       renderCell: ({ row }) => {
         return (
           <Stack spacing={2} direction="row">
-            <Button onClick={() => {}} variant="contained" color="info">
+            <Button
+              onClick={() => {
+                console.log(row);
+                const newRow = {
+                  ...row,
+                  direction:
+                    row.direccion.calle_direccion +
+                    ", No. " +
+                    row.direccion.num_int_direccion +
+                    "," +
+                    row.direccion.ciudad_direccion +
+                    ", " +
+                    row.direccion.colonia_direccion,
+                };
+
+                handleView(newRow);
+              }}
+              variant="contained"
+              color="info"
+            >
               Ver
             </Button>
             <Button
@@ -160,6 +197,13 @@ export const IndexBodega = () => {
           onClose={handleDelete}
           bodega={bodega}
           updateBodegas={getBodegas}
+        />
+        <VerGeneral
+          titulo="Detalle bodega"
+          onClose={handleView}
+          open={modalView}
+          datos={bodega}
+          names={formatView}
         />
       </Box>
     </>
