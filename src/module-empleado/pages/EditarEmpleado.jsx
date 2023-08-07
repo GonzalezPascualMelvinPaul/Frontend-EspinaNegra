@@ -3,6 +3,7 @@ import {
   Autocomplete,
   Button,
   Grid,
+  MenuItem,
   Skeleton,
   TextField,
   Typography,
@@ -21,9 +22,12 @@ import {
   updateEmpleadoProvider,
 } from "../../providers/empleado/providerEmpleado";
 import { set, values } from "lodash";
-import { AlertMessage, BreadCrumbsCustom } from "../../ui";
+import { AlertMessage, BreadCrumbsCustom, GoogleMaps } from "../../ui";
 import dayjs from "dayjs";
-import { getEstadosProvider } from "../../providers/estado/providerEstado";
+import {
+  getEstadosProvider,
+  getMunicipiosProvider,
+} from "../../providers/estado/providerEstado";
 dayjs.locale("es");
 const validationSchema = Yup.object({
   nombre_empleado: Yup.string().required("El nombre es requerido"),
@@ -64,29 +68,34 @@ const validationSchema = Yup.object({
     id_municipio: Yup.number(),
   }),
 });
-export const EditarEmpleado = ({
-  type = "view",
-
-  updateEmpleado = () => {},
-}) => {
+export const EditarEmpleado = () => {
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingData, setIsLoadingData] = useState(false);
+  const [isLoadingMunicipio, setIsLoadingMunicipio] = useState(false);
   const [open, setOpen] = useState(false);
   const [empleado, setEmpleado] = useState({});
-  const [estados, setEstados] = useState();
-  const [municipios, setMunicipios] = useState();
+  const [estados, setEstados] = useState([]);
+  const [municipios, setMunicipios] = useState([]);
   const { id } = useParams();
+  const [mapValues, setMapValues] = useState({
+    latitud: "",
+    longitud: "",
+    url: "",
+    codigoPostal: "",
+  });
 
   const getEstados = async () => {
     const { data } = await getEstadosProvider();
     setEstados(data?.estados);
   };
+
   const getEmpleado = async () => {
     const { ok, data } = await getEmpleadoProvider(id);
     if (ok) {
       setIsLoadingData(true);
+      getMunicipio(data?.direccion?.id_estado);
     } else {
       setIsLoadingData(false);
     }
@@ -96,10 +105,15 @@ export const EditarEmpleado = ({
     setOpen(false);
   };
 
-  useEffect(() => {
-    getEmpleado();
-    getEstados();
-  }, []);
+  const getMunicipio = async (id_estado) => {
+    const { ok, data } = await getMunicipiosProvider(id_estado);
+    if (ok) {
+      setIsLoadingMunicipio(true);
+    } else {
+      setIsLoadingMunicipio(false);
+    }
+    setMunicipios(data?.municipios);
+  };
 
   const onSubmit = async (values, e) => {
     values.fecha_ingreso = dayjs(values.fecha_ingreso).format("YYYY-MM-DD");
@@ -120,29 +134,36 @@ export const EditarEmpleado = ({
     setError(false);
   };
 
-  const initialValues = {
-    nombre_empleado: empleado?.nombre_empleado,
-    apellido_paterno_empleado: empleado?.apellido_paterno_empleado,
-    apellido_materno_empleado: empleado?.apellido_materno_empleado,
+  useEffect(() => {
+    getEmpleado();
+    getEstados();
+  }, []);
 
-    salario_empleado: empleado?.salario_empleado,
-    comision_empleado: empleado?.comision_empleado,
-    fecha_ingreso_empleado: new Date(empleado?.fecha_ingreso_empleado),
-    fecha_nacimiento_empleado: new Date(empleado?.fecha_nacimiento_empleado),
-    celular_empleado: empleado?.celular_empleado,
-    rfc_empleado: empleado?.rfc_empleado,
+  const initialValues = {
+    nombre_empleado: empleado?.nombre_empleado || "",
+    apellido_paterno_empleado: empleado?.apellido_paterno_empleado || "",
+    apellido_materno_empleado: empleado?.apellido_materno_empleado || "",
+
+    salario_empleado: empleado?.salario_empleado || "",
+    comision_empleado: empleado?.comision_empleado || "",
+    fecha_ingreso_empleado: new Date(empleado?.fecha_ingreso_empleado) || "",
+    fecha_nacimiento_empleado:
+      new Date(empleado?.fecha_nacimiento_empleado) || "",
+    celular_empleado: empleado?.celular_empleado || "",
+    rfc_empleado: empleado?.rfc_empleado || "",
     direccion: {
-      id_municipio: empleado?.direccion?.id_municipio,
-      estado: "",
-      calle_direccion: empleado?.direccion?.calle_direccion,
-      ciudad_direccion: empleado?.direccion?.ciudad_direccion,
-      codigo_postal_direccion: empleado?.direccion?.codigo_postal_direccion,
-      latitud_direccion: empleado?.direccion?.latitud_direccion,
-      longitud_direccion: empleado?.direccion?.longitud_direccion,
-      colonia_direccion: empleado?.direccion?.colonia_direccion,
-      num_ext_direccion: empleado?.direccion?.num_ext_direccion,
-      num_int_direccion: empleado?.direccion?.num_int_direccion,
-      url_maps_direccion: empleado?.direccion?.url_maps_direccion,
+      id_municipio: empleado?.direccion?.id_municipio || "",
+      estado: empleado?.direccion?.id_estado || "",
+      calle_direccion: empleado?.direccion?.calle_direccion || "",
+      ciudad_direccion: empleado?.direccion?.ciudad_direccion || "",
+      codigo_postal_direccion:
+        empleado?.direccion?.codigo_postal_direccion || "",
+      latitud_direccion: empleado?.direccion?.latitud_direccion || "",
+      longitud_direccion: empleado?.direccion?.longitud_direccion || "",
+      colonia_direccion: empleado?.direccion?.colonia_direccion || "",
+      num_ext_direccion: empleado?.direccion?.num_ext_direccion || "",
+      num_int_direccion: empleado?.direccion?.num_int_direccion || "",
+      url_maps_direccion: empleado?.direccion?.url_maps_direccion || "",
     },
   };
 
@@ -167,7 +188,7 @@ export const EditarEmpleado = ({
             },
           ]}
         />
-        {isLoadingData == false ? (
+        {isLoadingData == false && isLoadingMunicipio == false ? (
           <>
             <Skeleton variant="rectangular" width={"100%"} height={"80%"} />
           </>
@@ -179,20 +200,26 @@ export const EditarEmpleado = ({
               onSubmit={onSubmit}
             >
               {(formik) => {
-                useEffect(() => {
-                  if (estados && formik.values.direccion.estado) {
-                    const stateData = estados.find(
-                      (state) =>
-                        state.id_estado === formik.values.direccion.estado
-                    );
-                    if (stateData && stateData.municipio) {
-                      setMunicipios(stateData.municipio);
-                    } else {
-                      setMunicipios([]);
-                    }
-                  }
-                }, [formik.values.direccion.estado, estados]);
+                const handleMapValuesChange = (newValues) => {
+                  setMapValues(newValues);
 
+                  formik.setFieldValue(
+                    "direccion.codigo_postal_direccion",
+                    newValues.codigoPostal
+                  );
+                  formik.setFieldValue(
+                    "direccion.latitud_direccion",
+                    newValues.latitud
+                  );
+                  formik.setFieldValue(
+                    "direccion.longitud_direccion",
+                    newValues.longitud
+                  );
+                  formik.setFieldValue(
+                    "direccion.url_maps_direccion",
+                    newValues.url
+                  );
+                };
                 return (
                   <Form>
                     <Grid container spacing={2}>
@@ -415,56 +442,38 @@ export const EditarEmpleado = ({
                       <Grid item xs={12} md={12}>
                         <Typography variant="h6">Dirección</Typography>
                       </Grid>
-                      <Grid item xs={12} md={6}>
+
+                      <Grid item xs={12} md={6} sm={6}>
                         <Field
                           as={TextField}
-                          label="País"
-                          name="direccion.pais"
+                          label="Estado"
+                          name="direccion.estado"
                           variant="outlined"
                           fullWidth
                           margin="normal"
+                          select
                           error={
-                            formik.touched.direccion?.pais &&
-                            formik.errors.direccion?.pais
+                            formik.touched.direccion?.estado &&
+                            formik.errors.direccion?.estado
                               ? true
                               : false
                           }
-                          helperText={<ErrorMessage name="direccion.pais" />}
-                        />
-                      </Grid>
+                          helperText={<ErrorMessage name="direccion.estado" />}
+                          onChange={(e) => {
+                            const selectedEstadoId = e.target.value;
+                            formik.handleChange(e);
 
-                      <Grid item xs={12} md={6}>
-                        <Field name="direccion.estado">
-                          {({ field, form }) => (
-                            <Autocomplete
-                              id="estado-select"
-                              options={estados || []} // Verificar si estados es undefined y proporcionar una lista vacía en ese caso
-                              sx={{
-                                paddingTop: { xs: 2, md: 2 },
-                                paddingBottom: { xs: 2, md: 2 },
-                              }}
-                              getOptionLabel={(option) => option.nombre_estado}
-                              onChange={(event, newValue) => {
-                                form.setFieldValue(
-                                  "direccion.estado",
-                                  newValue?.id_estado || ""
-                                );
-                              }}
-                              renderInput={(params) => (
-                                <TextField
-                                  {...params}
-                                  label="Estado"
-                                  variant="outlined"
-                                  error={
-                                    formik.touched.direccion?.estado &&
-                                    formik.errors.direccion?.estado
-                                      ? true
-                                      : false
-                                  }
-                                />
-                              )}
-                            />
-                          )}
+                            getMunicipio(selectedEstadoId); // Llamar a la función para cargar los municipios
+                          }}
+                        >
+                          {estados.map((option) => (
+                            <MenuItem
+                              key={option.id_estado}
+                              value={option.id_estado}
+                            >
+                              {option.nombre_estado}
+                            </MenuItem>
+                          ))}
                         </Field>
                       </Grid>
 
@@ -472,12 +481,19 @@ export const EditarEmpleado = ({
                         <Field name="direccion.id_municipio">
                           {({ field, form }) => (
                             <Autocomplete
+                              {...field}
                               sx={{
                                 paddingTop: { xs: 2, md: 2 },
                                 paddingBottom: { xs: 2, md: 2 },
                               }}
-                              id="municipio-select"
-                              options={municipios || []} // Verificar si municipios es undefined y proporcionar una lista vacía en ese caso
+                              id="id_municipio"
+                              options={municipios || []}
+                              value={
+                                municipios.find(
+                                  (option) =>
+                                    option.id_municipio === field.value
+                                ) || ""
+                              }
                               getOptionLabel={(option) =>
                                 option.nombre_municipio
                               }
@@ -488,6 +504,7 @@ export const EditarEmpleado = ({
                                   newValue?.id_municipio || ""
                                 );
                               }}
+                              fullWidth
                               renderInput={(params) => (
                                 <TextField
                                   {...params}
@@ -498,6 +515,9 @@ export const EditarEmpleado = ({
                                     formik.errors.direccion?.id_municipio
                                       ? true
                                       : false
+                                  }
+                                  helperText={
+                                    <ErrorMessage name="direccion.id_municipio" />
                                   }
                                 />
                               )}
@@ -599,6 +619,15 @@ export const EditarEmpleado = ({
                           helperText={
                             <ErrorMessage name="direccion.num_ext_direccion" />
                           }
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <GoogleMaps
+                          /* latitud={initialValues?.direccion?.latitud_direccion}
+                          longitud={
+                            initialValues?.direccion?.longitud_direccion
+                          } */
+                          onMapValuesChange={handleMapValuesChange}
                         />
                       </Grid>
                       <Grid item xs={12} md={6}>

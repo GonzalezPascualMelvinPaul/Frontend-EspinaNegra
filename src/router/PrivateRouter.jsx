@@ -7,10 +7,6 @@ import { useSelector } from "react-redux";
 export const PrivateRouter = ({ children }) => {
   const { status } = useSelector((state) => state.auth);
 
-  if (status === "checking") {
-    return <CheckingAuth />;
-  }
-
   const { pathname, search } = useLocation();
   const lastPath = pathname + search;
 
@@ -18,6 +14,10 @@ export const PrivateRouter = ({ children }) => {
   const location = useLocation();
 
   sessionStorage.setItem("Location", location.pathname);
+
+  if (status === "checking") {
+    return <CheckingAuth />;
+  }
 
   return status !== "not-authenticated" ? (
     children

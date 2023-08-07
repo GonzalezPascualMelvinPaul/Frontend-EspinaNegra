@@ -4,5 +4,6 @@ export const getEnvVariables = () => {
     VITE_API_URL_IMAGE: import.meta.env.VITE_API_URL_IMAGE,
     VITE_URL_REPO: import.meta.env.VITE_URL_REPO,
     VITE_MODE: import.meta.env.VITE_MODE,
+    VITE_API_KEY_GOOGLE: import.meta.env.VITE_API_KEY_GOOGLE,
   };
 };

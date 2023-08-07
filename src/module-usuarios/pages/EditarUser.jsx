@@ -21,9 +21,9 @@ import {
 } from "@mui/material";
 import { CameraAltOutlined } from "@mui/icons-material";
 const validationSchema = Yup.object({
-  email: Yup.string().required("El email es requerido"),
-  username: Yup.string().required("El username es requerido"),
-  rol_id: Yup.number().required("El rol es requerido"),
+  email_usuario: Yup.string().required("El email es requerido"),
+  username_usuario: Yup.string().required("El username es requerido"),
+  id_rol: Yup.number().required("El rol es requerido"),
 });
 
 export const EditarUser = () => {
@@ -36,11 +36,11 @@ export const EditarUser = () => {
   const [rol, setRol] = useState([]);
   const [user, setUser] = useState([]);
   const { id } = useParams();
+
   const navigate = useNavigate();
   const getEmpleados = async () => {
     const { data } = await getEmpleadosProvider();
     setEmpleados(data?.empleados);
-    console.log("empleados", data?.empleados);
   };
   const getRoles = async () => {
     const { data } = await getRolesProvider();
@@ -68,23 +68,24 @@ export const EditarUser = () => {
     setIsLoading(true);
     setError(false);
     setOpen(false);
+    console.log("value", values);
     const { ok, data, message } = await updateUserProvider(values, id);
     if (ok) {
       setOpen(true);
       setError(false);
+      setTimeout(() => {
+        navigate("/usuario/inicio");
+      }, 5000);
     } else {
       setError(true);
       setOpen(false);
     }
     setMessage(message);
     setIsLoading(false);
-    setTimeout(() => {
-      navigate("/usuario/inicio");
-    }, 5000);
   };
   const initialValues = {
-    email: user?.email,
-    username: user?.username,
+    email_usuario: user?.email,
+    username_usuario: user?.username,
     id_rol: user?.id_rol,
     id_empleado: user?.id_empleado,
   };
@@ -125,28 +126,32 @@ export const EditarUser = () => {
                   <Field
                     as={TextField}
                     label="Email"
-                    name="email"
+                    name="email_usuario"
                     variant="outlined"
                     fullWidth
                     margin="normal"
                     error={
-                      formik.touched.email && formik.errors.email ? true : false
+                      formik.touched.email_usuario &&
+                      formik.errors.email_usuario
+                        ? true
+                        : false
                     }
-                    helperText={<ErrorMessage name="email" />}
+                    helperText={<ErrorMessage name="email_usuario" />}
                   />
                   <Field
                     as={TextField}
                     label="Username"
-                    name="username"
+                    name="username_usuario"
                     variant="outlined"
                     fullWidth
                     margin="normal"
                     error={
-                      formik.touched.username && formik.errors.username
+                      formik.touched.username_usuario &&
+                      formik.errors.username_usuario
                         ? true
                         : false
                     }
-                    helperText={<ErrorMessage name="username" />}
+                    helperText={<ErrorMessage name="username_usuario" />}
                   />
                   <Field
                     as={TextField}
