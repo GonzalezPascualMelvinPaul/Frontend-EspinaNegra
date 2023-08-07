@@ -39,39 +39,46 @@ const validationSchema = Yup.object({
     .typeError("El salario debe ser un numero")
     .required("El salario es requerido"),
   comision_empleado: Yup.number()
-    .typeError("El porcentaje de comision debe ser un numero")
-    .required("El porcentaje de comision es requerido")
-    .max(100, "El porcentaje de comision no puede ser mayor a 100")
-    .min(0, "El porcentaje de comision no puede ser menor a 0"),
+    .typeError("La comisión debe ser un numero")
+    .required("La comisión es requerido")
+    .max(100, "La comisión no puede ser mayor a 100")
+    .min(0, "La comisión no puede ser menor a 0"),
   fecha_ingreso_empleado: Yup.date().required(
     "La fecha de ingreso es requerida"
   ),
   fecha_nacimiento_empleado: Yup.date().required(
     "La fecha de nacimiento es requerida"
   ),
-  celular_empleado: Yup.number().typeError(
-    "El numero de celular de ser un numero"
-  ),
-  rfc_empleado: Yup.string(),
+  celular_empleado: Yup.number()
+    .typeError("El numero debe contener solo números")
+    .test(
+      "len",
+      "El numero debe contener 10 dígitos",
+      (val) => val && val.toString().length === 10
+    )
+    .required("El numero es obligatorio"),
+  rfc_empleado: Yup.string()
+    .matches(/^[A-Z]{4}\d{6}[A-Z0-9]{3}$/, "RFC inválido")
+    .required("El RFC es requerido"),
   direccion: Yup.object({
     calle_direccion: Yup.string(),
-    ciudad_direccion: Yup.string(),
+    ciudad_direccion: Yup.string().required("La ciudad es requerida"),
     codigo_postal_direccion: Yup.number(),
     latitud_direccion: Yup.string(),
     longitud_direccion: Yup.string(),
-    colonia_direccion: Yup.string(),
+    colonia_direccion: Yup.string().required("La colonia es requerida"),
     num_ext_direccion: Yup.string(),
     num_int_direccion: Yup.string(),
     url_maps_direccion: Yup.string(),
-    id_municipio: Yup.number(),
+    id_municipio: Yup.number().required("El municipio es requerido"),
   }),
 });
 const initialValues = {
   nombre_empleado: "",
   apellido_paterno_empleado: "",
   apellido_materno_empleado: "",
-  salario_empleado: 0,
-  comision_empleado: 0,
+  salario_empleado: "",
+  comision_empleado: "",
   fecha_ingreso_empleado: new Date(),
   fecha_nacimiento_empleado: new Date(),
   celular_empleado: "",

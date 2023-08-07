@@ -19,7 +19,10 @@ import {
   Grid,
 } from "@mui/material";
 import { getClientesProvider } from "../../providers/cliente/providerCliente";
-import { getProductosProvider } from "../../providers/producto/providerProducto";
+import {
+  getProductosMezcalesProvider,
+  getProductosProvider,
+} from "../../providers/producto/providerProducto";
 import { get } from "lodash";
 import { addVentaProvider } from "../../providers/venta/providerVenta";
 
@@ -77,7 +80,7 @@ export const AgregarVenta = () => {
   };
 
   const getProductos = async () => {
-    const { ok, data } = await getProductosProvider();
+    const { ok, data } = await getProductosMezcalesProvider();
     if (ok) {
       setProductos(data?.productos);
       setIsLoadingProductos(true);

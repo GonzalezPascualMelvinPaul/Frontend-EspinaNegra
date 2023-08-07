@@ -62,3 +62,14 @@ export const getVentaProvider = async (ventaId) => {
       return { ok: false, data: "", message: error?.response?.data?.message };
     });
 };
+
+export const getVentasconProductoProvider = async () => {
+  return espinaNegraApi
+    .get(`venta_producto`)
+    .then((response) => {
+      return { ok: true, data: response.data, message: response.data?.message };
+    })
+    .catch((error) => {
+      return { ok: false, data: "", message: error?.response?.data?.message };
+    });
+};

@@ -29,7 +29,9 @@ const validationSchema = Yup.object({
   ),
   fecha_final_produccion: Yup.date().required("La fecha final es requerida"),
   descripcion_produccion: Yup.string(),
-  litros_obtenidos_produccion: Yup.number(),
+  litros_obtenidos_produccion: Yup.number().required(
+    "Los litros obtenidos son requeridos"
+  ),
   lote_produccion: Yup.string().required("El lote de produccion es requerido"),
 });
 
@@ -89,9 +91,8 @@ export const EditarProduccion = () => {
   }, []);
 
   const initialValues = {
-    fecha_inicio_produccion:
-      new Date(produccion?.fecha_inicio_produccion) || "",
-    fecha_final_produccion: new Date(produccion?.fecha_final_produccion) || "",
+    fecha_inicio_produccion: dayjs(produccion?.fecha_inicio_produccion),
+    fecha_final_produccion: dayjs(produccion?.fecha_final_produccion),
     descripcion_produccion: produccion?.descripcion_produccion || "",
     litros_obtenidos_produccion: produccion?.litros_obtenidos_produccion || "",
     lote_produccion: produccion?.lote_produccion || "",
@@ -102,7 +103,7 @@ export const EditarProduccion = () => {
         handleClose={handleClose}
         message={message}
         open={open}
-        severity="success"
+        severity="info"
       />
       <IndexLayout title={"Produccion"}>
         <BreadCrumbsCustom

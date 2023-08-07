@@ -62,3 +62,14 @@ export const getCompraProvider = async (compraId) => {
       return { ok: false, data: "", message: error?.response?.data?.message };
     });
 };
+
+export const getComprasconProductoProvider = async () => {
+  return espinaNegraApi
+    .get(`compra_producto`)
+    .then((response) => {
+      return { ok: true, data: response.data, message: response.data?.message };
+    })
+    .catch((error) => {
+      return { ok: false, data: "", message: error?.response?.data?.message };
+    });
+};

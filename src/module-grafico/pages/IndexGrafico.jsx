@@ -17,10 +17,15 @@ import { BarChart, LineChart, PieChart } from "@mui/x-charts";
 import { getSueldosProvider } from "../../providers/empleado/providerEmpleado";
 import { GoogleMaps } from "../../ui";
 import { LoadScript } from "@react-google-maps/api";
+import { getComprasconProductoProvider } from "../../providers/compra/providerCompra";
+import { getVentasconProductoProvider } from "../../providers/venta/providerVenta";
 
 export const IndexGrafico = () => {
   const [sueldo, setSueldo] = useState([]);
+  const [productosComprado, setProductosComprado] = useState([]);
+  const [productosVenta, setProductosVenta] = useState([]);
   const [isLoadingSueldo, setIsLoadingSueldo] = useState(false);
+  const [isLoadingProducto, setIsLoadingProducto] = useState(false);
   const [error, setError] = useState();
 
   const getDataSueldo = async () => {
@@ -35,8 +40,31 @@ export const IndexGrafico = () => {
     setIsLoadingSueldo(false);
   };
 
+  const getProductos = async () => {
+    const { ok, data } = await getComprasconProductoProvider();
+    if (!ok) {
+      setError("Huno un error");
+    } else {
+      console.log(data);
+    }
+    setProductosComprado(data);
+    setIsLoadingProducto(true);
+  };
+
+  const getVentas = async () => {
+    const { ok, data } = await getVentasconProductoProvider();
+    if (!ok) {
+      setError("Huno un error");
+    } else {
+      console.log(data);
+    }
+    setProductosVenta(data);
+  };
+
   useEffect(() => {
     getDataSueldo();
+    getProductos();
+    getVentas();
   }, []);
 
   return (
@@ -48,17 +76,38 @@ export const IndexGrafico = () => {
               <Card sx={{ maxWidth: 600 }}>
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
-                    Compras del Mes
+                    Compras
                   </Typography>
                   <PieChart
                     series={[
                       {
-                        data: [
-                          { id: 0, value: 100, label: "Corchos" },
-                          { id: 1, value: 20, label: "Botellas" },
-                          { id: 2, value: 20, label: "Etiquetas" },
-                          { id: 3, value: 100, label: "Marbetes" },
-                        ],
+                        data: productosComprado,
+                        innerRadius: 30,
+                        outerRadius: 100,
+                        paddingAngle: 5,
+                        cornerRadius: 5,
+                        startAngle: -90,
+                        endAngle: 180,
+                        cx: 100,
+                        cy: 100,
+                      },
+                    ]}
+                    width={350}
+                    height={250}
+                  />
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Card sx={{ maxWidth: 600 }}>
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    Ventas
+                  </Typography>
+                  <PieChart
+                    series={[
+                      {
+                        data: productosVenta,
                         innerRadius: 30,
                         outerRadius: 100,
                         paddingAngle: 5,
@@ -93,7 +142,7 @@ export const IndexGrafico = () => {
                 </CardContent>
               </Card>
             </Grid>
-            <Grid item xs={12} md={6}>
+            {/* <Grid item xs={12} md={6}>
               <Card sx={{ overflow: "auto" }}>
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
@@ -135,7 +184,7 @@ export const IndexGrafico = () => {
                   />
                 </CardContent>
               </Card>
-            </Grid>
+            </Grid> */}
           </Grid>
         </IndexLayout>
       </Box>

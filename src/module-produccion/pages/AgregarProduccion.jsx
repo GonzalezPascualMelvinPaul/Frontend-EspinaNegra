@@ -5,7 +5,14 @@ import * as Yup from "yup";
 import { AlertMessage, BreadCrumbsCustom } from "../../ui";
 import { IndexLayout } from "../../layouts";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { Alert, Button, Grid, TextField, Typography } from "@mui/material";
+import {
+  Alert,
+  Button,
+  Grid,
+  MenuItem,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { addProduccionProvider } from "../../providers/produccion/providerProduccion";
@@ -18,7 +25,9 @@ const validationSchema = Yup.object({
   ),
   fecha_final_produccion: Yup.date().required("La fecha final es requerida"),
   descripcion_produccion: Yup.string(),
-  litros_obtenidos_produccion: Yup.number(),
+  litros_obtenidos_produccion: Yup.number().required(
+    "Los litros obtenidos son requeridos"
+  ),
   lote_produccion: Yup.string().required("El lote de produccion es requerido"),
 });
 
@@ -236,6 +245,24 @@ export const AgregarProduccion = () => {
                       helperText={<ErrorMessage name="lote_produccion" />}
                     />
                   </Grid>
+
+                  <Grid item xs={12} md={6}>
+                    <Field
+                      as={TextField}
+                      label="Biaticos"
+                      name="biaticos"
+                      variant="outlined"
+                      fullWidth
+                      margin="normal"
+                      error={
+                        formik.touched.biaticos && formik.errors.biaticos
+                          ? true
+                          : false
+                      }
+                      helperText={<ErrorMessage name="biaticos" />}
+                    />
+                  </Grid>
+
                   <Grid item xs={12} md={12}>
                     {error ? (
                       <Alert sx={{ mt: 0, mb: 0 }} severity="error">

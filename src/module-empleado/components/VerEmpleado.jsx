@@ -31,7 +31,7 @@ export const VerEmpleado = ({
             </Typography>
             <Typography variant="body1">
               <strong>Fecha de Nacimiento:</strong>{" "}
-              {empleado?.fecha_ingreso_empleado}
+              {empleado?.fecha_nacimiento_empleado}
             </Typography>
             <Typography variant="body1">
               <strong>RFC:</strong> {empleado?.rfc_empleado}

@@ -26,7 +26,7 @@ dayjs.locale("es");
 const validationSchema = Yup.object({
   fecha_inicio_envasado: Yup.date().required("La fecha de inicio es requerida"),
   fecha_final_envasado: Yup.date().required("La fecha final es requerida"),
-  descripcion_envasado: Yup.string(),
+  descripcion_envasado: Yup.string().required("La descripción es requerida"),
 });
 
 export const EditarEnvasado = () => {
@@ -86,8 +86,8 @@ export const EditarEnvasado = () => {
   }, []);
 
   const initialValues = {
-    fecha_inicio_envasado: new Date(envasado?.fecha_inicio_envasado),
-    fecha_final_envasado: new Date(envasado?.fecha_final_envasado),
+    fecha_inicio_envasado: dayjs(envasado?.fecha_inicio_envasado),
+    fecha_final_envasado: dayjs(envasado?.fecha_final_envasado),
     descripcion_envasado: envasado?.descripcion_envasado || "",
   };
 
@@ -97,7 +97,7 @@ export const EditarEnvasado = () => {
         handleClose={handleClose}
         message={message}
         open={open}
-        severity="success"
+        severity="info"
       />
       <IndexLayout title={"Envasado"}>
         <BreadCrumbsCustom
@@ -107,7 +107,7 @@ export const EditarEnvasado = () => {
               url: "/envasado/inicio",
             },
             {
-              name: "Agregar envasado",
+              name: "Editar envasado",
               url: "",
             },
           ]}
@@ -250,7 +250,7 @@ export const EditarEnvasado = () => {
                       sx={{ mb: "2rem" }}
                     >
                       <Button type="submit" variant="contained">
-                        Crear
+                        Editar
                       </Button>
                     </Grid>
                   </Grid>

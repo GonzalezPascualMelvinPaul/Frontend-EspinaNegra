@@ -15,7 +15,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { es } from "date-fns/locale";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { IndexLayout } from "../../layouts";
 import {
   getEmpleadoProvider,
@@ -51,23 +51,28 @@ const validationSchema = Yup.object({
   fecha_nacimiento_empleado: Yup.date().required(
     "La fecha de nacimiento es requerida"
   ),
-  celular_empleado: Yup.number().typeError(
-    "El numero de celular de ser un numero"
-  ),
+  celular_empleado: Yup.number()
+    .typeError("El numero debe contener solo números")
+    .test(
+      "len",
+      "El numero debe contener 10 dígitos",
+      (val) => val && val.toString().length === 10
+    )
+    .required("El numero es obligatorio"),
   rfc_empleado: Yup.string()
     .matches(/^[A-Z]{4}\d{6}[A-Z0-9]{3}$/, "RFC inválido")
     .required("El RFC es requerido"),
   direccion: Yup.object({
     calle_direccion: Yup.string(),
-    ciudad_direccion: Yup.string(),
+    ciudad_direccion: Yup.string().required("La ciudad es requerida"),
     codigo_postal_direccion: Yup.number(),
     latitud_direccion: Yup.string(),
     longitud_direccion: Yup.string(),
-    colonia_direccion: Yup.string(),
+    colonia_direccion: Yup.string().required("La colonia es requerida"),
     num_ext_direccion: Yup.string(),
     num_int_direccion: Yup.string(),
     url_maps_direccion: Yup.string(),
-    id_municipio: Yup.number(),
+    id_municipio: Yup.number().required("El municipio es requerido"),
   }),
 });
 export const EditarEmpleado = () => {
@@ -81,6 +86,7 @@ export const EditarEmpleado = () => {
   const [estados, setEstados] = useState([]);
   const [municipios, setMunicipios] = useState([]);
   const { id } = useParams();
+  const navigate = useNavigate();
   const [mapValues, setMapValues] = useState({
     latitud: "",
     longitud: "",
@@ -118,15 +124,20 @@ export const EditarEmpleado = () => {
   };
 
   const onSubmit = async (values, e) => {
-    values.fecha_ingreso = dayjs(values.fecha_ingreso).format("YYYY-MM-DD");
-    values.fecha_nacimiento = dayjs(values.fecha_nacimiento).format(
+    values.fecha_ingreso_empleado = dayjs(values.fecha_ingreso_empleado).format(
       "YYYY-MM-DD"
     );
+    values.fecha_nacimiento_empleado = dayjs(
+      values.fecha_nacimiento_empleado
+    ).format("YYYY-MM-DD");
     setIsLoading(true);
     console.log(values);
-    //const { ok, data, message } = await updateEmpleadoProvider(values, id);
+    const { ok, data, message } = await updateEmpleadoProvider(values, id);
     if (ok) {
       setOpen(true);
+      setTimeout(() => {
+        navigate("/empleado/inicio");
+      }, 3000);
     } else {
       setError(true);
       setMessage(message);
@@ -145,12 +156,11 @@ export const EditarEmpleado = () => {
     nombre_empleado: empleado?.nombre_empleado || "",
     apellido_paterno_empleado: empleado?.apellido_paterno_empleado || "",
     apellido_materno_empleado: empleado?.apellido_materno_empleado || "",
-
+    id_persona_fisica: empleado?.id_persona_fisica,
     salario_empleado: empleado?.salario_empleado || "",
     comision_empleado: empleado?.comision_empleado || "",
-    fecha_ingreso_empleado: new Date(empleado?.fecha_ingreso_empleado) || "",
-    fecha_nacimiento_empleado:
-      new Date(empleado?.fecha_nacimiento_empleado) || "",
+    fecha_ingreso_empleado: dayjs(empleado?.fecha_ingreso_empleado) || "",
+    fecha_nacimiento_empleado: dayjs(empleado?.fecha_nacimiento_empleado) || "",
     celular_empleado: empleado?.celular_empleado || "",
     rfc_empleado: empleado?.rfc_empleado || "",
     direccion: {

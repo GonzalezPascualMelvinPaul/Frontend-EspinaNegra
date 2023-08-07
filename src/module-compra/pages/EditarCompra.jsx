@@ -140,6 +140,7 @@ export const EditarCompra = () => {
                         as={TextField}
                         label="Vendido por"
                         name="empleado"
+                        disabled
                         variant="outlined"
                         fullWidth
                         margin="normal"

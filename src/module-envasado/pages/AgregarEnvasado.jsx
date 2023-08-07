@@ -5,7 +5,14 @@ import * as Yup from "yup";
 import { AlertMessage, BreadCrumbsCustom } from "../../ui";
 import { IndexLayout } from "../../layouts";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { Alert, Button, Grid, TextField, Typography } from "@mui/material";
+import {
+  Alert,
+  Button,
+  Grid,
+  MenuItem,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { useNavigate } from "react-router-dom";
@@ -15,7 +22,7 @@ dayjs.locale("es");
 const validationSchema = Yup.object({
   fecha_inicio_envasado: Yup.date().required("La fecha de inicio es requerida"),
   fecha_final_envasado: Yup.date().required("La fecha final es requerida"),
-  descripcion_envasado: Yup.string(),
+  descripcion_envasado: Yup.string().required("La descripción es requerida"),
 });
 
 const initialValues = {
@@ -180,6 +187,118 @@ export const AgregarEnvasado = () => {
                           : false
                       }
                       helperText={<ErrorMessage name="descripcion_envasado" />}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} md={6}>
+                    <Field
+                      as={TextField}
+                      label="Folios usados"
+                      name="folios_envasado"
+                      variant="outlined"
+                      fullWidth
+                      margin="normal"
+                      error={
+                        formik.touched.folios_envasado &&
+                        formik.errors.folios_envasado
+                          ? true
+                          : false
+                      }
+                      helperText={<ErrorMessage name="folios_envasado" />}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} md={6}>
+                    <Field
+                      as={TextField}
+                      label="Envase"
+                      name="botellas"
+                      variant="outlined"
+                      fullWidth
+                      select
+                      margin="normal"
+                      error={
+                        formik.touched.botellas && formik.errors.botellas
+                          ? true
+                          : false
+                      }
+                      helperText={<ErrorMessage name="botellas" />}
+                    >
+                      <MenuItem value="1">Botella</MenuItem>
+                    </Field>
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <Field
+                      as={TextField}
+                      label="Marbetes"
+                      name="marbetes"
+                      variant="outlined"
+                      fullWidth
+                      select
+                      margin="normal"
+                      error={
+                        formik.touched.marbetes && formik.errors.marbetes
+                          ? true
+                          : false
+                      }
+                      helperText={<ErrorMessage name="marbetes" />}
+                    >
+                      <MenuItem value="1">Marbete</MenuItem>
+                    </Field>
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <Field
+                      as={TextField}
+                      label="Holograma"
+                      name="holograma"
+                      variant="outlined"
+                      fullWidth
+                      select
+                      margin="normal"
+                      error={
+                        formik.touched.holograma && formik.errors.holograma
+                          ? true
+                          : false
+                      }
+                      helperText={<ErrorMessage name="holograma" />}
+                    >
+                      <MenuItem value="1">Holograma</MenuItem>
+                    </Field>
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <Field
+                      as={TextField}
+                      label="Mezcal"
+                      name="mezcal"
+                      variant="outlined"
+                      fullWidth
+                      select
+                      margin="normal"
+                      error={
+                        formik.touched.mezcal && formik.errors.mezcal
+                          ? true
+                          : false
+                      }
+                      helperText={<ErrorMessage name="mezcal" />}
+                    >
+                      <MenuItem value="1">Mezcal</MenuItem>
+                    </Field>
+                  </Grid>
+
+                  <Grid item xs={12} md={6}>
+                    <Field
+                      as={TextField}
+                      label="Biaticos"
+                      name="biaticos"
+                      variant="outlined"
+                      fullWidth
+                      margin="normal"
+                      error={
+                        formik.touched.biaticos && formik.errors.biaticos
+                          ? true
+                          : false
+                      }
+                      helperText={<ErrorMessage name="biaticos" />}
                     />
                   </Grid>
 

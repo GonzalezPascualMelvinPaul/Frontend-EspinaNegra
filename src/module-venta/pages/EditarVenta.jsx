@@ -157,6 +157,7 @@ export const EditarVenta = () => {
                         name="id_cliente"
                         variant="outlined"
                         fullWidth
+                        disabled
                         margin="normal"
                         select
                         error={
@@ -181,6 +182,7 @@ export const EditarVenta = () => {
                         as={TextField}
                         label="Vendido por"
                         name="empleado"
+                        disabled
                         variant="outlined"
                         fullWidth
                         margin="normal"

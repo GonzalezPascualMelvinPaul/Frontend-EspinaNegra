@@ -38,19 +38,21 @@ const validationSchema = Yup.object({
     apellido_paterno_persona_fisica: Yup.string().required(
       "El apellido paterno es requerido"
     ),
-    rfc_persona_fisica: Yup.string().required("El rfc es requerido"),
+    rfc_persona_fisica: Yup.string()
+      .matches(/^[A-Z]{4}\d{6}[A-Z0-9]{3}$/, "RFC inválido")
+      .required("El RFC es requerido"),
   }),
   direccion: Yup.object({
     calle_direccion: Yup.string(),
-    ciudad_direccion: Yup.string(),
+    ciudad_direccion: Yup.string().required("La ciudad es requerida"),
     codigo_postal_direccion: Yup.number(),
     latitud_direccion: Yup.string(),
     longitud_direccion: Yup.string(),
-    colonia_direccion: Yup.string(),
+    colonia_direccion: Yup.string().required("La colonia es requerida"),
     num_ext_direccion: Yup.string(),
     num_int_direccion: Yup.string(),
     url_maps_direccion: Yup.string(),
-    id_municipio: Yup.number(),
+    id_municipio: Yup.number().required("El municipio es requerido"),
   }),
 });
 

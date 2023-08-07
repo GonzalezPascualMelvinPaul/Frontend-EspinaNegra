@@ -107,8 +107,7 @@ export const AgregarCompra = () => {
     const index = arrayHelpers.form.values.productos.findIndex(
       (p) => p.producto === producto.id_producto
     );
-    console.log(producto);
-    console.log(index);
+
     if (index !== -1) {
       arrayHelpers.form.setFieldValue(
         `productos.${index}.cantidad`,
@@ -214,7 +213,7 @@ export const AgregarCompra = () => {
                       <Grid item xs={12} md={6}>
                         <Field
                           as={TextField}
-                          label="Recibo"
+                          label="N. Factura / Nota"
                           name="numero_factura_compra"
                           variant="outlined"
                           fullWidth

@@ -21,10 +21,8 @@ import { useNavigate } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({
   nombre_producto: Yup.string().required("El nombre es requerido"),
-  descripcion_producto: Yup.string().required("La descripción es requerida"),
-  numero_folio_producto: Yup.string().required(
-    "El numero de folio es requerida"
-  ),
+  descripcion_producto: Yup.string(),
+  numero_folio_producto: Yup.string(),
   precio_compra_producto: Yup.number()
     .required("El precio de compra es requerido")
     .test(
@@ -41,19 +39,6 @@ const validationSchema = Yup.object().shape({
   id_proveedor: Yup.number().required("El proveedor es requerido"),
   id_categoria: Yup.number().required("La categoría es requerida"),
   id_tipo_producto: Yup.number().required("El tipo de producto es requerido"),
-  cantidad_stock: Yup.number().required("La cantidad es requerida"),
-  cantidad_minima_stock: Yup.number()
-    .required("La cantidad mínima es requerida")
-    .test(
-      "is-greater",
-      "La cantidad minima de stock no puede ser mayor al stock maximo",
-      function (value) {
-        return this.parent.cantidad_maxima_stock >= value;
-      }
-    ),
-  cantidad_maxima_stock: Yup.number().required(
-    "La cantidad maxima es requerida"
-  ),
 });
 
 const initialValues = {
@@ -66,9 +51,9 @@ const initialValues = {
   id_proveedor: "",
   id_categoria: "",
   id_tipo_producto: "",
-  cantidad_stock: "",
-  cantidad_minima_stock: "",
-  cantidad_maxima_stock: "",
+  cantidad_stock: 0,
+  cantidad_minima_stock: 10,
+  cantidad_maxima_stock: 100,
 };
 
 export const AgregarProducto = () => {
@@ -105,7 +90,11 @@ export const AgregarProducto = () => {
     setIsLoading(true);
     setError(false);
     setOpen(false);
-    const { data, ok, message } = await addProductoProvider(values);
+    values.cantidad_stock = 0;
+    values.cantidad_minima_stock = 10;
+    values.cantidad_maxima_stock = 100;
+    //const { data, ok, message } = await addProductoProvider(values);
+    console.log(values);
     if (ok) {
       setOpen(true);
       setError(false);
@@ -218,6 +207,23 @@ export const AgregarProducto = () => {
                 <Grid item xs={12} md={6}>
                   <Field
                     as={TextField}
+                    label="Precio de venta"
+                    name="precio_venta_producto"
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                    error={
+                      formik.touched.precio_venta_producto &&
+                      formik.errors.precio_venta_producto
+                        ? true
+                        : false
+                    }
+                    helperText={<ErrorMessage name="precio_venta_producto" />}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Field
+                    as={TextField}
                     label="Precio de compra"
                     name="precio_compra_producto"
                     variant="outlined"
@@ -233,23 +239,6 @@ export const AgregarProducto = () => {
                   />
                 </Grid>
 
-                <Grid item xs={12} md={6}>
-                  <Field
-                    as={TextField}
-                    label="Precio de venta"
-                    name="precio_venta_producto"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    error={
-                      formik.touched.precio_venta_producto &&
-                      formik.errors.precio_venta_producto
-                        ? true
-                        : false
-                    }
-                    helperText={<ErrorMessage name="precio_venta_producto" />}
-                  />
-                </Grid>
                 <Grid item xs={12} md={6}>
                   <Field
                     as={TextField}
@@ -357,57 +346,7 @@ export const AgregarProducto = () => {
                     ))}
                   </Field>
                 </Grid>
-                <Grid item xs={12} md={6}>
-                  <Field
-                    as={TextField}
-                    label="Cantidad"
-                    name="cantidad_stock"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    error={
-                      formik.touched.cantidad_stock &&
-                      formik.errors.cantidad_stock
-                        ? true
-                        : false
-                    }
-                    helperText={<ErrorMessage name="cantidad_stock" />}
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <Field
-                    as={TextField}
-                    label="Cantidad mínima"
-                    name="cantidad_minima_stock"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    error={
-                      formik.touched.cantidad_minima_stock &&
-                      formik.errors.cantidad_minima_stock
-                        ? true
-                        : false
-                    }
-                    helperText={<ErrorMessage name="cantidad_minima_stock" />}
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <Field
-                    as={TextField}
-                    label="Cantidad maxima"
-                    name="cantidad_maxima_stock"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    error={
-                      formik.touched.cantidad_maxima_stock &&
-                      formik.errors.cantidad_maxima_stock
-                        ? true
-                        : false
-                    }
-                    helperText={<ErrorMessage name="cantidad_maxima_stock" />}
-                  />
-                </Grid>
+
                 <Grid item xs={12} md={12}>
                   {error ? (
                     <Alert sx={{ mt: 0, mb: 0 }} severity="error">

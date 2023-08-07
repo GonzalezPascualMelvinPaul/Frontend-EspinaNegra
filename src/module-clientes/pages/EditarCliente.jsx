@@ -41,22 +41,23 @@ const validationSchema = Yup.object({
     apellido_paterno_persona_fisica: Yup.string().required(
       "El apellido paterno es requerido"
     ),
-    rfc_persona_fisica: Yup.string().required("El rfc es requerido"),
+    rfc_persona_fisica: Yup.string()
+      .matches(/^[A-Z]{4}\d{6}[A-Z0-9]{3}$/, "RFC inválido")
+      .required("El RFC es requerido"),
   }),
   direccion: Yup.object({
     calle_direccion: Yup.string(),
-    ciudad_direccion: Yup.string(),
+    ciudad_direccion: Yup.string().required("La ciudad es requerida"),
     codigo_postal_direccion: Yup.number(),
     latitud_direccion: Yup.string(),
     longitud_direccion: Yup.string(),
-    colonia_direccion: Yup.string(),
+    colonia_direccion: Yup.string().required("La colonia es requerida"),
     num_ext_direccion: Yup.string(),
     num_int_direccion: Yup.string(),
     url_maps_direccion: Yup.string(),
-    id_municipio: Yup.number(),
+    id_municipio: Yup.number().required("El municipio es requerido"),
   }),
 });
-
 export const EditarCliente = () => {
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
@@ -227,6 +228,7 @@ export const EditarCliente = () => {
                           name="persona_fisica.nombre_persona_fisica"
                           variant="outlined"
                           fullWidth
+                          disabled
                           margin="normal"
                           error={
                             formik.touched.persona_fisica
@@ -247,6 +249,7 @@ export const EditarCliente = () => {
                           name="persona_fisica.apellido_paterno_persona_fisica"
                           variant="outlined"
                           fullWidth
+                          disabled
                           margin="normal"
                           error={
                             formik.touched.persona_fisica
@@ -268,6 +271,7 @@ export const EditarCliente = () => {
                           name="persona_fisica.apellido_materno_persona_fisica"
                           variant="outlined"
                           fullWidth
+                          disabled
                           margin="normal"
                           error={
                             formik.touched.persona_fisica
@@ -279,6 +283,26 @@ export const EditarCliente = () => {
                           }
                           helperText={
                             <ErrorMessage name="persona_fisica.apellido_materno_persona_fisica" />
+                          }
+                        />
+                      </Grid>
+                      <Grid item xs={12} md={6}>
+                        <Field
+                          as={TextField}
+                          label="RFC"
+                          name="persona_fisica.rfc_persona_fisica"
+                          variant="outlined"
+                          fullWidth
+                          disabled
+                          margin="normal"
+                          error={
+                            formik.touched.persona_fisica?.rfc_persona_fisica &&
+                            formik.errors.persona_fisica?.rfc_persona_fisica
+                              ? true
+                              : false
+                          }
+                          helperText={
+                            <ErrorMessage name="persona_fisica.rfc_persona_fisica" />
                           }
                         />
                       </Grid>
@@ -322,25 +346,7 @@ export const EditarCliente = () => {
                           inputMode="numeric"
                         />
                       </Grid>
-                      <Grid item xs={12} md={6}>
-                        <Field
-                          as={TextField}
-                          label="RFC"
-                          name="persona_fisica.rfc_persona_fisica"
-                          variant="outlined"
-                          fullWidth
-                          margin="normal"
-                          error={
-                            formik.touched.persona_fisica?.rfc_persona_fisica &&
-                            formik.errors.persona_fisica?.rfc_persona_fisica
-                              ? true
-                              : false
-                          }
-                          helperText={
-                            <ErrorMessage name="persona_fisica.rfc_persona_fisica" />
-                          }
-                        />
-                      </Grid>
+
                       <Grid item xs={12} md={12}>
                         <Typography variant="h6">Dirección</Typography>
                       </Grid>
