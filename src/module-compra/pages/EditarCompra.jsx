@@ -8,6 +8,7 @@ import {
   Alert,
   Button,
   CircularProgress,
+  Grid,
   InputAdornment,
   MenuItem,
   Skeleton,
@@ -18,10 +19,16 @@ import {
   getCompraProvider,
   updateCompraProvider,
 } from "../../providers/compra/providerCompra";
+import { DataGrid } from "@mui/x-data-grid";
 
 const validationSchema = Yup.object({
-  observaciones: Yup.string().required("El campo observaciones es requerido"),
-  recibo: Yup.string(),
+  total_compra: Yup.number()
+    .required("El total es requerido")
+    .min(0, "El total no puede ser negativo"),
+  observaciones_compra: Yup.string().required(
+    "Las observaciones son requeridas"
+  ),
+  numero_factura_compra: Yup.string(),
 });
 
 export const EditarCompra = () => {
@@ -37,12 +44,11 @@ export const EditarCompra = () => {
   const getCompra = async () => {
     const { ok, data } = await getCompraProvider(id);
     if (ok) {
-      console.log("Compra a editar", data);
       setIsLoadingData(true);
+      setCompra(data);
     } else {
       setIsLoadingData(false);
     }
-    setCompra(data.compra);
   };
 
   const handleClose = () => {
@@ -61,20 +67,39 @@ export const EditarCompra = () => {
     if (ok) {
       setOpen(true);
       setError(false);
+      setTimeout(() => {
+        navigate("/compra/inicio");
+      }, 2200);
     } else {
       setError(true);
       setOpen(false);
     }
     setMessage(message);
     setIsLoading(false);
-    setTimeout(() => {
-      navigate("/compra/inicio");
-    }, 2200);
   };
   const initialValues = {
-    observaciones: compra?.observaciones,
-    recibo: compra?.recibo || "",
+    total_compra: compra?.total_compra || "",
+    observaciones_compra: compra?.observaciones_compra || "",
+    numero_factura_compra: compra?.numero_factura_compra || "",
+    productos: compra?.productos_comprados || [],
+    empleado: compra?.nombre_usuario,
   };
+
+  const columns = [
+    {
+      field: "producto",
+      headerName: "Producto",
+      flex: 2,
+      sortable: true,
+    },
+    {
+      field: "cantidad",
+      headerName: "Cantidad",
+      flex: 2,
+      sortable: true,
+    },
+  ];
+
   return (
     <>
       <AlertMessage
@@ -109,54 +134,123 @@ export const EditarCompra = () => {
             >
               {(formik) => (
                 <Form>
-                  <Field
-                    as={TextField}
-                    label="Observaciones"
-                    name="observaciones"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    error={
-                      formik.touched.observaciones &&
-                      formik.errors.observaciones
-                        ? true
-                        : false
-                    }
-                    helperText={<ErrorMessage name="observaciones" />}
-                  />
-
-                  <Field
-                    as={TextField}
-                    label="Recibo"
-                    name="recibo"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    error={
-                      formik.touched.recibo && formik.errors.recibo
-                        ? true
-                        : false
-                    }
-                    helperText={<ErrorMessage name="recibo" />}
-                  />
-
-                  {error ? (
-                    <Alert sx={{ mt: 0, mb: 0 }} severity="error">
-                      {message}
-                    </Alert>
-                  ) : (
-                    ""
-                  )}
-                  {isLoading && !error ? (
-                    <Alert sx={{ mt: 0, mb: 0 }} severity="success">
-                      Enviando datos...
-                    </Alert>
-                  ) : (
-                    ""
-                  )}
-                  <Button type="submit" variant="contained">
-                    Modificar
-                  </Button>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} md={6}>
+                      <Field
+                        as={TextField}
+                        label="Vendido por"
+                        name="empleado"
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                        error={
+                          formik.touched.empleado && formik.errors.empleado
+                            ? true
+                            : false
+                        }
+                        helperText={<ErrorMessage name="empleado" />}
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <Field
+                        as={TextField}
+                        label="Observaciones"
+                        name="observaciones_compra"
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                        error={
+                          formik.touched.observaciones_compra &&
+                          formik.errors.observaciones_compra
+                            ? true
+                            : false
+                        }
+                        helperText={
+                          <ErrorMessage name="observaciones_compra" />
+                        }
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <Field
+                        as={TextField}
+                        label="N. Factura / Nota"
+                        name="numero_factura_compra"
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                        error={
+                          formik.touched.numero_factura_compra &&
+                          formik.errors.numero_factura_compra
+                            ? true
+                            : false
+                        }
+                        helperText={
+                          <ErrorMessage name="numero_factura_compra" />
+                        }
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <Field
+                        as={TextField}
+                        label="Total"
+                        name="total_compra"
+                        variant="outlined"
+                        fullWidth
+                        disabled
+                        margin="normal"
+                        error={
+                          formik.touched.total_compra &&
+                          formik.errors.total_compra
+                            ? true
+                            : false
+                        }
+                        helperText={<ErrorMessage name="total_compra" />}
+                        InputProps={{
+                          inputProps: {
+                            maxLength: 5,
+                          },
+                        }}
+                        inputMode="numeric"
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={12}>
+                      {/* Mostrar productos vendidos utilizando el DataGrid */}
+                      <DataGrid
+                        getRowId={(row) => row["id_compra"]}
+                        rows={compra?.productos_comprados || []}
+                        columns={columns}
+                        autoHeight
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={12}>
+                      {error ? (
+                        <Alert sx={{ mt: 0, mb: 0 }} severity="error">
+                          {message}
+                        </Alert>
+                      ) : (
+                        ""
+                      )}
+                      {isLoading && !error ? (
+                        <Alert sx={{ mt: 0, mb: 0 }} severity="success">
+                          Enviando datos...
+                        </Alert>
+                      ) : (
+                        ""
+                      )}
+                    </Grid>
+                    <Grid
+                      display={"flex"}
+                      justifyContent={"end"}
+                      item
+                      xs={12}
+                      md={12}
+                      sx={{ mb: "2rem" }}
+                    >
+                      <Button type="submit" variant="contained">
+                        Editar
+                      </Button>
+                    </Grid>
+                  </Grid>
                 </Form>
               )}
             </Formik>

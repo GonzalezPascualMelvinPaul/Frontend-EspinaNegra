@@ -117,7 +117,7 @@ export const IndexBodega = () => {
             </Button>
             <Button
               onClick={() => {
-                navigate(`/bodega/editar/${row.id}`);
+                navigate(`/bodega/editar/${row.id_bodega}`);
               }}
               variant="contained"
               color="secondary"

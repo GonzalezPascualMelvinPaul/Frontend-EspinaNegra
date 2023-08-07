@@ -181,7 +181,7 @@ export const IndexVenta = () => {
             {(permisos === "Administrador" || permisos === "Gerente") && (
               <Button
                 onClick={() => {
-                  navigate(`/venta/editar/${row.id}`);
+                  navigate(`/venta/editar/${row.id_venta}`);
                 }}
                 variant="contained"
                 color="secondary"

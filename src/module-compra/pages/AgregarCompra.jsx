@@ -16,6 +16,7 @@ import {
   TableRow,
   Alert,
   Skeleton,
+  Grid,
 } from "@mui/material";
 import { getClientesProvider } from "../../providers/cliente/providerCliente";
 import { getProductosProvider } from "../../providers/producto/providerProducto";
@@ -190,186 +191,211 @@ export const AgregarCompra = () => {
 
                 return (
                   <Form>
-                    <Field
-                      as={TextField}
-                      label="Observaciones"
-                      name="observaciones_compra"
-                      variant="outlined"
-                      fullWidth
-                      margin="normal"
-                      error={
-                        formik.touched.observaciones_compra &&
-                        formik.errors.observaciones_compra
-                          ? true
-                          : false
-                      }
-                      helperText={<ErrorMessage name="observaciones_compra" />}
-                    />
-                    <Field
-                      as={TextField}
-                      label="Recibo"
-                      name="numero_factura_compra"
-                      variant="outlined"
-                      fullWidth
-                      margin="normal"
-                      error={
-                        formik.touched.numero_factura_compra &&
-                        formik.errors.numero_factura_compra
-                          ? true
-                          : false
-                      }
-                      helperText={<ErrorMessage name="numero_factura_compra" />}
-                    />
+                    <Grid container spacing={2}>
+                      <Grid item xs={12} md={6}>
+                        <Field
+                          as={TextField}
+                          label="Observaciones"
+                          name="observaciones_compra"
+                          variant="outlined"
+                          fullWidth
+                          margin="normal"
+                          error={
+                            formik.touched.observaciones_compra &&
+                            formik.errors.observaciones_compra
+                              ? true
+                              : false
+                          }
+                          helperText={
+                            <ErrorMessage name="observaciones_compra" />
+                          }
+                        />
+                      </Grid>
+                      <Grid item xs={12} md={6}>
+                        <Field
+                          as={TextField}
+                          label="Recibo"
+                          name="numero_factura_compra"
+                          variant="outlined"
+                          fullWidth
+                          margin="normal"
+                          error={
+                            formik.touched.numero_factura_compra &&
+                            formik.errors.numero_factura_compra
+                              ? true
+                              : false
+                          }
+                          helperText={
+                            <ErrorMessage name="numero_factura_compra" />
+                          }
+                        />
+                      </Grid>
+                      <Grid item xs={12} md={6}>
+                        <Field
+                          as={TextField}
+                          label="Total"
+                          name="total_compra"
+                          variant="outlined"
+                          fullWidth
+                          disabled
+                          margin="normal"
+                          error={
+                            formik.touched.total_compra &&
+                            formik.errors.total_compra
+                              ? true
+                              : false
+                          }
+                          helperText={<ErrorMessage name="total_compra" />}
+                          InputProps={{
+                            inputProps: {
+                              maxLength: 5,
+                            },
+                          }}
+                          inputMode="numeric"
+                        />
+                      </Grid>
+                      <Grid item xs={12} md={12}>
+                        <FieldArray
+                          name="productos"
+                          render={(arrayHelpers) => {
+                            // Obtener el último producto en el array
+                            const lastProduct = get(
+                              formik.values,
+                              `productos.${formik.values.productos.length - 1}`,
+                              {}
+                            );
 
-                    <FieldArray
-                      name="productos"
-                      render={(arrayHelpers) => {
-                        // Obtener el último producto en el array
-                        const lastProduct = get(
-                          formik.values,
-                          `productos.${formik.values.productos.length - 1}`,
-                          {}
-                        );
+                            // Chequear si el último producto tiene un producto y una cantidad
+                            const isLastProductValid =
+                              formik.values.productos.length === 0 ||
+                              (lastProduct.productos && lastProduct.cantidad);
 
-                        // Chequear si el último producto tiene un producto y una cantidad
-                        const isLastProductValid =
-                          formik.values.productos.length === 0 ||
-                          (lastProduct.productos && lastProduct.cantidad);
-
-                        return (
-                          <div>
-                            <TableContainer>
-                              <Table>
-                                <TableHead>
-                                  <TableRow>
-                                    <TableCell>Producto</TableCell>
-                                    <TableCell>Precio</TableCell>
-                                    <TableCell>Cantidad</TableCell>
-                                    <TableCell>Acciones</TableCell>
-                                  </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                  {productos.map((producto) => (
-                                    <TableRow key={producto.id_producto}>
-                                      <TableCell>
-                                        {producto.nombre_producto}
-                                      </TableCell>
-                                      <TableCell>
-                                        {producto.precio_compra_producto}
-                                      </TableCell>
-                                      <TableCell>
-                                        {/* Mostrar input para la cantidad */}
-                                        <Field
-                                          as={TextField}
-                                          name={`productos.${formik.values.productos.findIndex(
-                                            (p) =>
-                                              p.producto ===
-                                              producto.id_producto
-                                          )}.cantidad`}
-                                          type="number"
-                                          InputProps={{
-                                            inputProps: {
-                                              min: 0, // No permitir números negativos
-                                              max: producto.cantidad_maxima_stock, // Establecer la cantidad máxima según la cantidad en stock
-                                            },
-                                          }}
-                                        />
-                                      </TableCell>
-                                      <TableCell>
-                                        {/* Botones de agregar y quitar */}
-                                        <Button
-                                          onClick={() =>
-                                            agregarProducto(
-                                              producto,
-                                              arrayHelpers
-                                            )
-                                          }
-                                          disabled={
-                                            formik.values.productos.reduce(
-                                              (total_venta, p) => {
-                                                if (
+                            return (
+                              <div>
+                                <TableContainer>
+                                  <Table>
+                                    <TableHead>
+                                      <TableRow>
+                                        <TableCell>Producto</TableCell>
+                                        <TableCell>Precio</TableCell>
+                                        <TableCell>Cantidad</TableCell>
+                                        <TableCell>Acciones</TableCell>
+                                      </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                      {productos.map((producto) => (
+                                        <TableRow key={producto.id_producto}>
+                                          <TableCell>
+                                            {producto.nombre_producto}
+                                          </TableCell>
+                                          <TableCell>
+                                            {producto.precio_compra_producto}
+                                          </TableCell>
+                                          <TableCell>
+                                            {/* Mostrar input para la cantidad */}
+                                            <Field
+                                              as={TextField}
+                                              name={`productos.${formik.values.productos.findIndex(
+                                                (p) =>
                                                   p.producto ===
                                                   producto.id_producto
-                                                ) {
-                                                  return (
-                                                    total_venta + p.cantidad
-                                                  );
-                                                } else {
-                                                  return total_venta;
-                                                }
-                                              },
-                                              0
-                                            ) >= producto.cantidad_maxima_stock // Deshabilitar el botón "+" cuando la cantidad es igual a la cantidad en stock
-                                          }
-                                        >
-                                          +
-                                        </Button>
-                                        <Button
-                                          onClick={() =>
-                                            quitarProducto(
-                                              producto.id_producto,
-                                              arrayHelpers
-                                            )
-                                          }
-                                          disabled={
-                                            !formik.values.productos.some(
-                                              (p) =>
-                                                p.producto ===
-                                                producto.id_producto
-                                            )
-                                          }
-                                        >
-                                          -
-                                        </Button>
-                                      </TableCell>
-                                    </TableRow>
-                                  ))}
-                                </TableBody>
-                              </Table>
-                            </TableContainer>
-                          </div>
-                        );
-                      }}
-                    />
-                    <Field
-                      as={TextField}
-                      label="Total"
-                      name="total_compra"
-                      variant="outlined"
-                      fullWidth
-                      disabled
-                      margin="normal"
-                      error={
-                        formik.touched.total_compra &&
-                        formik.errors.total_compra
-                          ? true
-                          : false
-                      }
-                      helperText={<ErrorMessage name="total_compra" />}
-                      InputProps={{
-                        inputProps: {
-                          maxLength: 5,
-                        },
-                      }}
-                      inputMode="numeric"
-                    />
-                    {error ? (
-                      <Alert sx={{ mt: 0, mb: 0 }} severity="error">
-                        {message}
-                      </Alert>
-                    ) : (
-                      ""
-                    )}
-                    {isLoading && !error ? (
-                      <Alert sx={{ mt: 0, mb: 0 }} severity="success">
-                        Enviando datos...
-                      </Alert>
-                    ) : (
-                      ""
-                    )}
-                    <Button type="submit" variant="contained">
-                      Crear
-                    </Button>
+                                              )}.cantidad`}
+                                              type="number"
+                                              InputProps={{
+                                                inputProps: {
+                                                  min: 0, // No permitir números negativos
+                                                  max: producto.cantidad_maxima_stock, // Establecer la cantidad máxima según la cantidad en stock
+                                                },
+                                              }}
+                                            />
+                                          </TableCell>
+                                          <TableCell>
+                                            {/* Botones de agregar y quitar */}
+                                            <Button
+                                              onClick={() =>
+                                                agregarProducto(
+                                                  producto,
+                                                  arrayHelpers
+                                                )
+                                              }
+                                              disabled={
+                                                formik.values.productos.reduce(
+                                                  (total_venta, p) => {
+                                                    if (
+                                                      p.producto ===
+                                                      producto.id_producto
+                                                    ) {
+                                                      return (
+                                                        total_venta + p.cantidad
+                                                      );
+                                                    } else {
+                                                      return total_venta;
+                                                    }
+                                                  },
+                                                  0
+                                                ) >=
+                                                producto.cantidad_maxima_stock // Deshabilitar el botón "+" cuando la cantidad es igual a la cantidad en stock
+                                              }
+                                            >
+                                              +
+                                            </Button>
+                                            <Button
+                                              onClick={() =>
+                                                quitarProducto(
+                                                  producto.id_producto,
+                                                  arrayHelpers
+                                                )
+                                              }
+                                              disabled={
+                                                !formik.values.productos.some(
+                                                  (p) =>
+                                                    p.producto ===
+                                                    producto.id_producto
+                                                )
+                                              }
+                                            >
+                                              -
+                                            </Button>
+                                          </TableCell>
+                                        </TableRow>
+                                      ))}
+                                    </TableBody>
+                                  </Table>
+                                </TableContainer>
+                              </div>
+                            );
+                          }}
+                        />
+                      </Grid>
+                      <Grid item xs={12} md={12}>
+                        {error ? (
+                          <Alert sx={{ mt: 0, mb: 0 }} severity="error">
+                            {message}
+                          </Alert>
+                        ) : (
+                          ""
+                        )}
+                        {isLoading && !error ? (
+                          <Alert sx={{ mt: 0, mb: 0 }} severity="success">
+                            Enviando datos...
+                          </Alert>
+                        ) : (
+                          ""
+                        )}
+                      </Grid>
+                      <Grid
+                        display={"flex"}
+                        justifyContent={"end"}
+                        item
+                        xs={12}
+                        md={12}
+                        sx={{ mb: "2rem" }}
+                      >
+                        <Button type="submit" variant="contained">
+                          Crear
+                        </Button>
+                      </Grid>
+                    </Grid>
                   </Form>
                 );
               }}

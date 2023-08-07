@@ -110,7 +110,7 @@ export const IndexProducto = () => {
       sortable: true,
     },
     {
-      field: "unidad_medida",
+      field: "nombre_unidad_medida",
       headerName: "Unidad Medida",
       flex: 1,
       sortable: true,

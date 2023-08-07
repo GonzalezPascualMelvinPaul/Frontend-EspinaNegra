@@ -1,7 +1,7 @@
 import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { LayoutRouter } from "../../router";
-import { AgregarProduccion, IndexProduccion } from "../pages";
+import { AgregarProduccion, EditarProduccion, IndexProduccion } from "../pages";
 import { useSelector } from "react-redux";
 
 export const ProduccionRoutes = () => {
@@ -20,6 +20,16 @@ export const ProduccionRoutes = () => {
           element={
             havePermision(["Administrador", "Gerente"]) ? (
               <AgregarProduccion />
+            ) : (
+              <Navigate to="/produccion/inicio" />
+            )
+          }
+        />
+        <Route
+          path="editar/:id"
+          element={
+            havePermision(["Administrador", "Gerente"]) ? (
+              <EditarProduccion />
             ) : (
               <Navigate to="/produccion/inicio" />
             )

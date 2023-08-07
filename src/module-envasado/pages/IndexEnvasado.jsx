@@ -128,7 +128,7 @@ export const IndexEnvasado = () => {
             {(permisos === "Administrador" || permisos === "Gerente") && (
               <Button
                 onClick={() => {
-                  navigate(`/envasado/editar/${row.id}`);
+                  navigate(`/envasado/editar/${row.id_envasado}`);
                 }}
                 variant="contained"
                 color="secondary"

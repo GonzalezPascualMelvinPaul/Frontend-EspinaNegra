@@ -1,7 +1,7 @@
 import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { LayoutRouter } from "../../router";
-import { AgregarEnvasado, IndexEnvasado } from "../pages";
+import { AgregarEnvasado, EditarEnvasado, IndexEnvasado } from "../pages";
 import { useSelector } from "react-redux";
 
 export const EnvasadoRoutes = () => {
@@ -19,6 +19,16 @@ export const EnvasadoRoutes = () => {
           element={
             havePermision(["Administrador", "Gerente"]) ? (
               <AgregarEnvasado />
+            ) : (
+              <Navigate to="/envasado/inicio" />
+            )
+          }
+        />
+        <Route
+          path="editar/:id"
+          element={
+            havePermision(["Administrador", "Gerente"]) ? (
+              <EditarEnvasado />
             ) : (
               <Navigate to="/envasado/inicio" />
             )

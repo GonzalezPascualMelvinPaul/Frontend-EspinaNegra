@@ -54,7 +54,9 @@ const validationSchema = Yup.object({
   celular_empleado: Yup.number().typeError(
     "El numero de celular de ser un numero"
   ),
-  rfc_empleado: Yup.string(),
+  rfc_empleado: Yup.string()
+    .matches(/^[A-Z]{4}\d{6}[A-Z0-9]{3}$/, "RFC inválido")
+    .required("El RFC es requerido"),
   direccion: Yup.object({
     calle_direccion: Yup.string(),
     ciudad_direccion: Yup.string(),
@@ -122,7 +124,7 @@ export const EditarEmpleado = () => {
     );
     setIsLoading(true);
     console.log(values);
-    const { ok, data, message } = await updateEmpleadoProvider(values, id);
+    //const { ok, data, message } = await updateEmpleadoProvider(values, id);
     if (ok) {
       setOpen(true);
     } else {
@@ -392,6 +394,7 @@ export const EditarEmpleado = () => {
                                     date
                                   )
                                 }
+                                maxDate={dayjs().subtract(18, "year").toDate()} // Set the maximum date to 18 years ago
                                 error={
                                   formik.touched.fecha_nacimiento_empleado &&
                                   formik.errors.fecha_nacimiento_empleado
@@ -495,7 +498,7 @@ export const EditarEmpleado = () => {
                                 ) || ""
                               }
                               getOptionLabel={(option) =>
-                                option.nombre_municipio
+                                option.nombre_municipio || ""
                               }
                               disabled={!formik.values.direccion.estado}
                               onChange={(event, newValue) => {
@@ -737,7 +740,7 @@ export const EditarEmpleado = () => {
                         sx={{ mb: "2rem" }}
                       >
                         <Button type="submit" variant="contained">
-                          Crear
+                          Editar
                         </Button>
                       </Grid>
                     </Grid>
