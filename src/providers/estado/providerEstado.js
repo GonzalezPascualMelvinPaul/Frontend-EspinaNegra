@@ -75,9 +75,9 @@ export const deleteEmpleadoProvider = async (empleadoId) => {
     });
 };
 
-export const getEmpleadoProvider = async (empleadoId) => {
+export const getMunicipiosProvider = async (id_estado) => {
   return espinaNegraApi
-    .get(`empleado/${empleadoId}`)
+    .get(`estado/${id_estado}`)
     .then((response) => {
       return { ok: true, data: response.data, message: response.data?.message };
     })

@@ -19,7 +19,6 @@ export const getUsersProvider = async () => {
 };
 
 export const updateUserProvider = async (user, id) => {
-  console.log(user);
   return espinaNegraApi
     .put(`user/${id}`, user)
     .then((response) => {
