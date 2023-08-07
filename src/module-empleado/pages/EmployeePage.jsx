@@ -23,6 +23,9 @@ import { useSelector } from "react-redux";
 import { TableResponsiveCustom } from "../../ui/components/TableResponsiveCustom";
 import { useTheme } from "@mui/material/styles";
 import { DataGrid } from "@mui/x-data-grid";
+import InfoIcon from "@mui/icons-material/Info";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 export const EmployeePage = () => {
   const { user } = useSelector((state) => state.auth);
@@ -82,37 +85,37 @@ export const EmployeePage = () => {
     {
       field: "nombre_empleado",
       headerName: "Nombre",
-      flex: 2,
+      width: 150,
       sortable: true,
     },
     {
       field: "apellido_paterno_empleado",
       headerName: "Apellido Paterno",
-      flex: 2,
+      width: 140,
       sortable: true,
     },
     {
       field: "apellido_materno_empleado",
       headerName: "Apellido Materno",
-      flex: 2,
+      width: 140,
       sortable: true,
     },
     {
       field: "fecha_ingreso_empleado",
       headerName: "Fecha de Ingreso",
-      flex: 2,
+
       sortable: true,
     },
     {
       field: "rfc_empleado",
       headerName: "RFC",
-      flex: 2,
+      width: 140,
       sortable: true,
     },
     {
       field: "codigo_empleado",
       headerName: "Codigo",
-      flex: 2,
+      width: 120,
       sortable: true,
       renderCell: ({ value }) => {
         return value ? value.toUpperCase() : "";
@@ -121,7 +124,7 @@ export const EmployeePage = () => {
     {
       field: "acciones",
       headerName: "Acciones",
-      flex: 3,
+      width: 300,
       sortable: false,
       disableColumnMenu: true,
       renderCell: ({ row }) => {
@@ -132,7 +135,7 @@ export const EmployeePage = () => {
               variant="contained"
               color="info"
             >
-              Ver
+              <InfoIcon />
             </Button>
             {(permisos === "Administrador" || permisos === "Gerente") && (
               <Button
@@ -142,7 +145,7 @@ export const EmployeePage = () => {
                 variant="contained"
                 color="secondary"
               >
-                Editar
+                <EditIcon />
               </Button>
             )}
             {permisos === "Administrador" && (
@@ -151,7 +154,7 @@ export const EmployeePage = () => {
                 color="error"
                 onClick={() => handleDelete(row)}
               >
-                Eliminar
+                <DeleteForeverIcon />
               </Button>
             )}
           </Stack>

@@ -22,6 +22,9 @@ import { useSelector } from "react-redux";
 import { TableResponsiveCustom } from "../../ui/components/TableResponsiveCustom";
 import { useTheme } from "@mui/material/styles";
 import { VerGeneral } from "../../ui/components/VerGeneral";
+import InfoIcon from "@mui/icons-material/Info";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 const formartView = [
   { name: "id_venta", title: "ID de Venta" },
@@ -176,7 +179,7 @@ export const IndexVenta = () => {
               variant="contained"
               color="info"
             >
-              Ver
+              <InfoIcon />
             </Button>
             {(permisos === "Administrador" || permisos === "Gerente") && (
               <Button
@@ -186,7 +189,7 @@ export const IndexVenta = () => {
                 variant="contained"
                 color="secondary"
               >
-                Editar
+                <EditIcon />
               </Button>
             )}
             {permisos === "Administrador" && (
@@ -195,7 +198,7 @@ export const IndexVenta = () => {
                 color="error"
                 onClick={() => handleDelete(row)}
               >
-                Eliminar
+                <DeleteForeverIcon />
               </Button>
             )}
           </Stack>
