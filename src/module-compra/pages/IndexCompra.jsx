@@ -21,6 +21,17 @@ import { getComprasProvider } from "../../providers/compra/providerCompra";
 import { useSelector } from "react-redux";
 import { useTheme } from "@mui/material/styles";
 import { TableResponsiveCustom } from "../../ui/components/TableResponsiveCustom";
+import { VerGeneral } from "../../ui/components/VerGeneral";
+
+const formartView = [
+  { name: "id_compra", title: "ID de Compra" },
+  { name: "fecha_compra", title: "Fecha de Compra" },
+  { name: "observaciones_compra", title: "Observaciones de Compra" },
+  { name: "total_compra", title: "Total de Compra" },
+  { name: "numero_factura_compra", title: "Número de Factura de Compra" },
+  { name: "nombre_usuario", title: "Nombre de Usuario" },
+  { name: "productos", title: "Productos Comprados" },
+];
 
 export const IndexCompra = () => {
   const [compras, setCompras] = useState([]);
@@ -35,6 +46,11 @@ export const IndexCompra = () => {
   const [permisos, setPermisos] = useState("Usuario");
   const theme = useTheme();
   const xssize = useMediaQuery(theme.breakpoints.only("xs"));
+  const [modalView, setModalView] = useState(false);
+  const handleView = (row) => {
+    setCompra(row);
+    setModalView(!modalView);
+  };
 
   useEffect(() => {
     const { nombre_rol } = user;
@@ -129,7 +145,22 @@ export const IndexCompra = () => {
       renderCell: ({ row }) => {
         return (
           <Stack spacing={2} direction="row">
-            <Button onClick={() => {}} variant="contained" color="info">
+            <Button
+              onClick={() => {
+                const vendidos = row.productos_comprados.map((prod) => {
+                  return prod.cantidad + " " + prod.producto + "| ";
+                });
+                const newRow = {
+                  ...row,
+                  productos: vendidos,
+                  total_compra: "$" + row.total_compra,
+                };
+
+                handleView(newRow);
+              }}
+              variant="contained"
+              color="info"
+            >
               Ver
             </Button>
             {(permisos === "Administrador" || permisos === "Gerente") && (
@@ -209,11 +240,12 @@ export const IndexCompra = () => {
             </>
           )}
         </IndexLayout>
-        <EliminarCompra
-          open={modalDelete}
-          onClose={handleDelete}
-          compra={compra}
-          updateCompras={getCompras}
+        <VerGeneral
+          titulo="Detalle compra"
+          onClose={handleView}
+          open={modalView}
+          datos={compra}
+          names={formartView}
         />
       </Box>
     </>
