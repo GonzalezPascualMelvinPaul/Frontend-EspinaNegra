@@ -21,6 +21,19 @@ import { useSelector } from "react-redux";
 import { getProduccionesProvider } from "../../providers/produccion/providerProduccion";
 import { TableResponsiveCustom } from "../../ui/components/TableResponsiveCustom";
 import { EliminarProduccion } from "./EliminarProduccion";
+import { VerGeneral } from "../../ui/components/VerGeneral";
+
+const formartView = [
+  { name: "id_produccion", title: "ID" },
+  { name: "fecha_inicio_produccion", title: "Fecha de Inicio" },
+  { name: "fecha_final_produccion", title: "Fecha Final" },
+  { name: "descripcion_produccion", title: "Descripción" },
+  {
+    name: "litros_obtenidos_produccion",
+    title: "Litros Obtenidos de Producción",
+  },
+  { name: "lote_produccion", title: "Lote de Producción" },
+];
 
 export const IndexProduccion = () => {
   const [producciones, setProducciones] = useState([]);
@@ -35,6 +48,11 @@ export const IndexProduccion = () => {
   const [permisos, setPermisos] = useState("Usuario");
   const theme = useTheme();
   const xssize = useMediaQuery(theme.breakpoints.only("xs"));
+  const [modalView, setModalView] = useState(false);
+  const handleView = (row) => {
+    setProduccion(row);
+    setModalView(!modalView);
+  };
 
   useEffect(() => {
     const { nombre_rol } = user;
@@ -130,7 +148,18 @@ export const IndexProduccion = () => {
       renderCell: ({ row }) => {
         return (
           <Stack spacing={2} direction="row">
-            <Button onClick={() => {}} variant="contained" color="info">
+            <Button
+              onClick={() => {
+                console.log(row);
+                const newRow = {
+                  ...row,
+                };
+
+                handleView(newRow);
+              }}
+              variant="contained"
+              color="info"
+            >
               Ver
             </Button>
             {(permisos === "Administrador" || permisos === "Gerente") && (
@@ -214,6 +243,13 @@ export const IndexProduccion = () => {
           onClose={handleDelete}
           produccion={produccion}
           updateProducciones={getProduccion}
+        />
+        <VerGeneral
+          titulo="Detalle producción"
+          onClose={handleView}
+          open={modalView}
+          datos={produccion}
+          names={formartView}
         />
       </Box>
     </>
