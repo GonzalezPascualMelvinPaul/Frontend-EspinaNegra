@@ -21,6 +21,9 @@ import { useSelector } from "react-redux";
 import { useTheme } from "@mui/material/styles";
 import { TableResponsiveCustom } from "../../ui/components/TableResponsiveCustom";
 import { VerProovedor } from "./VerProovedor";
+import InfoIcon from "@mui/icons-material/Info";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 export const IndexProveedor = () => {
   const [proveedores, setProveedores] = useState([]);
@@ -114,7 +117,7 @@ export const IndexProveedor = () => {
               variant="contained"
               color="info"
             >
-              Ver
+              <InfoIcon />
             </Button>
             {(permisos === "Administrador" || permisos === "Gerente") && (
               <Button
@@ -124,7 +127,7 @@ export const IndexProveedor = () => {
                 variant="contained"
                 color="secondary"
               >
-                Editar
+                <EditIcon />
               </Button>
             )}
             {permisos === "Administrador" && (
@@ -133,7 +136,7 @@ export const IndexProveedor = () => {
                 color="error"
                 onClick={() => handleDelete(row)}
               >
-                Eliminar
+                <DeleteForeverIcon />
               </Button>
             )}
           </Stack>

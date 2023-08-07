@@ -16,6 +16,9 @@ import { AddCircleOutline } from "@mui/icons-material";
 import { EliminarBodega } from "./EliminarBodega";
 import { TableResponsiveCustom } from "../../ui/components/TableResponsiveCustom";
 import { VerGeneral } from "../../ui/components/VerGeneral";
+import InfoIcon from "@mui/icons-material/Info";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 const formatView = [
   { name: "id_bodega", title: "ID" },
@@ -113,7 +116,7 @@ export const IndexBodega = () => {
               variant="contained"
               color="info"
             >
-              Ver
+              <InfoIcon />
             </Button>
             <Button
               onClick={() => {
@@ -122,14 +125,14 @@ export const IndexBodega = () => {
               variant="contained"
               color="secondary"
             >
-              Editar
+              <EditIcon />
             </Button>
             <Button
               variant="contained"
               color="error"
               onClick={() => handleDelete(row)}
             >
-              Eliminar
+              <DeleteForeverIcon />
             </Button>
           </Stack>
         );

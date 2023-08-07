@@ -21,6 +21,9 @@ import { getEnvasadosProvider } from "../../providers/envasado/providerEnvasado"
 import { TableResponsiveCustom } from "../../ui/components/TableResponsiveCustom";
 import { EliminarEnvasado } from "./EliminarEnvasado";
 import { VerGeneral } from "../../ui/components/VerGeneral";
+import InfoIcon from "@mui/icons-material/Info";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 const formartView = [
   { name: "id_envasado", title: "ID de Envasado" },
@@ -148,7 +151,7 @@ export const IndexEnvasado = () => {
               variant="contained"
               color="info"
             >
-              Ver
+              <InfoIcon />
             </Button>
             {(permisos === "Administrador" || permisos === "Gerente") && (
               <Button
@@ -158,7 +161,7 @@ export const IndexEnvasado = () => {
                 variant="contained"
                 color="secondary"
               >
-                Editar
+                <EditIcon />
               </Button>
             )}
             {permisos === "Administrador" && (
@@ -167,7 +170,7 @@ export const IndexEnvasado = () => {
                 color="error"
                 onClick={() => handleDelete(row)}
               >
-                Eliminar
+                <DeleteForeverIcon />
               </Button>
             )}
           </Stack>

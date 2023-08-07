@@ -20,6 +20,9 @@ import { EliminarUser } from "./EliminarUser";
 import { useTheme } from "@mui/material/styles";
 import { TableResponsiveCustom } from "../../ui/components/TableResponsiveCustom";
 import { VerUser } from "./VerUser";
+import InfoIcon from "@mui/icons-material/Info";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 export const IndexUsuarios = () => {
   const [users, setUsers] = useState([]);
@@ -99,8 +102,9 @@ export const IndexUsuarios = () => {
               onClick={() => handleView(row)}
               variant="contained"
               color="info"
+              size="small"
             >
-              Ver
+              <InfoIcon />
             </Button>
             <Button
               onClick={() => {
@@ -108,15 +112,17 @@ export const IndexUsuarios = () => {
               }}
               variant="contained"
               color="secondary"
+              size="small"
             >
-              Editar
+              <EditIcon />
             </Button>
             <Button
               variant="contained"
               color="error"
+              size="small"
               onClick={() => handleDelete(row)}
             >
-              Eliminar
+              <DeleteForeverIcon />
             </Button>
           </Stack>
         );

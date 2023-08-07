@@ -22,6 +22,9 @@ import { getProduccionesProvider } from "../../providers/produccion/providerProd
 import { TableResponsiveCustom } from "../../ui/components/TableResponsiveCustom";
 import { EliminarProduccion } from "./EliminarProduccion";
 import { VerGeneral } from "../../ui/components/VerGeneral";
+import InfoIcon from "@mui/icons-material/Info";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 const formartView = [
   { name: "id_produccion", title: "ID" },
@@ -160,7 +163,7 @@ export const IndexProduccion = () => {
               variant="contained"
               color="info"
             >
-              Ver
+              <InfoIcon />
             </Button>
             {(permisos === "Administrador" || permisos === "Gerente") && (
               <Button
@@ -170,7 +173,7 @@ export const IndexProduccion = () => {
                 variant="contained"
                 color="secondary"
               >
-                Editar
+                <EditIcon />
               </Button>
             )}
             {permisos === "Administrador" && (
@@ -179,7 +182,7 @@ export const IndexProduccion = () => {
                 color="error"
                 onClick={() => handleDelete(row)}
               >
-                Eliminar
+                <DeleteForeverIcon />
               </Button>
             )}
           </Stack>
