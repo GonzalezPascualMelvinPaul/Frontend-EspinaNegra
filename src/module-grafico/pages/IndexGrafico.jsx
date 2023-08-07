@@ -43,8 +43,6 @@ export const IndexGrafico = () => {
     <>
       <Box>
         <IndexLayout title={""}>
-          <GoogleMaps />
-
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
               <Card sx={{ maxWidth: 600 }}>

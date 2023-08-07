@@ -623,10 +623,10 @@ export const EditarEmpleado = () => {
                       </Grid>
                       <Grid item xs={12}>
                         <GoogleMaps
-                          /* latitud={initialValues?.direccion?.latitud_direccion}
+                          latitud={initialValues?.direccion?.latitud_direccion}
                           longitud={
                             initialValues?.direccion?.longitud_direccion
-                          } */
+                          }
                           onMapValuesChange={handleMapValuesChange}
                         />
                       </Grid>
