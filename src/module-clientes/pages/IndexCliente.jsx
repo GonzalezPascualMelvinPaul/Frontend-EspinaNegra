@@ -20,6 +20,18 @@ import { EliminarCliente } from "./EliminarCliente";
 import { useSelector } from "react-redux";
 import { useTheme } from "@mui/material/styles";
 import { TableResponsiveCustom } from "../../ui/components/TableResponsiveCustom";
+import { VerGeneral } from "../../ui/components/VerGeneral";
+
+const formartView = [
+  { name: "id_cliente", title: "ID" },
+  { name: "nombre_persona_fisica", title: "Nombre" },
+  { name: "apellido_paterno_persona_fisica", title: "Apellido paterno" },
+  { name: "apellido_materno_persona_fisica", title: "Apellido materno" },
+  { name: "rfc_persona_fisica", title: "RFC" },
+  { name: "direction", title: "Dirección" },
+  { name: "email_cliente", title: "Email" },
+  { name: "celular_cliente", title: "Celular" },
+];
 
 export const IndexCliente = () => {
   const { user } = useSelector((state) => state.auth);
@@ -29,10 +41,16 @@ export const IndexCliente = () => {
   const [clienteBuscador, setClienteBuscador] = useState([]);
   const [cliente, setCliente] = useState(null);
   const [modalDelete, setModalDelete] = useState(false);
+  const [modalView, setModalView] = useState(false);
   const [permisos, setPermisos] = useState("Usuario");
   const navigate = useNavigate();
   const theme = useTheme();
   const xssize = useMediaQuery(theme.breakpoints.only("xs"));
+
+  const handleView = (row) => {
+    setCliente(row);
+    setModalView(!modalView);
+  };
 
   const handleSearch = (event) => {
     setBuscador(event.target.value);
@@ -108,7 +126,23 @@ export const IndexCliente = () => {
       renderCell: ({ row }) => {
         return (
           <Stack spacing={2} direction="row">
-            <Button onClick={() => {}} variant="contained" color="info">
+            <Button
+              onClick={() => {
+                const newRow = {
+                  ...row,
+                  direction:
+                    row.calle_direccion +
+                    ", " +
+                    row.ciudad_direccion +
+                    ", " +
+                    row.colonia_direccion,
+                };
+
+                handleView(newRow);
+              }}
+              variant="contained"
+              color="info"
+            >
               Ver
             </Button>
             {(permisos === "Administrador" || permisos === "Gerente") && (
@@ -196,11 +230,12 @@ export const IndexCliente = () => {
             </>
           )}
         </IndexLayout>
-        <EliminarCliente
-          open={modalDelete}
-          onClose={handleDelete}
-          cliente={cliente}
-          updateClientes={getClientes}
+        <VerGeneral
+          titulo="Detalle cliente"
+          onClose={handleView}
+          open={modalView}
+          datos={cliente}
+          names={formartView}
         />
       </Box>
     </>

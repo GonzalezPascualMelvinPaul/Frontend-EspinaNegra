@@ -20,6 +20,22 @@ import { getProductosProvider } from "../../providers/producto/providerProducto"
 import { useSelector } from "react-redux";
 import { useTheme } from "@mui/material/styles";
 import { TableResponsiveCustom } from "../../ui/components/TableResponsiveCustom";
+import { VerGeneral } from "../../ui/components/VerGeneral";
+
+const formartView = [
+  { name: "nombre_producto", title: "Nombre" },
+  { name: "cantidad_maxima_stock", title: "Cantidad maxima" },
+  { name: "cantidad_minima_stock", title: "Cantidad minima" },
+  { name: "cantidad_stock", title: "Stock" },
+  { name: "descripcion_producto", title: "Descripción" },
+  { name: "fecha_caducidad_producto", title: "Fecha caducidad" },
+  { name: "lote_produccion", title: "Lote" },
+  { name: "modelo_producto", title: "Modelo" },
+  { name: "nombre_categoria", title: "Nombre" },
+  { name: "numero_folio_producto", title: "Folio" },
+  { name: "precio_compra_producto", title: "Precio compra" },
+  { name: "precio_venta_producto", title: "Precio venta" },
+];
 
 export const IndexProducto = () => {
   const [productos, setProductos] = useState([]);
@@ -33,6 +49,11 @@ export const IndexProducto = () => {
   const [permisos, setPermisos] = useState("Usuario");
   const theme = useTheme();
   const xssize = useMediaQuery(theme.breakpoints.only("xs"));
+  const [modalView, setModalView] = useState(false);
+  const handleView = (row) => {
+    setProducto(row);
+    setModalView(!modalView);
+  };
 
   useEffect(() => {
     const { nombre_rol } = user;
@@ -115,7 +136,18 @@ export const IndexProducto = () => {
       renderCell: ({ row }) => {
         return (
           <Stack spacing={2} direction="row">
-            <Button onClick={() => {}} variant="contained" color="info">
+            <Button
+              onClick={() => {
+                console.log(row);
+                const newRow = {
+                  ...row,
+                };
+
+                handleView(newRow);
+              }}
+              variant="contained"
+              color="info"
+            >
               Ver
             </Button>
             {(permisos === "Administrador" || permisos === "Gerente") && (
@@ -207,6 +239,13 @@ export const IndexProducto = () => {
           onClose={handleDelete}
           producto={producto}
           updateProductos={getProductos}
+        />
+        <VerGeneral
+          titulo="Detalle producto"
+          onClose={handleView}
+          open={modalView}
+          datos={producto}
+          names={formartView}
         />
       </Box>
     </>
