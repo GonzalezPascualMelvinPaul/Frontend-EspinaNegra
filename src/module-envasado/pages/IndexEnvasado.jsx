@@ -20,6 +20,14 @@ import { useSelector } from "react-redux";
 import { getEnvasadosProvider } from "../../providers/envasado/providerEnvasado";
 import { TableResponsiveCustom } from "../../ui/components/TableResponsiveCustom";
 import { EliminarEnvasado } from "./EliminarEnvasado";
+import { VerGeneral } from "../../ui/components/VerGeneral";
+
+const formartView = [
+  { name: "id_envasado", title: "ID de Envasado" },
+  { name: "descripcion_envasado", title: "Descripción de Envasado" },
+  { name: "fecha_inicio_envasado", title: "Fecha de Inicio de Envasado" },
+  { name: "fecha_final_envasado", title: "Fecha Final de Envasado" },
+];
 
 export const IndexEnvasado = () => {
   const [envasados, setEnvasados] = useState([]);
@@ -34,6 +42,12 @@ export const IndexEnvasado = () => {
   const [permisos, setPermisos] = useState("Usuario");
   const theme = useTheme();
   const xssize = useMediaQuery(theme.breakpoints.only("xs"));
+
+  const [modalView, setModalView] = useState(false);
+  const handleView = (row) => {
+    setEnvasado(row);
+    setModalView(!modalView);
+  };
 
   useEffect(() => {
     const { nombre_rol } = user;
@@ -122,7 +136,18 @@ export const IndexEnvasado = () => {
       renderCell: ({ row }) => {
         return (
           <Stack spacing={2} direction="row">
-            <Button onClick={() => {}} variant="contained" color="info">
+            <Button
+              onClick={() => {
+                console.log(row);
+                const newRow = {
+                  ...row,
+                };
+
+                handleView(newRow);
+              }}
+              variant="contained"
+              color="info"
+            >
               Ver
             </Button>
             {(permisos === "Administrador" || permisos === "Gerente") && (
@@ -206,6 +231,14 @@ export const IndexEnvasado = () => {
           onClose={handleDelete}
           envasado={envasado}
           updateEnvasados={getEnvasado}
+        />
+
+        <VerGeneral
+          titulo="Detalle envasado"
+          onClose={handleView}
+          open={modalView}
+          datos={envasado}
+          names={formartView}
         />
       </Box>
     </>
