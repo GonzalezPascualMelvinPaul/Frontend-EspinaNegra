@@ -41,12 +41,11 @@ export const IndexCliente = () => {
   const [clienteBuscador, setClienteBuscador] = useState([]);
   const [cliente, setCliente] = useState(null);
   const [modalDelete, setModalDelete] = useState(false);
-  const [modalView, setModalView] = useState(false);
   const [permisos, setPermisos] = useState("Usuario");
   const navigate = useNavigate();
   const theme = useTheme();
   const xssize = useMediaQuery(theme.breakpoints.only("xs"));
-
+  const [modalView, setModalView] = useState(false);
   const handleView = (row) => {
     setCliente(row);
     setModalView(!modalView);
@@ -128,6 +127,7 @@ export const IndexCliente = () => {
           <Stack spacing={2} direction="row">
             <Button
               onClick={() => {
+                console.log(row);
                 const newRow = {
                   ...row,
                   direction:
