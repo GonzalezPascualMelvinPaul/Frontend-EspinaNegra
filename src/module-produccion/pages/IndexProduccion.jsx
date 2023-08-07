@@ -136,7 +136,7 @@ export const IndexProduccion = () => {
             {(permisos === "Administrador" || permisos === "Gerente") && (
               <Button
                 onClick={() => {
-                  navigate(`/produccion/editar/${row.id}`);
+                  navigate(`/produccion/editar/${row.id_produccion}`);
                 }}
                 variant="contained"
                 color="secondary"

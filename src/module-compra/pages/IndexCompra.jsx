@@ -105,13 +105,10 @@ export const IndexCompra = () => {
       sortable: true,
     },
     {
-      field: "empleado",
+      field: "nombre_usuario",
       headerName: "Empleado",
       flex: 2,
       sortable: true,
-      renderCell: ({ value }) => {
-        return value.nombre_persona_fisica;
-      },
     },
     {
       field: "total_compra",
@@ -138,7 +135,7 @@ export const IndexCompra = () => {
             {(permisos === "Administrador" || permisos === "Gerente") && (
               <Button
                 onClick={() => {
-                  navigate(`/compra/editar/${row.id}`);
+                  navigate(`/compra/editar/${row.id_compra}`);
                 }}
                 variant="contained"
                 color="secondary"
