@@ -113,9 +113,9 @@ export const EditarProducto = () => {
   useEffect(() => {
     getProducto();
     getProveedores();
+    getUnidadMedidas();
     getCategorias();
     getTipoProducto();
-    getUnidadMedidas();
   }, []);
 
   const onSubmit = async (values, e) => {

@@ -18,15 +18,6 @@ const StyledLink = styled(Link)({
 });
 export const BreadCrumbsCustom = ({ routes = [] }) => {
   const classes = useStyles();
-  /* const breadcrumbs = routes.map((route) => (
-    <Link key={route.name} color="inherit" underline="hover" to={route.url}>
-      <Box sx={{ display: "flex", justifyContent: "center" }}>
-        <Typography sx={{ fontSize: { md: "15px", xs: "10px" } }}>
-          {route.name}
-        </Typography>
-      </Box>
-    </Link>
-  )); */
 
   const breadcrumbs = routes.map((route, index) => {
     if (index !== routes.length - 1) {

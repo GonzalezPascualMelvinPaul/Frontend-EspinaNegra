@@ -44,7 +44,7 @@ export const EliminarCompra = ({
           textAlign={"center"}
         >
           ¿DESEA ELIMINAR LA COMPRA con ID: {compra?.id_compra} hecho por{" "}
-          {compra?.empleado?.nombre_persona_fisica} ?
+          {compra?.nombre_usuario} ?
         </Typography>
         {error ? (
           <Alert sx={{ mt: 0, mb: 0 }} severity="error">

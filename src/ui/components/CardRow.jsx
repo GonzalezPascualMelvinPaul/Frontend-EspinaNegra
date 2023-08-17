@@ -1,4 +1,4 @@
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import React from "react";
 
 export const CardRow = ({ columns = [], row }) => {

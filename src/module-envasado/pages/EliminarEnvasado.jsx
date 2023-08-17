@@ -45,9 +45,9 @@ export const EliminarEnvasado = ({
           variant="h7"
           textAlign={"center"}
         >
-          ¿DESEA ELIMINAR LA PRODUCCION con ID: {envasado?.id_envasado} con
-          fecha {envasado?.fecha_inicio_envasado} al{" "}
-          {envasado?.fecha_final_envasado} ?
+          ¿DESEA ELIMINAR EL ENVASADO con ID: {envasado?.id_envasado} con fecha{" "}
+          {envasado?.fecha_inicio_envasado} al {envasado?.fecha_final_envasado}{" "}
+          ?
         </Typography>
         {error ? (
           <Alert sx={{ mt: 0, mb: 0 }} severity="error">

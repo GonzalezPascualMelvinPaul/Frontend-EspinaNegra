@@ -181,11 +181,11 @@ export const IndexProducto = () => {
   ];
 
   const getProductos = async () => {
+    console.log("entrando muchas veces");
     const { data } = await getProductosProvider();
     setProductos(data.productos);
     setProductosBuscador(data.productos);
     setIsLoading(false);
-    console.log(data);
   };
   useEffect(() => {
     getProductos();

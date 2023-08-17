@@ -208,7 +208,7 @@ export const AgregarEnvasado = () => {
                     />
                   </Grid>
 
-                  <Grid item xs={12} md={6}>
+                  {/* <Grid item xs={12} md={6}>
                     <Field
                       as={TextField}
                       label="Envase"
@@ -300,7 +300,7 @@ export const AgregarEnvasado = () => {
                       }
                       helperText={<ErrorMessage name="biaticos" />}
                     />
-                  </Grid>
+                  </Grid> */}
 
                   <Grid item xs={12} md={12}>
                     {error ? (

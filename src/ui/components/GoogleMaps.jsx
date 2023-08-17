@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { GoogleMap, Marker, LoadScript } from "@react-google-maps/api";
-import { Box } from "@mui/material";
+
 import { getEnvVariables } from "../../helpers/getEnvVariables";
 
 export const GoogleMaps = ({

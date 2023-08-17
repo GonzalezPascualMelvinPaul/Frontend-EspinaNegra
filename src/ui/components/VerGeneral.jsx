@@ -8,9 +8,10 @@ export const VerGeneral = ({
   onClose = () => {},
   datos = {},
   names = [],
+  key,
 }) => {
   return (
-    <CustomModal open={open} onClose={onClose}>
+    <CustomModal key={key} open={open} onClose={onClose}>
       <Paper elevation={12} style={{ padding: "16px" }}>
         <Grid container spacing={2}>
           <Grid item xs={12}>

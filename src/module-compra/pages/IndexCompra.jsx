@@ -243,7 +243,14 @@ export const IndexCompra = () => {
             </>
           )}
         </IndexLayout>
+        <EliminarCompra
+          compra={compra}
+          onClose={handleDelete}
+          open={modalDelete}
+          updateCompras={getCompras}
+        />
         <VerGeneral
+          key={compra?.id_compra}
           titulo="Detalle compra"
           onClose={handleView}
           open={modalView}

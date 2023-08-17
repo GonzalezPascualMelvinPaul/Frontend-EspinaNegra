@@ -54,6 +54,19 @@ export const IndexCliente = () => {
     setModalView(!modalView);
   };
 
+  useEffect(() => {
+    const { nombre_rol } = user;
+    if (nombre_rol === "Usuario") {
+      setPermisos("Usuario");
+    }
+    if (nombre_rol === "Gerente") {
+      setPermisos("Gerente");
+    }
+    if (nombre_rol === "Administrador") {
+      setPermisos("Administrador");
+    }
+  }, [user]);
+
   const handleSearch = (event) => {
     setBuscador(event.target.value);
     searching(clientes, event.target.value);
@@ -76,18 +89,6 @@ export const IndexCliente = () => {
     setCliente(row);
     setModalDelete(!modalDelete);
   };
-  useEffect(() => {
-    const { nombre_rol } = user;
-    if (nombre_rol === "Usuario") {
-      setPermisos("Usuario");
-    }
-    if (nombre_rol === "Gerente") {
-      setPermisos("Gerente");
-    }
-    if (nombre_rol === "Administrador") {
-      setPermisos("Administrador");
-    }
-  }, [user]);
 
   const columns = [
     {
@@ -175,6 +176,7 @@ export const IndexCliente = () => {
   ];
 
   const getClientes = async () => {
+    console.log("entrando muchas veces");
     const { data } = await getClientesProvider();
     setClientes(data?.clientes);
     setClienteBuscador(data?.clientes);
@@ -184,6 +186,7 @@ export const IndexCliente = () => {
   useEffect(() => {
     getClientes();
   }, []);
+
   return (
     <>
       <Box>
@@ -233,6 +236,12 @@ export const IndexCliente = () => {
             </>
           )}
         </IndexLayout>
+        <EliminarCliente
+          onClose={handleDelete}
+          open={modalDelete}
+          cliente={cliente}
+          updateClientes={getClientes}
+        />
         <VerGeneral
           titulo="Detalle cliente"
           onClose={handleView}

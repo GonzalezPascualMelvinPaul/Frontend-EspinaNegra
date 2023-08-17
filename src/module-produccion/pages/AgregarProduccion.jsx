@@ -246,7 +246,7 @@ export const AgregarProduccion = () => {
                     />
                   </Grid>
 
-                  <Grid item xs={12} md={6}>
+                  {/* <Grid item xs={12} md={6}>
                     <Field
                       as={TextField}
                       label="Biaticos"
@@ -261,7 +261,7 @@ export const AgregarProduccion = () => {
                       }
                       helperText={<ErrorMessage name="biaticos" />}
                     />
-                  </Grid>
+                  </Grid> */}
 
                   <Grid item xs={12} md={12}>
                     {error ? (

@@ -109,3 +109,14 @@ export const getProductoProvider = async (productoId) => {
       return { ok: false, data: "", message: errorMessage };
     });
 };
+
+export const getProductoStockProvider = async () => {
+  return espinaNegraApi
+    .get(`producto_stock`)
+    .then((response) => {
+      return { ok: true, data: response.data, message: response.data?.message };
+    })
+    .catch((error) => {
+      return { ok: false, data: "", message: error?.response?.data?.message };
+    });
+};

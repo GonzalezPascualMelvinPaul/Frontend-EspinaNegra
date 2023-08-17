@@ -5,6 +5,7 @@ import {
   CardContent,
   Container,
   Grid,
+  Skeleton,
   Stack,
   Typography,
 } from "@mui/material";
@@ -19,172 +20,188 @@ import { GoogleMaps } from "../../ui";
 import { LoadScript } from "@react-google-maps/api";
 import { getComprasconProductoProvider } from "../../providers/compra/providerCompra";
 import { getVentasconProductoProvider } from "../../providers/venta/providerVenta";
+import AppCurrentVisits from "../../sections/@dashboard/app/AppCurrentVisits";
+import { getProductoStockProvider } from "../../providers/producto/providerProducto";
+import Chart from "react-google-charts";
 
 export const IndexGrafico = () => {
   const [sueldo, setSueldo] = useState([]);
   const [productosComprado, setProductosComprado] = useState([]);
   const [productosVenta, setProductosVenta] = useState([]);
+  const [productoStock, setProductoStock] = useState([]);
   const [isLoadingSueldo, setIsLoadingSueldo] = useState(false);
-  const [isLoadingProducto, setIsLoadingProducto] = useState(false);
+  const [isLoadingProductoComprado, setIsLoadingProductoComprado] =
+    useState(false);
+  const [isLoadingProductoVenta, setIsLoadingProductoVenta] = useState(false);
+  const [isLoadingProductoStock, setIsLoadingProductoStock] = useState(false);
   const [error, setError] = useState();
 
   const getDataSueldo = async () => {
-    const { ok, data } = await getSueldosProvider();
     setIsLoadingSueldo(false);
+    const { ok, data } = await getSueldosProvider();
+
     if (!ok) {
       setError("Hubo un error");
+      setIsLoadingSueldo(false);
     } else {
-      console.log(data);
+      setIsLoadingSueldo(true);
     }
     setSueldo(data);
-    setIsLoadingSueldo(false);
   };
 
   const getProductos = async () => {
+    setIsLoadingProductoComprado(false);
     const { ok, data } = await getComprasconProductoProvider();
     if (!ok) {
       setError("Huno un error");
+      setIsLoadingProductoComprado(false);
     } else {
-      console.log(data);
+      setIsLoadingProductoComprado(true);
     }
     setProductosComprado(data);
-    setIsLoadingProducto(true);
   };
 
   const getVentas = async () => {
+    setIsLoadingProductoVenta(false);
     const { ok, data } = await getVentasconProductoProvider();
     if (!ok) {
-      setError("Huno un error");
+      setIsLoadingProductoVenta(false);
     } else {
-      console.log(data);
+      setIsLoadingProductoVenta(true);
     }
     setProductosVenta(data);
+  };
+  const getProductoStock = async () => {
+    setIsLoadingProductoStock(false);
+    const { ok, data } = await getProductoStockProvider();
+    if (!ok) {
+      setError("Huno un error");
+      setIsLoadingProductoStock(false);
+    } else {
+      setIsLoadingProductoStock(true);
+    }
+    setProductoStock(data);
   };
 
   useEffect(() => {
     getDataSueldo();
     getProductos();
     getVentas();
+    getProductoStock();
   }, []);
 
   return (
     <>
       <Box>
         <IndexLayout title={""}>
-          <Grid container spacing={2}>
+          <Grid mb={2} container spacing={2}>
             <Grid item xs={12} md={6}>
-              <Card sx={{ maxWidth: 600 }}>
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    Compras
-                  </Typography>
-                  <PieChart
-                    series={[
-                      {
-                        data: productosComprado,
-                        innerRadius: 30,
-                        outerRadius: 100,
-                        paddingAngle: 5,
-                        cornerRadius: 5,
-                        startAngle: -90,
-                        endAngle: 180,
-                        cx: 100,
-                        cy: 100,
-                      },
-                    ]}
-                    width={350}
-                    height={250}
-                  />
-                </CardContent>
-              </Card>
+              {isLoadingProductoComprado ? (
+                <>
+                  <Card sx={{ maxWidth: 600 }}>
+                    <CardContent>
+                      <Typography gutterBottom variant="h5" component="div">
+                        Compras
+                      </Typography>
+
+                      <Chart
+                        chartType="PieChart"
+                        data={productosComprado}
+                        width="100%"
+                        height="300px"
+                        options={{
+                          is3D: true,
+                        }}
+                      />
+                    </CardContent>
+                  </Card>
+                </>
+              ) : (
+                <>
+                  <Skeleton height={"300px"} />
+                </>
+              )}
             </Grid>
             <Grid item xs={12} md={6}>
-              <Card sx={{ maxWidth: 600 }}>
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    Ventas
-                  </Typography>
-                  <PieChart
-                    series={[
-                      {
-                        data: productosVenta,
-                        innerRadius: 30,
-                        outerRadius: 100,
-                        paddingAngle: 5,
-                        cornerRadius: 5,
-                        startAngle: -90,
-                        endAngle: 180,
-                        cx: 100,
-                        cy: 100,
-                      },
-                    ]}
-                    width={350}
-                    height={250}
-                  />
-                </CardContent>
-              </Card>
+              {isLoadingProductoVenta ? (
+                <>
+                  {" "}
+                  <Card sx={{ maxWidth: 600 }}>
+                    <CardContent>
+                      <Typography gutterBottom variant="h5" component="div">
+                        Ventas
+                      </Typography>
+
+                      <Chart
+                        chartType="PieChart"
+                        data={productosVenta}
+                        width="100%"
+                        height="300px"
+                        options={{
+                          is3D: true,
+                        }}
+                      />
+                    </CardContent>
+                  </Card>
+                </>
+              ) : (
+                <>
+                  <Skeleton height={"300px"} />
+                </>
+              )}
             </Grid>
             <Grid item xs={12} md={6}>
-              <Card sx={{ overflow: "auto" }}>
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    Sueldos de empleados
-                  </Typography>
-                  <PieChart
-                    series={[
-                      {
-                        data: sueldo,
-                      },
-                    ]}
-                    width={500}
-                    height={250}
-                  />
-                </CardContent>
-              </Card>
-            </Grid>
-            {/* <Grid item xs={12} md={6}>
-              <Card sx={{ overflow: "auto" }}>
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    Producciones
-                  </Typography>
-                  <LineChart
-                    xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
-                    series={[
-                      {
-                        data: [2, 5.5, 2, 8.5, 1.5, 5],
-                      },
-                    ]}
-                    width={600}
-                    height={300}
-                  />
-                </CardContent>
-              </Card>
+              {isLoadingSueldo ? (
+                <>
+                  {" "}
+                  <Card sx={{ overflow: "auto" }}>
+                    <CardContent>
+                      <Typography gutterBottom variant="h5" component="div">
+                        Sueldos de empleados
+                      </Typography>
+                      <Chart
+                        chartType="PieChart"
+                        data={sueldo}
+                        width="100%"
+                        height="300px"
+                        options={{
+                          is3D: true,
+                        }}
+                      />
+                    </CardContent>
+                  </Card>
+                </>
+              ) : (
+                <>
+                  <Skeleton height={"300px"} />
+                </>
+              )}
             </Grid>
             <Grid item xs={12} md={6}>
-              <Card sx={{ maxWidth: 600 }}>
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    Sueldos
-                  </Typography>
-                  <BarChart
-                    xAxis={[
-                      {
-                        scaleType: "band",
-                        data: ["group A", "group B", "group C"],
-                      },
-                    ]}
-                    series={[
-                      { data: [4, 3, 5] },
-                      { data: [1, 6, 3] },
-                      { data: [2, 5, 6] },
-                    ]}
-                    width={500}
-                    height={300}
-                  />
-                </CardContent>
-              </Card>
-            </Grid> */}
+              {isLoadingProductoComprado ? (
+                <Card sx={{ overflow: "auto" }}>
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="div">
+                      Productos
+                    </Typography>
+                    <Chart
+                      chartType="PieChart"
+                      data={productoStock}
+                      width="100%"
+                      height="300px"
+                      loader={false}
+                      options={{
+                        is3D: true,
+                      }}
+                    />
+                  </CardContent>
+                </Card>
+              ) : (
+                <>
+                  <Skeleton height={"300px"} />
+                </>
+              )}
+            </Grid>
           </Grid>
         </IndexLayout>
       </Box>

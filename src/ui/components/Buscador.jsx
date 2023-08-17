@@ -1,8 +1,4 @@
-import {
-  ScreenSearchDesktop,
-  SearchOffOutlined,
-  SearchOutlined,
-} from "@mui/icons-material";
+import { SearchOutlined } from "@mui/icons-material";
 import { Box, InputAdornment, TextField } from "@mui/material";
 import React from "react";
 

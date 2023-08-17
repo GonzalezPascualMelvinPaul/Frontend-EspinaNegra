@@ -12,18 +12,3 @@ export const AuthRoutes = () => {
     </PublicRouter>
   );
 };
-
-/* [
-  {
-    path: "login",
-    element: <LoginPage />,
-  },
-  {
-    path: "register",
-    element: <RegisterPage />,
-  },
-  {
-    path: "/auth/*",
-    element: <Navigate to={"/auth/login"} />,
-  },
-]; */
