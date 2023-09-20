@@ -4,6 +4,8 @@ import {
   AccountBoxOutlined,
   CropRotateOutlined,
   DashboardOutlined,
+  DensityLargeOutlined,
+  Filter1Outlined,
   GroupOutlined,
   Inventory2Outlined,
   LocalMallOutlined,
@@ -61,13 +63,23 @@ export const navConfig = [
   },
   {
     title: "Compra",
-    path: "/compra",
+    path: "/compra/inicio",
     icon: <LocalMallOutlined />,
   },
   {
     title: "Graficos",
-    path: "/grafico",
+    path: "/grafico/inicio",
     icon: <ShowChartOutlined />,
+  },
+  {
+    title: "Hologramas",
+    path: "/sat/holograma",
+    icon: <DensityLargeOutlined />,
+  },
+  {
+    title: "Marbetes",
+    path: "sat/marbete",
+    icon: <Filter1Outlined />,
   },
   {
     title: "Produccion",

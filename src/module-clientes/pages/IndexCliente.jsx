@@ -94,28 +94,28 @@ export const IndexCliente = () => {
     {
       field: "nombre_persona_fisica",
       headerName: "Nombre",
-      flex: 1,
+      width: 100,
       sortable: true,
     },
     {
       field: "email_cliente",
       headerName: "Email",
-      flex: 1,
+      width: 150,
     },
     {
       field: "celular_cliente",
       headerName: "Celular",
-      flex: 1,
+      width: 100,
     },
     {
       field: "rfc_persona_fisica",
       headerName: "RFC",
-      flex: 1,
+      width: 200,
     },
     {
       field: "direccion",
       headerName: "Dirección",
-      flex: 3,
+      width: 300,
       renderCell: ({ row }) => {
         return `${row.calle_direccion}, ${row.ciudad_direccion}, Oaxaca`;
       },
@@ -123,7 +123,7 @@ export const IndexCliente = () => {
     {
       field: "acciones",
       headerName: "Acciones",
-      flex: 3,
+      width: 300,
       sortable: false,
       disableColumnMenu: true,
       renderCell: ({ row }) => {

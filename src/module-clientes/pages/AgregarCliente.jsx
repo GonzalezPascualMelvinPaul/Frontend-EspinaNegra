@@ -19,7 +19,12 @@ import {
   getEstadosProvider,
   getMunicipiosProvider,
 } from "../../providers/estado/providerEstado";
-
+import dayjs from "dayjs";
+import RfcFacil from "rfc-facil";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import es from "date-fns/locale/es";
+dayjs.locale("es");
 const validationSchema = Yup.object({
   email_cliente: Yup.string().required("El email es requerido"),
   celular_cliente: Yup.number()
@@ -30,14 +35,19 @@ const validationSchema = Yup.object({
       (val) => val && val.toString().length === 10
     )
     .required("El numero es obligatorio"),
+  fecha_nacimiento_empleado: Yup.date().required(
+    "La fecha de nacimiento es requerida"
+  ),
   persona_fisica: Yup.object({
-    nombre_persona_fisica: Yup.string().required("El nombre es requerido"),
-    apellido_materno_persona_fisica: Yup.string().required(
-      "El apellido materno es requerido"
-    ),
-    apellido_paterno_persona_fisica: Yup.string().required(
-      "El apellido paterno es requerido"
-    ),
+    nombre_persona_fisica: Yup.string()
+      .required("El nombre es requerido")
+      .matches("^[A-Za-z\\s]+$", "Solo se acepta letras sin tildes"),
+    apellido_materno_persona_fisica: Yup.string()
+      .required("El apellido materno es requerido")
+      .matches("^[A-Za-z\\s]+$", "Solo se acepta letras sin tildes"),
+    apellido_paterno_persona_fisica: Yup.string()
+      .required("El apellido paterno es requerido")
+      .matches("^[A-Za-z\\s]+$", "Solo se acepta letras sin tildes"),
     rfc_persona_fisica: Yup.string()
       .matches(/^[A-Z]{4}\d{6}[A-Z0-9]{3}$/, "RFC inválido")
       .required("El RFC es requerido"),
@@ -65,7 +75,7 @@ const validationSchema = Yup.object({
 const initialValues = {
   email_cliente: "",
   celular_cliente: "",
-
+  fecha_nacimiento_empleado: dayjs().subtract(18, "years").toDate(),
   direccion: {
     id_municipio: "",
     estado: "",
@@ -100,6 +110,14 @@ export const AgregarCliente = () => {
     url: "",
     codigoPostal: "",
   });
+  const [suggestedDomains, setSuggestedDomains] = useState([
+    "example.com",
+    "gmail.com",
+    "yahoo.com",
+    "outlook.com",
+    "itoaxaca.edu.mx",
+    // Agrega más dominios aquí...
+  ]);
   const navigate = useNavigate();
 
   const getMunicipio = async (id_estado) => {
@@ -118,6 +136,7 @@ export const AgregarCliente = () => {
     setIsLoading(true);
     setError(false);
     setOpen(false);
+    values.email_cliente = values.email_cliente + "@gmail.com";
     const { data, ok, message } = await addClienteProvider(values);
     if (ok) {
       setOpen(true);
@@ -136,6 +155,13 @@ export const AgregarCliente = () => {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleEmailChange = (formik, inputValue) => {
+    const atIndex = inputValue.indexOf("@");
+    const username = atIndex !== -1 ? inputValue.slice(0, atIndex) : inputValue;
+    formik.setFieldValue("email_cliente", username);
+  };
+
   useEffect(() => {
     getEstados();
   }, []);
@@ -166,6 +192,28 @@ export const AgregarCliente = () => {
           onSubmit={onSubmit}
         >
           {(formik) => {
+            const calcularRFC = (
+              nombre,
+              apellidoPaterno,
+              apellidoMaterno,
+              fechaNacimiento
+            ) => {
+              const dia = fechaNacimiento.getDate();
+              const mes = fechaNacimiento.getMonth() + 1; // ¡Recuerda que los meses son indexados en base 0!
+              const anio = fechaNacimiento.getFullYear();
+
+              const rfc = RfcFacil.forNaturalPerson({
+                name: nombre,
+                firstLastName: apellidoPaterno,
+                secondLastName: apellidoMaterno,
+                day: dia,
+                month: mes,
+                year: anio,
+              });
+
+              formik.setFieldValue("persona_fisica.rfc_persona_fisica", rfc);
+            };
+
             const handleMapValuesChange = (newValues) => {
               setMapValues(newValues);
 
@@ -254,6 +302,121 @@ export const AgregarCliente = () => {
                     />
                   </Grid>
                   <Grid item xs={12} md={6}>
+                    <Field name="fecha_nacimiento_empleado">
+                      {({ field, form }) => (
+                        <LocalizationProvider
+                          dateAdapter={AdapterDateFns}
+                          adapterLocale={es}
+                        >
+                          <DatePicker
+                            label="Fecha de nacimiento"
+                            name="fecha_nacimiento_empleado"
+                            value={field.value}
+                            maxDate={dayjs().subtract(18, "year").toDate()}
+                            onChange={(date) =>
+                              form.setFieldValue(
+                                "fecha_nacimiento_empleado",
+                                date
+                              )
+                            }
+                            error={
+                              formik.touched.fecha_nacimiento_empleado &&
+                              formik.errors.fecha_nacimiento_empleado
+                                ? true
+                                : false
+                            }
+                            helperText={
+                              <ErrorMessage name="fecha_nacimiento_empleado" />
+                            }
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                variant="outlined"
+                                fullWidth
+                                margin="normal"
+                              />
+                            )}
+                          />
+                          <ErrorMessage name="fecha_nacimiento_empleado" />
+                        </LocalizationProvider>
+                      )}
+                    </Field>
+                  </Grid>
+
+                  <Grid
+                    display={"flex"}
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                    item
+                    xs={12}
+                    md={6}
+                  >
+                    <Button
+                      onClick={() =>
+                        calcularRFC(
+                          formik.values.persona_fisica.nombre_persona_fisica,
+                          formik.values.persona_fisica
+                            .apellido_paterno_persona_fisica,
+                          formik.values.persona_fisica
+                            .apellido_materno_persona_fisica,
+                          formik.values.fecha_nacimiento_empleado
+                        )
+                      }
+                      variant="contained"
+                    >
+                      Calcular RFC
+                    </Button>
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <Field
+                      as={TextField}
+                      label="RFC"
+                      name="persona_fisica.rfc_persona_fisica"
+                      variant="outlined"
+                      fullWidth
+                      margin="normal"
+                      error={
+                        formik.touched.persona_fisica?.rfc_persona_fisica &&
+                        formik.errors.persona_fisica?.rfc_persona_fisica
+                          ? true
+                          : false
+                      }
+                      helperText={
+                        <ErrorMessage name="persona_fisica.rfc_persona_fisica" />
+                      }
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} md={6}>
+                    <Field name="email_cliente">
+                      {({ field }) => (
+                        <Autocomplete
+                          freeSolo
+                          options={suggestedDomains.map(
+                            (domain) => field.value + "@" + domain
+                          )}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              label="Email"
+                              variant="outlined"
+                              fullWidth
+                              margin="normal"
+                              error={
+                                formik.touched.email_cliente &&
+                                formik.errors.email_cliente
+                              }
+                              helperText={<ErrorMessage name="email_cliente" />}
+                              onChange={(event) => {
+                                handleEmailChange(formik, event.target.value);
+                              }}
+                            />
+                          )}
+                        />
+                      )}
+                    </Field>
+                  </Grid>
+                  {/*  <Grid item xs={12} md={6}>
                     <Field
                       as={TextField}
                       label="Email"
@@ -269,7 +432,7 @@ export const AgregarCliente = () => {
                       }
                       helperText={<ErrorMessage name="email_cliente" />}
                     />
-                  </Grid>
+                  </Grid> */}
                   <Grid item xs={12} md={6}>
                     <Field
                       as={TextField}
@@ -293,25 +456,7 @@ export const AgregarCliente = () => {
                       inputMode="numeric"
                     />
                   </Grid>
-                  <Grid item xs={12} md={6}>
-                    <Field
-                      as={TextField}
-                      label="RFC"
-                      name="persona_fisica.rfc_persona_fisica"
-                      variant="outlined"
-                      fullWidth
-                      margin="normal"
-                      error={
-                        formik.touched.persona_fisica?.rfc_persona_fisica &&
-                        formik.errors.persona_fisica?.rfc_persona_fisica
-                          ? true
-                          : false
-                      }
-                      helperText={
-                        <ErrorMessage name="persona_fisica.rfc_persona_fisica" />
-                      }
-                    />
-                  </Grid>
+
                   <Grid item xs={12} md={12}>
                     <Typography variant="h6">Dirección</Typography>
                   </Grid>

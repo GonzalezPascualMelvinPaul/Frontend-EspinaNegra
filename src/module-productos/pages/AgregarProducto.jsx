@@ -12,7 +12,10 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { addProductoProvider } from "../../providers/producto/providerProducto";
+import {
+  addProductoProvider,
+  getNombreCodigoProvider,
+} from "../../providers/producto/providerProducto";
 import { getProveedoresProvider } from "../../providers/proveedor/providerProveedor";
 import { getCategoriasProvider } from "../../providers/categoria/providerCategoria";
 import { getTipoProductoProvider } from "../../providers/tipo_producto/providerTipoProducto";
@@ -21,6 +24,10 @@ import { useNavigate } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({
   nombre_producto: Yup.string().required("El nombre es requerido"),
+  codigo_barra_producto: Yup.string().required(
+    "El codigo de barra es requerido"
+  ),
+
   descripcion_producto: Yup.string(),
   numero_folio_producto: Yup.string(),
   precio_compra_producto: Yup.number()
@@ -47,6 +54,7 @@ const initialValues = {
   numero_folio_producto: "",
   precio_compra_producto: "",
   precio_venta_producto: "",
+  codigo_barra_producto: "",
   id_unidad_medida: "",
   id_proveedor: "",
   id_categoria: "",
@@ -65,6 +73,7 @@ export const AgregarProducto = () => {
   const [categorias, setCategorias] = useState([]);
   const [tipoProductos, setTipoProductos] = useState([]);
   const [unididadMedidas, setUnidadMedidas] = useState([]);
+  const [nombreCodigo, setNombreCodigo] = useState([]);
   const navigate = useNavigate();
   const getProveedores = async () => {
     const { data } = await getProveedoresProvider();
@@ -86,6 +95,11 @@ export const AgregarProducto = () => {
     setUnidadMedidas(data?.unidad_medidas);
   };
 
+  const getNombreCodigo = async () => {
+    const { data } = await getNombreCodigoProvider();
+    setNombreCodigo(data?.productos);
+  };
+
   const onSubmit = async (values, e) => {
     setIsLoading(true);
     setError(false);
@@ -93,7 +107,9 @@ export const AgregarProducto = () => {
     values.cantidad_stock = 0;
     values.cantidad_minima_stock = 10;
     values.cantidad_maxima_stock = 100;
-    //const { data, ok, message } = await addProductoProvider(values);
+    values.numero_folio_producto =
+      values.numero_folio_producto == "" ? "---" : values.numero_folio_producto;
+    const { data, ok, message } = await addProductoProvider(values);
     console.log(values);
     if (ok) {
       setOpen(true);
@@ -118,6 +134,7 @@ export const AgregarProducto = () => {
     getCategorias();
     getTipoProducto();
     getUnidadMedidas();
+    getNombreCodigo();
   }, []);
 
   return (
@@ -169,7 +186,23 @@ export const AgregarProducto = () => {
                     helperText={<ErrorMessage name="nombre_producto" />}
                   />
                 </Grid>
-
+                <Grid item xs={12} md={6}>
+                  <Field
+                    as={TextField}
+                    label="Codigo de barra"
+                    name="codigo_barra_producto"
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                    error={
+                      formik.touched.codigo_barra_producto &&
+                      formik.errors.codigo_barra_producto
+                        ? true
+                        : false
+                    }
+                    helperText={<ErrorMessage name="codigo_barra_producto" />}
+                  />
+                </Grid>
                 <Grid item xs={12} md={6}>
                   <Field
                     as={TextField}

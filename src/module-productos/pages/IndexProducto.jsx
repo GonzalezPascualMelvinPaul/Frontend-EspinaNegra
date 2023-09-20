@@ -38,6 +38,7 @@ const formartView = [
   { name: "numero_folio_producto", title: "Folio" },
   { name: "precio_compra_producto", title: "Precio compra" },
   { name: "precio_venta_producto", title: "Precio venta" },
+  { name: "codigo_barra_producto", title: "Codigo barra" },
 ];
 
 export const IndexProducto = () => {
@@ -97,43 +98,55 @@ export const IndexProducto = () => {
     {
       field: "nombre_producto",
       headerName: "Nombre",
-      flex: 1,
+      width: 140,
       sortable: true,
     },
     {
       field: "precio_compra_producto",
       headerName: "Precio Compra",
-      flex: 1,
+      width: 120,
       sortable: true,
+      renderCell: ({ value }) => {
+        return value ? `$ ${value}` : "";
+      },
     },
     {
       field: "precio_venta_producto",
       headerName: "Precio Venta",
-      flex: 1,
+      width: 120,
       sortable: true,
+      renderCell: ({ value }) => {
+        return value ? `$ ${value}` : "";
+      },
     },
     {
       field: "nombre_unidad_medida",
       headerName: "Unidad Medida",
-      flex: 1,
+      width: 120,
       sortable: true,
     },
     {
       field: "cantidad_stock",
       headerName: "Cantidad",
-      flex: 1,
+      width: 120,
       sortable: true,
     },
     {
       field: "nombre_categoria",
       headerName: "Categoría",
-      flex: 1,
+      width: 120,
+      sortable: true,
+    },
+    {
+      field: "codigo_barra_producto",
+      headerName: "Codigo de barra",
+      width: 130,
       sortable: true,
     },
     {
       field: "acciones",
       headerName: "Acciones",
-      flex: 2,
+      width: 250,
       sortable: false,
       disableColumnMenu: true,
       renderCell: ({ row }) => {

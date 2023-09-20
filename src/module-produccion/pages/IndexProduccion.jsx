@@ -36,6 +36,8 @@ const formartView = [
     title: "Litros Obtenidos de Producción",
   },
   { name: "lote_produccion", title: "Lote de Producción" },
+  { name: "nombre_producto", title: "Nombre Producto" },
+  { name: "total_detalle_produccion", title: "Total Producción" },
 ];
 
 export const IndexProduccion = () => {
@@ -115,37 +117,52 @@ export const IndexProduccion = () => {
     {
       field: "id_produccion",
       headerName: "ID",
-      flex: 1,
+      width: 50,
       sortable: true,
     },
     {
       field: "fecha_inicio_produccion",
       headerName: "Fecha de Inicio",
-      flex: 2,
+      width: 120,
       sortable: true,
     },
     {
       field: "fecha_final_produccion",
       headerName: "Fecha Final",
-      flex: 2,
+      width: 120,
       sortable: true,
     },
     {
       field: "litros_obtenidos_produccion",
       headerName: "Litros Obtenidos",
-      flex: 2,
+      width: 140,
       sortable: true,
     },
     {
       field: "lote_produccion",
       headerName: "Lote de Produccion",
-      flex: 2,
+      width: 140,
       sortable: true,
+    },
+    {
+      field: "nombre_producto",
+      headerName: "Mezcal Producido",
+      width: 140,
+      sortable: true,
+    },
+    {
+      field: "total_detalle_produccion",
+      headerName: "Total de produccion",
+      width: 140,
+      sortable: true,
+      renderCell: ({ value }) => {
+        return value ? `$ ${value}` : "";
+      },
     },
     {
       field: "acciones",
       headerName: "Acciones",
-      flex: 3,
+      width: 300,
       sortable: false,
       disableColumnMenu: true,
       renderCell: ({ row }) => {
@@ -156,6 +173,7 @@ export const IndexProduccion = () => {
                 console.log(row);
                 const newRow = {
                   ...row,
+                  total_detalle_produccion: "$" + row.total_detalle_produccion,
                 };
 
                 handleView(newRow);

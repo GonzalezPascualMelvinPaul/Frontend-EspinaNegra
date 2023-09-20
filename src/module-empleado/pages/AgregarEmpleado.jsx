@@ -26,15 +26,18 @@ import {
 } from "../../providers/estado/providerEstado";
 import { getRolesProvider } from "../../providers/role/providerRole";
 import { useNavigate } from "react-router-dom";
+import RfcFacil from "rfc-facil";
 dayjs.locale("es");
 const validationSchema = Yup.object({
-  nombre_empleado: Yup.string().required("El nombre es requerido"),
-  apellido_paterno_empleado: Yup.string().required(
-    "El apellido paterno es requerido"
-  ),
-  apellido_materno_empleado: Yup.string().required(
-    "El apellido materno es requerido"
-  ),
+  nombre_empleado: Yup.string()
+    .required("El nombre es requerido")
+    .matches("^[A-Za-z\\s]+$", "Solo se acepta letras sin tildes"),
+  apellido_paterno_empleado: Yup.string()
+    .required("El apellido paterno es requerido")
+    .matches("^[A-Za-z\\s]+$", "Solo se acepta letras sin tildes"),
+  apellido_materno_empleado: Yup.string()
+    .required("El apellido materno es requerido")
+    .matches("^[A-Za-z\\s]+$", "Solo se acepta letras sin tildes"),
   salario_empleado: Yup.number()
     .typeError("El salario debe ser un numero")
     .required("El salario es requerido"),
@@ -85,8 +88,8 @@ const initialValues = {
   apellido_materno_empleado: "",
   salario_empleado: "",
   comision_empleado: "",
-  fecha_ingreso_empleado: new Date(),
-  fecha_nacimiento_empleado: new Date(),
+  fecha_ingreso_empleado: dayjs(),
+  fecha_nacimiento_empleado: dayjs().subtract(18, "years").toDate(),
   celular_empleado: "",
   rfc_empleado: "",
   direccion: {
@@ -167,10 +170,6 @@ export const AgregarEmpleado = () => {
     setMessage(message);
     setIsLoading(false);
   };
-  /* 
-  const handleMapValuesChange = (newValues) => {
-    setMapValues(newValues);
-  }; */
 
   useEffect(() => {
     getRoles();
@@ -205,6 +204,26 @@ export const AgregarEmpleado = () => {
           onSubmit={onSubmit}
         >
           {(formik) => {
+            const calcularRFC = (
+              nombre,
+              apellidoPaterno,
+              apellidoMaterno,
+              fechaNacimiento
+            ) => {
+              const dia = fechaNacimiento.getDate();
+              const mes = fechaNacimiento.getMonth() + 1; // ¡Recuerda que los meses son indexados en base 0!
+              const anio = fechaNacimiento.getFullYear();
+              const rfc = RfcFacil.forNaturalPerson({
+                name: nombre,
+                firstLastName: apellidoPaterno,
+                secondLastName: apellidoMaterno,
+                day: dia,
+                month: mes,
+                year: anio,
+              });
+              formik.setFieldValue("rfc_empleado", rfc);
+            };
+
             const handleMapValuesChange = (newValues) => {
               setMapValues(newValues);
 
@@ -225,6 +244,7 @@ export const AgregarEmpleado = () => {
                 newValues.url
               );
             };
+
             return (
               <Form>
                 <Grid container spacing={2}>
@@ -285,6 +305,69 @@ export const AgregarEmpleado = () => {
                         <ErrorMessage name="apellido_materno_empleado" />
                       }
                     />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <Field name="fecha_nacimiento_empleado">
+                      {({ field, form }) => (
+                        <LocalizationProvider
+                          dateAdapter={AdapterDateFns}
+                          adapterLocale={es}
+                        >
+                          <DatePicker
+                            label="Fecha de nacimiento"
+                            name="fecha_nacimiento_empleado"
+                            value={field.value}
+                            maxDate={dayjs().subtract(18, "year").toDate()}
+                            onChange={(date) =>
+                              form.setFieldValue(
+                                "fecha_nacimiento_empleado",
+                                date
+                              )
+                            }
+                            error={
+                              formik.touched.fecha_nacimiento_empleado &&
+                              formik.errors.fecha_nacimiento_empleado
+                                ? true
+                                : false
+                            }
+                            helperText={
+                              <ErrorMessage name="fecha_nacimiento_empleado" />
+                            }
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                variant="outlined"
+                                fullWidth
+                                margin="normal"
+                              />
+                            )}
+                          />
+                          <ErrorMessage name="fecha_nacimiento_empleado" />
+                        </LocalizationProvider>
+                      )}
+                    </Field>
+                  </Grid>
+                  <Grid
+                    display={"flex"}
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                    item
+                    xs={12}
+                    md={6}
+                  >
+                    <Button
+                      onClick={() =>
+                        calcularRFC(
+                          formik.values.nombre_empleado,
+                          formik.values.apellido_paterno_empleado,
+                          formik.values.apellido_materno_empleado,
+                          formik.values.fecha_nacimiento_empleado
+                        )
+                      }
+                      variant="contained"
+                    >
+                      Calcular RFC
+                    </Button>
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <Field
@@ -374,46 +457,7 @@ export const AgregarEmpleado = () => {
                       )}
                     </Field>
                   </Grid>
-                  <Grid item xs={12} md={6}>
-                    <Field name="fecha_nacimiento_empleado">
-                      {({ field, form }) => (
-                        <LocalizationProvider
-                          dateAdapter={AdapterDateFns}
-                          adapterLocale={es}
-                        >
-                          <DatePicker
-                            label="Fecha de nacimiento"
-                            name="fecha_nacimiento_empleado"
-                            value={field.value}
-                            onChange={(date) =>
-                              form.setFieldValue(
-                                "fecha_nacimiento_empleado",
-                                date
-                              )
-                            }
-                            error={
-                              formik.touched.fecha_nacimiento_empleado &&
-                              formik.errors.fecha_nacimiento_empleado
-                                ? true
-                                : false
-                            }
-                            helperText={
-                              <ErrorMessage name="fecha_nacimiento_empleado" />
-                            }
-                            renderInput={(params) => (
-                              <TextField
-                                {...params}
-                                variant="outlined"
-                                fullWidth
-                                margin="normal"
-                              />
-                            )}
-                          />
-                          <ErrorMessage name="fecha_nacimiento_empleado" />
-                        </LocalizationProvider>
-                      )}
-                    </Field>
-                  </Grid>
+
                   <Grid item xs={12} md={6}>
                     <Field
                       as={TextField}

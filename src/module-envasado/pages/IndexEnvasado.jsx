@@ -30,6 +30,13 @@ const formartView = [
   { name: "descripcion_envasado", title: "Descripción de Envasado" },
   { name: "fecha_inicio_envasado", title: "Fecha de Inicio de Envasado" },
   { name: "fecha_final_envasado", title: "Fecha Final de Envasado" },
+  {
+    name: "folio_holograma_envasado",
+    title: "Folios de Hologramas utilizados",
+  },
+  { name: "nombre_producto_envasado", title: "Nombre Producto" },
+  { name: "folio_marbete_envasado", title: "Folios de Marbete utilizados" },
+  { name: "total_detalle_envasado", title: "Total envasado" },
 ];
 
 export const IndexEnvasado = () => {
@@ -109,31 +116,46 @@ export const IndexEnvasado = () => {
     {
       field: "id_envasado",
       headerName: "ID",
-      flex: 1,
+      width: 50,
       sortable: true,
     },
     {
       field: "fecha_inicio_envasado",
       headerName: "Fecha de Inicio",
-      flex: 2,
+      width: 140,
       sortable: true,
     },
     {
       field: "fecha_final_envasado",
       headerName: "Fecha Final",
-      flex: 2,
+      width: 140,
       sortable: true,
     },
     {
       field: "descripcion_envasado",
-      headerName: "Envasado",
-      flex: 2,
+      headerName: "Descripcion",
+      width: 150,
       sortable: true,
+    },
+    {
+      field: "nombre_producto_envasado",
+      headerName: "Mezcal Envasado",
+      width: 140,
+      sortable: true,
+    },
+    {
+      field: "total_detalle_envasado",
+      headerName: "Total de produccion",
+      width: 160,
+      sortable: true,
+      renderCell: ({ value }) => {
+        return value ? `$ ${value}` : "";
+      },
     },
     {
       field: "acciones",
       headerName: "Acciones",
-      flex: 3,
+      width: 300,
       sortable: false,
       disableColumnMenu: true,
       renderCell: ({ row }) => {
@@ -144,6 +166,7 @@ export const IndexEnvasado = () => {
                 console.log(row);
                 const newRow = {
                   ...row,
+                  total_detalle_envasado: "$" + row.total_detalle_envasado,
                 };
 
                 handleView(newRow);

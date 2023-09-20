@@ -120,3 +120,21 @@ export const getProductoStockProvider = async () => {
       return { ok: false, data: "", message: error?.response?.data?.message };
     });
 };
+
+export const getNombreCodigoProvider = async () => {
+  return espinaNegraApi
+    .get(`nombres_codigo`)
+    .then((response) => {
+      return { ok: true, data: response.data, message: response.data?.message };
+    })
+    .catch((error) => {
+      let response = error.response.data;
+
+      let errorMessage = response.message + "\n";
+
+      for (let key in response.errors) {
+        errorMessage += response.errors[key].join("\n") + "\n";
+      }
+      return { ok: false, data: "", message: errorMessage };
+    });
+};

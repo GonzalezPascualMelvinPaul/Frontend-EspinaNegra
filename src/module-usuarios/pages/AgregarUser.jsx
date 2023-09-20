@@ -6,6 +6,7 @@ import { IndexLayout } from "../../layouts";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import {
   Alert,
+  Autocomplete,
   Button,
   Grid,
   InputAdornment,
@@ -30,6 +31,7 @@ const validationSchema = Yup.object({
 const initialValues = {
   email_usuario: "",
   username_usuario: "",
+  domain: "example.com",
   id_rol: "",
   id_empleado: "",
 };
@@ -42,6 +44,15 @@ export const AgregarUser = () => {
   const [open, setOpen] = useState(false);
   const [rol, setRol] = useState([]);
   const [empleados, setEmpleados] = useState([]);
+  const [suggestedDomains, setSuggestedDomains] = useState([
+    "example.com",
+    "gmail.com",
+    "yahoo.com",
+    "outlook.com",
+    "itoaxaca.edu.mx",
+    // Agrega más dominios aquí...
+  ]);
+
   const navigate = useNavigate();
 
   const getRoles = async () => {
@@ -88,6 +99,12 @@ export const AgregarUser = () => {
     setOpen(false);
   };
 
+  const handleEmailChange = (formik, inputValue) => {
+    const atIndex = inputValue.indexOf("@");
+    const username = atIndex !== -1 ? inputValue.slice(0, atIndex) : inputValue;
+    formik.setFieldValue("email_usuario", username);
+  };
+
   useEffect(() => {
     getRoles();
     getEmpleados();
@@ -119,159 +136,193 @@ export const AgregarUser = () => {
           validationSchema={validationSchema}
           onSubmit={onSubmit}
         >
-          {(formik) => (
-            <Form>
-              <Grid container spacing={2}>
-                <Grid item xs={12} md={6} sm={6}>
-                  <Field
-                    as={TextField}
-                    label="Email"
-                    name="email_usuario"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    error={
-                      formik.touched.email_usuario &&
-                      formik.errors.email_usuario
-                        ? true
-                        : false
-                    }
-                    helperText={<ErrorMessage name="email_usuario" />}
-                  />
-                </Grid>
-                <Grid item xs={12} md={6} sm={6}>
-                  <Field
-                    as={TextField}
-                    label="Username"
-                    name="username_usuario"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    error={
-                      formik.touched.username_usuario &&
-                      formik.errors.username_usuario
-                        ? true
-                        : false
-                    }
-                    helperText={<ErrorMessage name="username_usuario" />}
-                  />
-                </Grid>
-                <Grid item xs={12} md={6} sm={6}>
-                  <Field
-                    as={TextField}
-                    label="Imagen"
-                    name="image"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    type="file"
-                    error={
-                      formik.touched.image && formik.errors.image ? true : false
-                    }
-                    helperText={<ErrorMessage name="image" />}
-                    onChange={handleImageChange}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <CameraAltOutlined />
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12} md={6} sm={6}>
-                  <Field
-                    as={TextField}
-                    label="Rol"
-                    name="id_rol"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    select
-                    error={
-                      formik.touched.id_rol && formik.errors.id_rol
-                        ? true
-                        : false
-                    }
-                    helperText={<ErrorMessage name="id_rol" />}
-                  >
-                    {rol.map((option) => (
-                      <MenuItem key={option.id_rol} value={option.id_rol}>
-                        {option.nombre_rol}
-                      </MenuItem>
-                    ))}
-                  </Field>
-                </Grid>
-                <Grid item xs={12} md={6} sm={6}>
-                  <Field
-                    name="id_empleado"
-                    label="Empleado"
-                    as={TextField}
-                    variant="outlined"
-                    fullWidth
-                    select
-                    margin="normal"
-                    error={
-                      formik.touched.id_empleado && formik.errors.id_empleado
-                        ? true
-                        : false
-                    }
-                    helperText={<ErrorMessage name="id_empleado" />}
-                    SelectProps={{
-                      MenuProps: {
-                        PaperProps: {
-                          style: {
-                            maxHeight: 48 * 5 + 8, // donde '48' es la altura de cada elemento del menú y '5' es el número de elementos visibles
-                            width: 250,
+          {(formik) => {
+            return (
+              <Form>
+                <Grid container spacing={2}>
+                  {/* <Grid item xs={12} md={6} sm={6}>
+                    <Field
+                      as={TextField}
+                      label="Email"
+                      name="email_usuario"
+                      variant="outlined"
+                      fullWidth
+                      margin="normal"
+                      error={
+                        formik.touched.email_usuario &&
+                        formik.errors.email_usuario
+                          ? true
+                          : false
+                      }
+                      helperText={<ErrorMessage name="email_usuario" />}
+                    />
+                  </Grid> */}
+                  <Grid item xs={12} md={6} sm={6}>
+                    <Field name="email_usuario">
+                      {({ field }) => (
+                        <Autocomplete
+                          freeSolo
+                          options={suggestedDomains.map(
+                            (domain) => field.value + "@" + domain
+                          )}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              label="Email"
+                              variant="outlined"
+                              fullWidth
+                              margin="normal"
+                              error={
+                                formik.touched.email_usuario &&
+                                formik.errors.email_usuario
+                              }
+                              helperText={<ErrorMessage name="email_usuario" />}
+                              onChange={(event) => {
+                                handleEmailChange(formik, event.target.value);
+                              }}
+                            />
+                          )}
+                        />
+                      )}
+                    </Field>
+                  </Grid>
+
+                  <Grid item xs={12} md={6} sm={6}>
+                    <Field
+                      as={TextField}
+                      label="Username"
+                      name="username_usuario"
+                      variant="outlined"
+                      fullWidth
+                      margin="normal"
+                      error={
+                        formik.touched.username_usuario &&
+                        formik.errors.username_usuario
+                          ? true
+                          : false
+                      }
+                      helperText={<ErrorMessage name="username_usuario" />}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6} sm={6}>
+                    <Field
+                      as={TextField}
+                      label="Imagen"
+                      name="image"
+                      variant="outlined"
+                      fullWidth
+                      margin="normal"
+                      type="file"
+                      error={
+                        formik.touched.image && formik.errors.image
+                          ? true
+                          : false
+                      }
+                      helperText={<ErrorMessage name="image" />}
+                      onChange={handleImageChange}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <CameraAltOutlined />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6} sm={6}>
+                    <Field
+                      as={TextField}
+                      label="Rol"
+                      name="id_rol"
+                      variant="outlined"
+                      fullWidth
+                      margin="normal"
+                      select
+                      error={
+                        formik.touched.id_rol && formik.errors.id_rol
+                          ? true
+                          : false
+                      }
+                      helperText={<ErrorMessage name="id_rol" />}
+                    >
+                      {rol.map((option) => (
+                        <MenuItem key={option.id_rol} value={option.id_rol}>
+                          {option.nombre_rol}
+                        </MenuItem>
+                      ))}
+                    </Field>
+                  </Grid>
+                  <Grid item xs={12} md={6} sm={6}>
+                    <Field
+                      name="id_empleado"
+                      label="Empleado"
+                      as={TextField}
+                      variant="outlined"
+                      fullWidth
+                      select
+                      margin="normal"
+                      error={
+                        formik.touched.id_empleado && formik.errors.id_empleado
+                          ? true
+                          : false
+                      }
+                      helperText={<ErrorMessage name="id_empleado" />}
+                      SelectProps={{
+                        MenuProps: {
+                          PaperProps: {
+                            style: {
+                              maxHeight: 48 * 5 + 8, // donde '48' es la altura de cada elemento del menú y '5' es el número de elementos visibles
+                              width: 250,
+                            },
                           },
                         },
-                      },
-                    }}
-                  >
-                    {empleados.map((option) => (
-                      <MenuItem
-                        key={option.id_empleado}
-                        value={option.id_empleado}
-                      >
-                        {option.nombre_empleado}{" "}
-                        {option.apellido_paterno_empleado}{" "}
-                        {option.apellido_materno_empleado}
-                      </MenuItem>
-                    ))}
-                  </Field>
-                </Grid>
-                <Grid item xs={12} md={6} sm={6}>
-                  {error ? (
-                    <Alert sx={{ mt: 0, mb: 0 }} severity="error">
-                      {message}
-                    </Alert>
-                  ) : (
-                    ""
-                  )}
-                  {isLoading && !error ? (
-                    <Alert sx={{ mt: 0, mb: 0 }} severity="success">
-                      Enviando datos...
-                    </Alert>
-                  ) : (
-                    ""
-                  )}
-                </Grid>
+                      }}
+                    >
+                      {empleados.map((option) => (
+                        <MenuItem
+                          key={option.id_empleado}
+                          value={option.id_empleado}
+                        >
+                          {option.nombre_empleado}{" "}
+                          {option.apellido_paterno_empleado}{" "}
+                          {option.apellido_materno_empleado}
+                        </MenuItem>
+                      ))}
+                    </Field>
+                  </Grid>
+                  <Grid item xs={12} md={6} sm={6}>
+                    {error ? (
+                      <Alert sx={{ mt: 0, mb: 0 }} severity="error">
+                        {message}
+                      </Alert>
+                    ) : (
+                      ""
+                    )}
+                    {isLoading && !error ? (
+                      <Alert sx={{ mt: 0, mb: 0 }} severity="success">
+                        Enviando datos...
+                      </Alert>
+                    ) : (
+                      ""
+                    )}
+                  </Grid>
 
-                <Grid
-                  display={"flex"}
-                  justifyContent={"end"}
-                  item
-                  xs={12}
-                  md={12}
-                  sx={{ mb: "2rem" }}
-                >
-                  <Button type="submit" variant="contained">
-                    Crear
-                  </Button>
+                  <Grid
+                    display={"flex"}
+                    justifyContent={"end"}
+                    item
+                    xs={12}
+                    md={12}
+                    sx={{ mb: "2rem" }}
+                  >
+                    <Button type="submit" variant="contained">
+                      Crear
+                    </Button>
+                  </Grid>
                 </Grid>
-              </Grid>
-            </Form>
-          )}
+              </Form>
+            );
+          }}
         </Formik>
       </IndexLayout>
     </>

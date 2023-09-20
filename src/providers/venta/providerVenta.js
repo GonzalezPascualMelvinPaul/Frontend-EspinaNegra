@@ -63,9 +63,9 @@ export const getVentaProvider = async (ventaId) => {
     });
 };
 
-export const getVentasconProductoProvider = async () => {
+export const getVentasconProductoProvider = async (fechas) => {
   return espinaNegraApi
-    .get(`venta_producto`)
+    .post(`venta_producto`, fechas)
     .then((response) => {
       return { ok: true, data: response.data, message: response.data?.message };
     })

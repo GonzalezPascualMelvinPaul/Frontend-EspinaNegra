@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import es from "date-fns/locale/es";
 import * as Yup from "yup";
@@ -17,6 +17,7 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { addProduccionProvider } from "../../providers/produccion/providerProduccion";
 import { useNavigate } from "react-router-dom";
+import { getProductosMezcalesProvider } from "../../providers/producto/providerProducto";
 dayjs.locale("es");
 
 const validationSchema = Yup.object({
@@ -29,14 +30,22 @@ const validationSchema = Yup.object({
     "Los litros obtenidos son requeridos"
   ),
   lote_produccion: Yup.string().required("El lote de produccion es requerido"),
+  id_producto: Yup.number().required(
+    "El tipo de mezcal a producir es requerido"
+  ),
+  total_produccion: Yup.number().required(
+    "El total de produccion es requerido"
+  ),
 });
 
 const initialValues = {
   fecha_inicio_produccion: new Date(),
   fecha_final_produccion: new Date(),
   descripcion_produccion: "",
-  litros_obtenidos_produccion: 0,
+  litros_obtenidos_produccion: "",
   lote_produccion: "",
+  id_producto: "",
+  total_produccion: "",
 };
 
 export const AgregarProduccion = () => {
@@ -44,9 +53,20 @@ export const AgregarProduccion = () => {
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const [productos, setProductos] = useState([]);
+  const [isLoadingProductos, setIsLoadingProductos] = useState(false);
+
   const navigate = useNavigate();
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const getProductos = async () => {
+    const { ok, data } = await getProductosMezcalesProvider();
+    if (ok) {
+      setProductos(data?.productos);
+      setIsLoadingProductos(true);
+    }
   };
   const onSubmit = async (values, e) => {
     values.fecha_inicio_produccion = dayjs(
@@ -74,6 +94,11 @@ export const AgregarProduccion = () => {
     setMessage(message);
     setIsLoading(false);
   };
+
+  useEffect(() => {
+    getProductos();
+  }, []);
+
   return (
     <>
       <AlertMessage
@@ -231,6 +256,23 @@ export const AgregarProduccion = () => {
                   <Grid item xs={12} md={6}>
                     <Field
                       as={TextField}
+                      label="Costo de Producción"
+                      name="total_produccion"
+                      variant="outlined"
+                      fullWidth
+                      margin="normal"
+                      error={
+                        formik.touched.total_produccion &&
+                        formik.errors.total_produccion
+                          ? true
+                          : false
+                      }
+                      helperText={<ErrorMessage name="total_produccion" />}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <Field
+                      as={TextField}
                       label="Lote de Produccion"
                       name="lote_produccion"
                       variant="outlined"
@@ -244,6 +286,32 @@ export const AgregarProduccion = () => {
                       }
                       helperText={<ErrorMessage name="lote_produccion" />}
                     />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <Field
+                      as={TextField}
+                      label="Mezcal a producir"
+                      name="id_producto"
+                      variant="outlined"
+                      fullWidth
+                      margin="normal"
+                      select
+                      error={
+                        formik.touched.id_producto && formik.errors.id_producto
+                          ? true
+                          : false
+                      }
+                      helperText={<ErrorMessage name="id_producto" />}
+                    >
+                      {productos.map((option) => (
+                        <MenuItem
+                          key={option.id_producto}
+                          value={option.id_producto}
+                        >
+                          {option.nombre_producto}
+                        </MenuItem>
+                      ))}
+                    </Field>
                   </Grid>
 
                   {/* <Grid item xs={12} md={6}>

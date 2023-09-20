@@ -25,6 +25,7 @@ import { VentaRoutes } from "../module-venta/router";
 import { EnvasadoRoutes } from "../module-envasado/router";
 import { ProduccionRoutes } from "../module-produccion/router";
 import { GraficoRoutes } from "../module-grafico/router";
+import { SatRoutes } from "../module-sat/router";
 
 /* const routes = createBrowserRouter([
   {
@@ -154,6 +155,14 @@ export const AppRouter = () => {
           element={
             <PrivateRouter>
               <GraficoRoutes />
+            </PrivateRouter>
+          }
+        />
+        <Route
+          path="/sat/*"
+          element={
+            <PrivateRouter>
+              <SatRoutes />
             </PrivateRouter>
           }
         />

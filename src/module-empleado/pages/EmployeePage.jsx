@@ -103,7 +103,7 @@ export const EmployeePage = () => {
     {
       field: "fecha_ingreso_empleado",
       headerName: "Fecha de Ingreso",
-
+      width: 150,
       sortable: true,
     },
     {
